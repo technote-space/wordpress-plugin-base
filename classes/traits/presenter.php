@@ -201,7 +201,7 @@ trait Presenter {
 		if ( ! $append_version ) {
 			return '';
 		}
-		$append = $this->apply_filters( 'assets_version', '' );
+		$append = $this->apply_filters( 'assets_version' );
 		if ( $append !== '' ) {
 			if ( $q ) {
 				return '?' . $q . '=' . $append;

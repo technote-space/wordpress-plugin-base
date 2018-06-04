@@ -114,7 +114,7 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 			function () {
 			},
 			$this->get_img_url( $this->app->get_config( 'config', 'menu_image' ), '' ),
-			$this->apply_filters( 'admin_menu_position', 100 )
+			$this->apply_filters( 'admin_menu_position' )
 		);
 
 		if ( isset( $this->page ) && $this->app->user_can( $this->page->get_capability() ) ) {

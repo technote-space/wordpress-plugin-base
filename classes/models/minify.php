@@ -91,7 +91,7 @@ class Minify implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 		// を除去
 		$script = preg_replace( '#}\s*\)\s*\(\s*jQuery\s*\);?\n?\(\s*function\s*\(\s*\$\s*\)\s*\{#s', '', $script );
 
-		if ( $this->apply_filters( "minify_js", true ) ) {
+		if ( $this->apply_filters( "minify_js" ) ) {
 			$minify = new \MatthiasMullie\Minify\JS();
 			$minify->add( $script );
 			echo '<script>' . $minify->minify() . '</script>';
@@ -145,7 +145,7 @@ class Minify implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 			return implode( "\n", $s );
 		}, $this->css ) );
 
-		if ( $this->apply_filters( 'minify_css', true ) ) {
+		if ( $this->apply_filters( 'minify_css' ) ) {
 			$minify = new \MatthiasMullie\Minify\CSS();
 			$minify->add( $css );
 			echo '<style>' . $minify->minify() . '</style>';

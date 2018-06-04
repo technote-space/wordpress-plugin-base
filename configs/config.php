@@ -32,7 +32,7 @@ return array(
 	'plugin_version'       => '0.0.0.0.0',
 
 	// db version
-	'db_version'           => '0.0.0.0.2',
+	'db_version'           => '0.0.0.0.0',
 
 	// update
 	'update_info_file_url' => '',
