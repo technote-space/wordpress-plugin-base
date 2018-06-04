@@ -384,8 +384,27 @@ class Db implements \Technote\Interfaces\Singleton {
 				continue;
 			}
 
-			$conditions[] = "`$field` = " . $format;
-			$values[]     = $value;
+			$op = '=';
+			if ( is_array( $value ) ) {
+				if ( count( $value ) > 1 ) {
+					$op  = $value[0];
+					$val = $value[1];
+					if ( is_array( $val ) ) {
+						foreach ( $val as $v ) {
+							$values[] = $v;
+						}
+						$conditions[] = "`$field` $op (" . str_repeat( $format . ',', count( $val ) - 1 ) . $format . ')';
+						continue;
+					}
+				} else {
+					continue;
+				}
+			} else {
+				$val = $value;
+			}
+
+			$conditions[] = "`$field` $op " . $format;
+			$values[]     = $val;
 		}
 		$conditions = implode( ' AND ', $conditions );
 		$table      = $this->get_table( $table );
