@@ -55,7 +55,7 @@ class Technote {
 
 		add_action( 'init', function () use ( $plugin_name, $plugin_file ) {
 			$this->initialize( $plugin_name, $plugin_file );
-		} );
+		}, 1 );
 	}
 
 	/**
