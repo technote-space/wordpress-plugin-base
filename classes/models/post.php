@@ -1,0 +1,132 @@
+<?php
+/**
+ * Technote Models Post
+ *
+ * @version 0.0.0.0.0
+ * @author technote-space
+ * @since 0.0.0.0.0
+ * @copyright technote All Rights Reserved
+ * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @link https://technote.space
+ */
+
+namespace Technote\Models;
+
+if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
+	exit;
+}
+
+/**
+ * Class Post
+ * @package Technote\Models
+ */
+class Post implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \Technote\Interfaces\Uninstall {
+
+	use \Technote\Traits\Singleton, \Technote\Traits\Hook, \Technote\Traits\Uninstall;
+
+	/**
+	 * initialize
+	 */
+	protected function initialize() {
+
+	}
+
+	/**
+	 * @return string
+	 */
+	private function get_post_prefix() {
+		return $this->get_slug( 'post_prefix', '_post' );
+	}
+
+	/**
+	 * @param string $key
+	 * @param int|null $post_id
+	 * @param bool $single
+	 * @param mixed $default
+	 *
+	 * @return mixed
+	 */
+	public function get( $key, $post_id = null, $single = true, $default = '' ) {
+		if ( ! isset( $post_id ) ) {
+			global $post, $wp_query;
+			if ( is_null( $post ) ) {
+				if ( isset( $wp_query, $wp_query->query_vars['p'] ) ) {
+					$post_id = $wp_query->query_vars['p'];
+				} else {
+					$post_id = 0;
+				}
+			} else {
+				$post_id = $post->ID;
+			}
+		}
+		if ( $post_id <= 0 ) {
+			return $this->apply_filters( 'get_post_meta', $default, $key, $post_id, $single, $default );
+		}
+
+		return $this->apply_filters( 'get_post_meta', get_post_meta( $post_id, $this->get_post_prefix() . $key, $single ), $key, $post_id, $single, $default );
+	}
+
+	/**
+	 * @param $post_id
+	 * @param $key
+	 * @param $value
+	 *
+	 * @return bool|int
+	 */
+	public function set( $post_id, $key, $value ) {
+		if ( $post_id <= 0 ) {
+			return false;
+		}
+
+		return update_post_meta( $post_id, $this->get_post_prefix() . $key, $value );
+	}
+
+	/**
+	 * @param string $key
+	 * @param string $value
+	 */
+	public function set_all( $key, $value ) {
+		global $wpdb;
+		$query = $wpdb->prepare( "UPDATE $wpdb->postmeta SET meta_value = %s WHERE meta_key LIKE %s", $value, $this->get_post_prefix() . $key );
+		$wpdb->query( $query );
+	}
+
+	/**
+	 * @param string $key
+	 */
+	public function delete_all( $key ) {
+		global $wpdb;
+		$query = $wpdb->prepare( "DELETE FROM $wpdb->postmeta WHERE meta_key LIKE %s", $this->get_post_prefix() . $key );
+		$wpdb->query( $query );
+	}
+
+	/**
+	 * @param $key
+	 * @param $value
+	 *
+	 * @return mixed
+	 */
+	public function find( $key, $value ) {
+		global $wpdb;
+		$query   = <<< SQL
+			SELECT * FROM {$wpdb->postmeta}
+			WHERE meta_key LIKE %s
+			AND   meta_value LIKE %s
+SQL;
+		$results = $wpdb->get_results( $wpdb->prepare( $query, $this->get_post_prefix() . $key, $value ) );
+		$results = array_map( function ( $d ) {
+			return $d->post_id;
+		}, $results );
+
+		return $this->apply_filters( "find_post_meta", $results, $key, $value );
+	}
+
+	/**
+	 * uninstall
+	 */
+	public function uninstall() {
+		global $wpdb;
+		$query = $wpdb->prepare( "DELETE FROM $wpdb->postmeta WHERE meta_key LIKE %s%%", $this->get_post_prefix() );
+		$wpdb->query( $query );
+	}
+}
