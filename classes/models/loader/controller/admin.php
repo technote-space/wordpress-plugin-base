@@ -129,7 +129,7 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 
 		/** @var \Technote\Controllers\Admin\Base $page */
 		foreach ( \Technote\Models\Utility::flatten( $pages ) as $page ) {
-			add_submenu_page(
+			$hook = add_submenu_page(
 				$this->get_menu_slug(),
 				$page->get_page_title(),
 				$page->get_menu_name(),
@@ -139,6 +139,9 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 					$this->load();
 				}
 			);
+			add_action( "load-$hook", function () {
+				$this->page->setup_help();
+			} );
 		}
 	}
 
