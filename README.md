@@ -80,7 +80,7 @@ Wordpress plugin 開発用のライブラリです。
 
 設定を更新したら configs/config.php の db_version も更新します。  
 自動でテーブルの追加・更新が行われます。  
-データの取得・挿入・更新・削除は以下のように行うことができます。
+データの取得・挿入・更新・削除は以下のように行います。
 ```
 // 取得
 $this->app->db->select( 'test', array(
@@ -143,7 +143,7 @@ $this->app->db->delete( 'test', array(
 ),
 ```
 
-設定ページで設定可能になります。
+設定ページで設定可能になります。  
 プログラムで使用するには以下のようにします。
 ```
 if ( $this->apply_filters( 'minify_css' ) ) {

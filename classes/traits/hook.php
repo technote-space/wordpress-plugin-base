@@ -37,6 +37,9 @@ trait Hook {
 		$args    = func_get_args();
 		$key     = $args[0];
 		$args[0] = $this->get_filter_prefix() . $key;
+		if ( count( $args ) < 2 ) {
+			$args[] = null;
+		}
 		$default = call_user_func_array( 'apply_filters', $args );
 
 		if ( isset( $this->app->setting ) && $this->app->setting->is_setting( $key ) ) {
