@@ -160,4 +160,30 @@ class Utility {
 
 		return static::replace( $string, self::$time );
 	}
+
+	/**
+	 * @param string $command
+	 *
+	 * @return array
+	 */
+	public static function exec( $command ) {
+		$command .= ' 2>&1';
+		$command = escapeshellcmd( $command );
+		exec( $command, $output, $return_var );
+
+		return array( $output, $return_var );
+	}
+
+	/**
+	 * @param string $command
+	 */
+	public static function exec_async( $command ) {
+		$command = escapeshellcmd( $command );
+		if ( PHP_OS !== 'WIN32' && PHP_OS !== 'WINNT' ) {
+			exec( $command . ' >/dev/null 2>&1 &' );
+		} else {
+			$fp = popen( 'start "" ' . $command, 'r' );
+			pclose( $fp );
+		}
+	}
 }
