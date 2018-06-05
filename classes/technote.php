@@ -120,8 +120,8 @@ class Technote {
 		$update_info_file_url = $this->get_config( 'config', 'update_info_file_url' );
 		if ( ! empty( $update_info_file_url ) ) {
 			\Puc_v4_Factory::buildUpdateChecker(
-				'http://example.com/path/to/details.json',
 				$update_info_file_url,
+				$this->plugin_file,
 				$this->plugin_name
 			);
 		}

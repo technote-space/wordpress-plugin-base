@@ -6,12 +6,67 @@ Wordpress plugin 開発用のライブラリです。
 # 要件
 - PHP 5.4 以上
 
-# インストール
+
+# 手順
+
+## プラグインフォルダの作成
+
+wp-content/plugins フォルダに プラグイン用のフォルダを作成
+
+## プラグインファイルの作成
+
+作成したプラグインフォルダに「プラグイン名.php」(例：example.php) を作成
+https://wpdocs.osdn.jp/%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E3%81%AE%E4%BD%9C%E6%88%90#.E6.A8.99.E6.BA.96.E3.83.97.E3.83.A9.E3.82.B0.E3.82.A4.E3.83.B3.E6.83.85.E5.A0.B1  
+を参考にプラグインの情報を入力
+
+## このライブラリのインストール
+
+composer を使用してインストールします。  
+作成したプラグインフォルダで以下のコマンドを実行します。  
 
 ```composer require technote/wordpress-plugin-base```
 
+## このライブラリの使用
 
-# 開発
+作成したプラグインファイルにライブラリを使用する記述を追記します。  
+プラグインファイルはおおよそ以下のようなものになります。
+
+```
+<?php
+/*
+Plugin Name: example
+Plugin URI:
+Description: Plugin Description
+Author: example
+Version: 0.0.0.0
+Author URI: http://example.com/
+*/
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+@require_once dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+
+$example = \Technote\Technote::get_instance( 'Example', __FILE__ );
+```
+
+```
+example - example.php
+    |
+    - classes
+    |    |
+    |    - controllers
+    |           |
+    |           - admin
+    |           - api
+    - views
+    |   |
+    |   - admin
+    |
+    - configs
+```
+
 
 ## 基本設定
 - configs/config.php  
@@ -148,7 +203,9 @@ $this->app->db->delete( 'test', array(
 設定ページで設定可能になります。  
 プログラムで使用するには以下のようにします。
 ```
-if ( $this->apply_filters( 'minify_css' ) ) {
+$this->apply_filters( 'minify_js' ) // true or false
+
+if ( $this->apply_filters( 'minify_js' ) ) {
     // ...
 }
 ```

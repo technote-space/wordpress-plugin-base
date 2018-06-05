@@ -61,7 +61,7 @@ trait Nonce {
 	private function nonce_check() {
 		$nonce_key = $this->get_nonce_key();
 
-		return ! $this->is_post() || ( isset( $_POST[ $nonce_key ] ) && wp_verify_nonce( $_POST[ $nonce_key ], $this->get_nonce_action() ) );
+		return $this->is_post() && isset( $_POST[ $nonce_key ] ) && wp_verify_nonce( $_POST[ $nonce_key ], $this->get_nonce_action() );
 	}
 
 }
