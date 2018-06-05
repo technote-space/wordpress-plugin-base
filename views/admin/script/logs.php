@@ -20,5 +20,13 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
         $('#<?php $instance->id();?>-delete_log').click(function () {
             return confirm('Are you sure you want to delete this file?');
         });
+        $('#<?php $instance->id();?>-main-contents .close_button').click(function () {
+            const ul = $('#<?php $instance->id();?>-main-contents .directory > ul');
+            if ($(ul).hasClass('closed')) {
+                $(ul).removeClass('closed').slideDown().next('.close_button').val('<?php $instance->h( 'Close' );?>');
+            } else {
+                $(ul).addClass('closed').slideUp().next('.close_button').val('<?php $instance->h( 'Open' );?>');
+            }
+        });
     })(jQuery);
 </script>

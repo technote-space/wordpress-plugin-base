@@ -39,7 +39,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 		<?php $instance->form( 'input/submit', $args, array(
 			'id'    => $instance->id( false ) . '-delete_log',
 			'name'  => 'delete',
-			'value' => 'delete',
+			'value' => 'Delete',
 		) ); ?>
 		<?php $instance->form( 'close', $args ); ?>
 	<?php endif; ?>
@@ -157,5 +157,10 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
             </ul>
         </li>
     </ul>
+	<?php $instance->form( 'input/button', $args, array(
+		'class' => 'close_button',
+		'name'  => 'close',
+		'value' => 'Close',
+	) ); ?>
 </div>
 

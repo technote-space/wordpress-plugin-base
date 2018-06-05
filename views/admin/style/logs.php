@@ -17,19 +17,19 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 ?>
 <style>
     #<?php $instance->id();?>-main-contents .log {
-        width: 70%;
         display: inline-block;
     }
 
     #<?php $instance->id();?>-main-contents .directory {
-        width: 25%;
+        position: fixed;
         display: inline-block;
         background-color: bisque;
         border: #0000cc solid 1px;
         padding: 10px;
         font-size: 20px;
         line-height: 1em;
-        float: right;
+        right: 10px;
+        top: 50px;
     }
 
     #<?php $instance->id();?>-main-contents ul li ul {
@@ -72,5 +72,9 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 
     #<?php $instance->id();?>-main-contents li.selected > a {
         text-decoration: underline;
+    }
+
+    #<?php $instance->id();?>-main-contents .close_button {
+        float: right;
     }
 </style>
