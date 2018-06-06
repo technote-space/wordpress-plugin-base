@@ -16,6 +16,10 @@
         "matthiasmullie/minify": "^1.3",
         "yahnis-elsts/plugin-update-checker": "^4.4"
     },
+    "require-dev": {
+        "phpunit/phpunit": "4.8.*",
+        "phake/phake": "2.*"
+    },
     "scripts": {
         "test": "phpunit"
     },
