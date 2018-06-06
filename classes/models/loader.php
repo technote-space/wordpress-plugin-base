@@ -26,6 +26,11 @@ class Loader implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 
 	use \Technote\Traits\Singleton, \Technote\Traits\Hook;
 
+	/** @var \Technote\Models\Loader\Controller\Admin $admin */
+	public $admin;
+	/** @var \Technote\Models\Loader\Controller\Api $api */
+	public $api;
+
 	/**
 	 * initialize
 	 */

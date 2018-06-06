@@ -47,6 +47,53 @@ class Define implements \Technote\Interfaces\Singleton {
 
 	use \Technote\Traits\Singleton;
 
+	/** @var string $plugin_name */
+	public $plugin_name;
+	/** @var string $plugin_file */
+	public $plugin_file;
+	/** @var string $plugin_namespace */
+	public $plugin_namespace;
+	/** @var string $plugin_dir */
+	public $plugin_dir;
+	/** @var string $plugin_dir_name */
+	public $plugin_dir_name;
+	/** @var string $plugin_base_name */
+	public $plugin_base_name;
+	/** @var string $lib_name */
+	public $lib_name;
+	/** @var string $lib_namespace */
+	public $lib_namespace;
+	/** @var string $lib_dir */
+	public $lib_dir;
+	/** @var string $lib_assets_dir */
+	public $lib_assets_dir;
+	/** @var string $lib_classes_dir */
+	public $lib_classes_dir;
+	/** @var string $lib_configs_dir */
+	public $lib_configs_dir;
+	/** @var string $lib_views_dir */
+	public $lib_views_dir;
+	/** @var string $lib_language_dir */
+	public $lib_language_dir;
+	/** @var string $lib_vendor_dir */
+	public $lib_vendor_dir;
+	/** @var string $lib_assets_url */
+	public $lib_assets_url;
+	/** @var string $plugin_assets_dir */
+	public $plugin_assets_dir;
+	/** @var string $plugin_classes_dir */
+	public $plugin_classes_dir;
+	/** @var string $plugin_configs_dir */
+	public $plugin_configs_dir;
+	/** @var string $plugin_views_dir */
+	public $plugin_views_dir;
+	/** @var string $plugin_languages_dir */
+	public $plugin_languages_dir;
+	/** @var string $plugin_logs_dir */
+	public $plugin_logs_dir;
+	/** @var string $plugin_assets_url */
+	public $plugin_assets_url;
+
 	/**
 	 * initialize
 	 */

@@ -42,6 +42,41 @@ class Technote {
 	/** @var array */
 	private static $instances = array();
 
+	/** @var string $original_plugin_name */
+	public $original_plugin_name;
+	/** @var string $plugin_name */
+	public $plugin_name;
+	/** @var string $plugin_file */
+	public $plugin_file;
+	/** @var array $plugin_data */
+	public $plugin_data;
+	/** @var \Technote\Models\Define $define */
+	public $define;
+	/** @var \Technote\Models\Config $config */
+	public $config;
+	/** @var \Technote\Models\Setting $setting */
+	public $setting;
+	/** @var \Technote\Models\Option $option */
+	public $option;
+	/** @var \Technote\Models\Device $device */
+	public $device;
+	/** @var \Technote\Models\Minify $minify */
+	public $minify;
+	/** @var \Technote\Models\Filter $filter */
+	public $filter;
+	/** @var \Technote\Models\User $user */
+	public $user;
+	/** @var \Technote\Models\Post $post */
+	public $post;
+	/** @var \Technote\Models\Loader $loader */
+	public $loader;
+	/** @var \Technote\Models\Log $log */
+	public $log;
+	/** @var \Technote\Models\Input $input */
+	public $input;
+	/** @var \Technote\Models\Db $db */
+	public $db;
+
 	/**
 	 * Technote constructor.
 	 *

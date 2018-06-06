@@ -25,7 +25,7 @@ class Db implements \Technote\Interfaces\Singleton {
 	use \Technote\Traits\Singleton;
 
 	/** @var array */
-	private $table_defines = null;
+	protected $table_defines = null;
 
 	/**
 	 * initialize
@@ -73,87 +73,101 @@ class Db implements \Technote\Interfaces\Singleton {
 		$this->table_defines = $this->app->config->load( 'db' );
 		empty( $this->table_defines ) and $this->table_defines = array();
 
-
 		foreach ( $this->table_defines as $table => $define ) {
-			if ( empty( $define['columns'] ) ) {
-				unset( $this->table_defines[ $table ] );
+
+			list( $id, $columns ) = $this->setup_table_columns( $table, $define );
+			if ( empty( $id ) ) {
 				continue;
 			}
-
-			if ( empty( $define['id'] ) ) {
-				$this->table_defines[ $table ]['id'] = $table . '_id';
-			}
-
-			$columns       = array();
-			$columns['id'] = array(
-				'name'     => $this->table_defines[ $table ]['id'],
-				'type'     => 'bigint(20)',
-				'unsigned' => true,
-				'null'     => false,
-				'format'   => '%d',
-			);
-
-			$check = true;
-			foreach ( $define['columns'] as $key => $column ) {
-				if ( ! is_array( $column ) ) {
-					$check = false;
-					break;
-				}
-				$type = Utility::array_get( $column, 'type' );
-				if ( empty( $type ) ) {
-					$check = false;
-					break;
-				}
-
-				$column['name']   = Utility::array_get( $column, 'name', $key );
-				$column['format'] = Utility::array_get( $column, 'format', $this->type2format( $type ) );
-				$columns[ $key ]  = $column;
-			}
-			if ( ! $check ) {
-				unset( $this->table_defines[ $table ] );
-				continue;
-			}
-
-			$columns['created_at'] = array(
-				'name'   => 'created_at',
-				'type'   => 'datetime',
-				'null'   => false,
-				'format' => '%s'
-			);
-			$columns['created_by'] = array(
-				'name'   => 'created_by',
-				'type'   => 'varchar(32)',
-				'null'   => false,
-				'format' => '%s'
-			);
-			$columns['updated_at'] = array(
-				'name'   => 'updated_at',
-				'type'   => 'datetime',
-				'null'   => false,
-				'format' => '%s'
-			);
-			$columns['updated_by'] = array(
-				'name'   => 'updated_by',
-				'type'   => 'varchar(32)',
-				'null'   => false,
-				'format' => '%s'
-			);
-
-			if ( $this->is_logical( $define ) ) {
-				$columns['deleted_at'] = array(
-					'name'   => 'deleted_at',
-					'type'   => 'datetime',
-					'format' => '%s'
-				);
-				$columns['deleted_by'] = array(
-					'name'   => 'deleted_by',
-					'type'   => 'varchar(32)',
-					'format' => '%s'
-				);
-			}
-
+			$this->table_defines[ $table ]['id']      = $id;
 			$this->table_defines[ $table ]['columns'] = $columns;
 		}
+	}
+
+	/**
+	 * @param string $table
+	 * @param array $define
+	 *
+	 * @return array
+	 */
+	protected function setup_table_columns( $table, $define ) {
+		if ( empty( $define['columns'] ) ) {
+			return array( false, false );
+		}
+
+		$id = $table . '_id';
+		if ( ! empty( $define['id'] ) ) {
+			$id = $define['id'];
+		}
+
+		$columns       = array();
+		$columns['id'] = array(
+			'name'     => $id,
+			'type'     => 'bigint(20)',
+			'unsigned' => true,
+			'null'     => false,
+			'format'   => '%d',
+		);
+
+		$check = true;
+		foreach ( $define['columns'] as $key => $column ) {
+			if ( ! is_array( $column ) ) {
+				$check = false;
+				break;
+			}
+			$type = Utility::array_get( $column, 'type' );
+			if ( empty( $type ) ) {
+				$check = false;
+				break;
+			}
+
+			$column['name']   = Utility::array_get( $column, 'name', $key );
+			$column['format'] = Utility::array_get( $column, 'format', $this->type2format( $type ) );
+			$columns[ $key ]  = $column;
+		}
+		if ( ! $check ) {
+			return array( false, false );
+		}
+
+		$columns['created_at'] = array(
+			'name'   => 'created_at',
+			'type'   => 'datetime',
+			'null'   => false,
+			'format' => '%s'
+		);
+		$columns['created_by'] = array(
+			'name'   => 'created_by',
+			'type'   => 'varchar(32)',
+			'null'   => false,
+			'format' => '%s'
+		);
+		$columns['updated_at'] = array(
+			'name'   => 'updated_at',
+			'type'   => 'datetime',
+			'null'   => false,
+			'format' => '%s'
+		);
+		$columns['updated_by'] = array(
+			'name'   => 'updated_by',
+			'type'   => 'varchar(32)',
+			'null'   => false,
+			'format' => '%s'
+		);
+
+		if ( $this->is_logical( $define ) ) {
+			$columns['deleted_at'] = array(
+				'name'   => 'deleted_at',
+				'type'   => 'datetime',
+				'format' => '%s'
+			);
+			$columns['deleted_by'] = array(
+				'name'   => 'deleted_by',
+				'type'   => 'varchar(32)',
+				'format' => '%s'
+			);
+		}
+
+		return array( $id, $columns );
 	}
 
 	/**
@@ -175,6 +189,19 @@ class Db implements \Technote\Interfaces\Singleton {
 	}
 
 	/**
+	 * @param $table
+	 *
+	 * @return array
+	 */
+	public function get_columns( $table ) {
+		if ( ! isset( $this->table_defines[ $table ]['columns'] ) ) {
+			return array();
+		}
+
+		return $this->table_defines[ $table ]['columns'];
+	}
+
+	/**
 	 * db update
 	 */
 	private function db_update() {
@@ -188,87 +215,89 @@ class Db implements \Technote\Interfaces\Singleton {
 		}
 
 		set_time_limit( 60 * 5 );
-		require_once ABSPATH . "wp-admin" . DS . "includes" . DS . "upgrade.php";
 
-		$char = defined( "DB_CHARSET" ) ? DB_CHARSET : "utf8";
 		foreach ( $this->table_defines as $table => $define ) {
-			if ( empty( $define['id'] ) ) {
-				$define['id'] = $table . '_id';
-			}
-
-			$table = $this->get_table( $table );
-			$sql   = "CREATE TABLE {$table} (\n";
-			foreach ( $define['columns'] as $key => $column ) {
-				$name     = Utility::array_get( $column, 'name' );
-				$type     = Utility::array_get( $column, 'type' );
-				$unsigned = Utility::array_get( $column, 'unsigned', false );
-				$null     = Utility::array_get( $column, 'null', true );
-				$default  = Utility::array_get( $column, 'default', null );
-				$comment  = Utility::array_get( $column, 'comment', '' );
-
-				$sql .= $name . ' ' . strtolower( $type );
-				if ( $unsigned ) {
-					$sql .= ' unsigned';
-				}
-				if ( $null ) {
-					$sql .= ' NULL';
-				} else {
-					$sql .= ' NOT NULL';
-				}
-				if ( $key === 'id' ) {
-					$sql .= ' AUTO_INCREMENT';
-				} elseif ( isset( $default ) ) {
-					$default = str_replace( '\'', '\\\'', $default );
-					$sql     .= " DEFAULT '{$default}'";
-				}
-				if ( ! empty( $comment ) ) {
-					$comment = str_replace( '\'', '\\\'', $comment );
-					$sql     .= " COMMENT '{$comment}'";
-				}
-				$sql .= ",\n";
-			}
-
-			$index   = array();
-			$index[] = "PRIMARY KEY  ({$define['columns']['id']['name']})";
-			if ( ! empty( $define['index']['key'] ) ) {
-				foreach ( $define['index']['key'] as $name => $columns ) {
-					if ( ! array( $columns ) ) {
-						$columns = array( $columns );
-					}
-					$columns = implode( ', ', $columns );
-					$index[] = "INDEX {$name} ({$columns})";
-				}
-			}
-			if ( ! empty( $define['index']['unique'] ) ) {
-				foreach ( $define['index']['unique'] as $name => $columns ) {
-					if ( ! array( $columns ) ) {
-						$columns = array( $columns );
-					}
-					$columns = implode( ', ', $columns );
-					$index[] = "UNIQUE KEY {$name} ({$columns})";
-				}
-			}
-			$sql .= implode( ",\n", $index );
-			$sql .= "\n) ENGINE = InnoDB DEFAULT CHARSET = {$char};";
-
-			$results = dbDelta( $sql );
+			$results = $this->table_update( $table, $define );
 			if ( $results ) {
-				$tmp = '';
-				foreach ( $results as $result ) {
-					if ( ! $result ) {
-						continue;
-					}
-					if ( $tmp ) {
-						$tmp .= "<br>" . $result;
-					} else {
-						$tmp = $result;
-					}
-				}
-				if ( $tmp ) {
-					$this->app->add_message( $tmp );
+				$message = implode( '<br>', array_filter( $results, function ( $d ) {
+					return ! empty( $d );
+				} ) );
+				if ( $message ) {
+					$this->app->add_message( $message );
 				}
 			}
 		}
+	}
+
+	/**
+	 * @param string $table
+	 * @param array $define
+	 *
+	 * @return array
+	 */
+	protected function table_update( $table, $define ) {
+		require_once ABSPATH . "wp-admin" . DS . "includes" . DS . "upgrade.php";
+		$char = defined( "DB_CHARSET" ) ? DB_CHARSET : "utf8";
+		if ( empty( $define['id'] ) ) {
+			$define['id'] = $table . '_id';
+		}
+
+		$table = $this->get_table( $table );
+		$sql   = "CREATE TABLE {$table} (\n";
+		foreach ( $define['columns'] as $key => $column ) {
+			$name     = Utility::array_get( $column, 'name' );
+			$type     = Utility::array_get( $column, 'type' );
+			$unsigned = Utility::array_get( $column, 'unsigned', false );
+			$null     = Utility::array_get( $column, 'null', true );
+			$default  = Utility::array_get( $column, 'default', null );
+			$comment  = Utility::array_get( $column, 'comment', '' );
+
+			$sql .= $name . ' ' . strtolower( $type );
+			if ( $unsigned ) {
+				$sql .= ' unsigned';
+			}
+			if ( $null ) {
+				$sql .= ' NULL';
+			} else {
+				$sql .= ' NOT NULL';
+			}
+			if ( $key === 'id' ) {
+				$sql .= ' AUTO_INCREMENT';
+			} elseif ( isset( $default ) ) {
+				$default = str_replace( '\'', '\\\'', $default );
+				$sql     .= " DEFAULT '{$default}'";
+			}
+			if ( ! empty( $comment ) ) {
+				$comment = str_replace( '\'', '\\\'', $comment );
+				$sql     .= " COMMENT '{$comment}'";
+			}
+			$sql .= ",\n";
+		}
+
+		$index   = array();
+		$index[] = "PRIMARY KEY  ({$define['columns']['id']['name']})";
+		if ( ! empty( $define['index']['key'] ) ) {
+			foreach ( $define['index']['key'] as $name => $columns ) {
+				if ( ! array( $columns ) ) {
+					$columns = array( $columns );
+				}
+				$columns = implode( ', ', $columns );
+				$index[] = "INDEX {$name} ({$columns})";
+			}
+		}
+		if ( ! empty( $define['index']['unique'] ) ) {
+			foreach ( $define['index']['unique'] as $name => $columns ) {
+				if ( ! array( $columns ) ) {
+					$columns = array( $columns );
+				}
+				$columns = implode( ', ', $columns );
+				$index[] = "UNIQUE KEY {$name} ({$columns})";
+			}
+		}
+		$sql .= implode( ",\n", $index );
+		$sql .= "\n) ENGINE = InnoDB DEFAULT CHARSET = {$char};";
+
+		return dbDelta( $sql );
 	}
 
 	/**
@@ -408,7 +437,14 @@ class Db implements \Technote\Interfaces\Singleton {
 		}
 		$conditions = implode( ' AND ', $conditions );
 		$table      = $this->get_table( $table );
-		$sql        = "SELECT * FROM `$table`";
+		$fields     = array();
+		foreach ( $columns as $key => $column ) {
+			$name     = Utility::array_get( $column, 'name' );
+			$fields[] = $name . ' AS ' . $key;
+		}
+		empty( $fields ) and $fields = array( '*' );
+		$fields = implode( ', ', $fields );
+		$sql    = "SELECT {$fields} FROM `$table`";
 		if ( ! empty( $conditions ) ) {
 			$sql .= "WHERE $conditions";
 		}
@@ -528,6 +564,5 @@ class Db implements \Technote\Interfaces\Singleton {
 
 		return $wpdb->delete( $this->get_table( $table ), $_where, $_where_format );
 	}
-
 
 }

@@ -73,16 +73,16 @@ trait Singleton {
 	 */
 	public function get_slug( $config_name, $suffix ) {
 
-		if ( ! isset( self::$slugs[ $config_name ] ) ) {
+		if ( ! isset( self::$slugs[ $this->app->plugin_name ][ $config_name ] ) ) {
 			$default = $this->app->plugin_name . $suffix;
 			$slug    = $this->app->get_config( 'slug', $config_name, $default );
 			if ( empty( $slug ) ) {
 				$slug = $default;
 			}
-			self::$slugs[ $config_name ] = $slug;
+			self::$slugs[ $this->app->plugin_name ][ $config_name ] = $slug;
 		}
 
-		return self::$slugs[ $config_name ];
+		return self::$slugs[ $this->app->plugin_name ][ $config_name ];
 	}
 
 	/**

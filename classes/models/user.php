@@ -32,6 +32,23 @@ class User implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 
 	use \Technote\Traits\Singleton, \Technote\Traits\Hook, \Technote\Traits\Uninstall;
 
+	/** @var int $user_id */
+	public $user_id;
+	/** @var \WP_User $user_data */
+	public $user_data;
+	/** @var int $user_level */
+	public $user_level;
+	/** @var bool $super_admin */
+	public $super_admin;
+	/** @var string $user_name */
+	public $user_name;
+	/** @var string $display_name */
+	public $display_name;
+	/** @var string $user_email */
+	public $user_email;
+	/** @var bool $logged_in */
+	public $logged_in;
+
 	/**
 	 * initialize
 	 */
@@ -82,13 +99,13 @@ class User implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 			return $this->apply_filters( 'get_user_meta', $default, $key, $user_id, $single, $default );
 		}
 
-		return $this->apply_filters( 'get_user_meta', get_user_meta( $user_id, $this->get_user_prefix() . $key, $single ), $key, $user_id, $single, $default );
+		return $this->apply_filters( 'get_user_meta', get_user_meta( $user_id, $this->get_user_prefix() . $key, $single ), $key, $user_id, $single, $default, $this->get_user_prefix() );
 	}
 
 	/**
 	 * @param $key
 	 * @param $value
-	 * @param null $user_id
+	 * @param int|null $user_id
 	 *
 	 * @return bool|int
 	 */
@@ -101,6 +118,24 @@ class User implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 		}
 
 		return update_user_meta( $user_id, $this->get_user_prefix() . $key, $value );
+	}
+
+	/**
+	 * @param string $key
+	 * @param int|null $user_id
+	 * @param string $meta_value
+	 *
+	 * @return bool
+	 */
+	public function delete( $key, $user_id = null, $meta_value = '' ) {
+		if ( ! isset( $user_id ) ) {
+			$user_id = $this->user_id;
+		}
+		if ( $user_id <= 0 ) {
+			return false;
+		}
+
+		return delete_user_meta( $user_id, $this->get_user_prefix() . $key, $meta_value );
 	}
 
 	/**

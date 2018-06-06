@@ -34,6 +34,9 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 	/** @var array $errors */
 	private $errors = array();
 
+	/** @var \Technote\Controllers\Admin\Base */
+	public $page;
+
 	/**
 	 * initialize
 	 */
@@ -121,11 +124,11 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 			add_action( "load-$hook", function () {
 				$this->page->setup_help();
 			} );
-
-			add_filter( 'plugin_action_links_' . $this->app->define->plugin_base_name, function ( $links ) {
-				return $this->plugin_action_links( $links );
-			} );
 		}
+
+		add_filter( 'plugin_action_links_' . $this->app->define->plugin_base_name, function ( $links ) {
+			return $this->plugin_action_links( $links );
+		} );
 
 		/** @var \Technote\Controllers\Admin\Base $page */
 		foreach ( \Technote\Models\Utility::flatten( $pages ) as $page ) {
