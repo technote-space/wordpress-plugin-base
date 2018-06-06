@@ -19,7 +19,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 /**
  * Trait Singleton
  * @package TechnoteTraits
- * @property \Technote\Technote $app
+ * @property \Technote $app
  */
 trait Singleton {
 
@@ -29,15 +29,15 @@ trait Singleton {
 	/** @var array */
 	private static $slugs = array();
 
-	/** @var \Technote\Technote */
+	/** @var \Technote */
 	protected $app;
 
 	/**
 	 * Singleton constructor.
 	 *
-	 * @param \Technote\Technote $app
+	 * @param \Technote $app
 	 */
-	private function __construct( \Technote\Technote $app ) {
+	private function __construct( \Technote $app ) {
 		$this->app = $app;
 	}
 
@@ -47,11 +47,11 @@ trait Singleton {
 	protected abstract function initialize();
 
 	/**
-	 * @param \Technote\Technote $app
+	 * @param \Technote $app
 	 *
 	 * @return \Technote\Traits\Singleton
 	 */
-	public static function get_instance( \Technote\Technote $app ) {
+	public static function get_instance( \Technote $app ) {
 		$class = get_called_class();
 		if ( false === $class ) {
 			$class = get_class();

@@ -19,7 +19,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 /**
  * Trait Hook
  * @package Technote\Traits
- * @property \Technote\Technote $app
+ * @property \Technote $app
  */
 trait Hook {
 

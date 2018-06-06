@@ -19,7 +19,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 /**
  * Trait Loader
  * @package Technote\Traits\Controller
- * @property \Technote\Technote $app
+ * @property \Technote $app
  */
 trait Loader {
 

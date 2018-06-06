@@ -16,4 +16,4 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 /** @var \Technote\Traits\Presenter $instance */
 /** @var string $url */
 ?>
-<?php $instance->url( $url, 'Setting', true ); ?>
+<?php $instance->url( $url, 'Settings', true ); ?>

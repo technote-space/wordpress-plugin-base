@@ -38,7 +38,7 @@ return array(
 	'update_info_file_url' => '',
 
 	// text domain
-	'text_domain'          => '',
+	'text_domain'          => 'default',
 
 	// menu image url
 	'menu_image'           => '',

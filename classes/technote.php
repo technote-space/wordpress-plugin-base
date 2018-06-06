@@ -10,20 +10,17 @@
  * @link https://technote.space
  */
 
-namespace Technote;
-
 if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 	return;
 }
 
 /**
  * Class Technote
- * @package Technote
  * @property string $original_plugin_name
  * @property string $plugin_name
  * @property string $plugin_file
  * @property array $plugin_data
- * @property Models\Define $define
+ * @property \Technote\Models\Define $define
  * @property \Technote\Models\Config $config
  * @property \Technote\Models\Setting $setting
  * @property \Technote\Models\Option $option
@@ -84,9 +81,9 @@ class Technote {
 	 * @param string $plugin_file
 	 */
 	private function __construct( $plugin_name, $plugin_file ) {
-		require_once dirname( __FILE__ ) . DS . 'traits' . DS . 'singleton.php';
-		require_once dirname( __FILE__ ) . DS . 'interfaces' . DS . 'singleton.php';
-		require_once dirname( __FILE__ ) . DS . 'models' . DS . 'define.php';
+		require_once __DIR__ . DS . 'traits' . DS . 'singleton.php';
+		require_once __DIR__ . DS . 'interfaces' . DS . 'singleton.php';
+		require_once __DIR__ . DS . 'models' . DS . 'define.php';
 
 		add_action( 'init', function () use ( $plugin_name, $plugin_file ) {
 			$this->initialize( $plugin_name, $plugin_file );
@@ -129,23 +126,23 @@ class Technote {
 		$this->plugin_name          = strtolower( $plugin_name );
 		$this->plugin_file          = $plugin_file;
 		$this->plugin_data          = get_plugin_data( $this->plugin_file );
-		$this->define               = Models\Define::get_instance( $this );
+		$this->define               = \Technote\Models\Define::get_instance( $this );
 		spl_autoload_register( array( $this, 'load_class' ) );
 
-		$this->input   = Models\Input::get_instance( $this );
-		$this->config  = Models\Config::get_instance( $this );
-		$this->setting = Models\Setting::get_instance( $this );
-		$this->option  = Models\Option::get_instance( $this );
-		$this->log     = Models\Log::get_instance( $this );
+		$this->input   = \Technote\Models\Input::get_instance( $this );
+		$this->config  = \Technote\Models\Config::get_instance( $this );
+		$this->setting = \Technote\Models\Setting::get_instance( $this );
+		$this->option  = \Technote\Models\Option::get_instance( $this );
+		$this->log     = \Technote\Models\Log::get_instance( $this );
 
-		$this->device = Models\Device::get_instance( $this );
-		$this->minify = Models\Minify::get_instance( $this );
-		$this->user   = Models\User::get_instance( $this );
-		$this->post   = Models\Post::get_instance( $this );
-		$this->loader = Models\Loader::get_instance( $this );
-		$this->db     = Models\Db::get_instance( $this );
+		$this->device = \Technote\Models\Device::get_instance( $this );
+		$this->minify = \Technote\Models\Minify::get_instance( $this );
+		$this->user   = \Technote\Models\User::get_instance( $this );
+		$this->post   = \Technote\Models\Post::get_instance( $this );
+		$this->loader = \Technote\Models\Loader::get_instance( $this );
+		$this->db     = \Technote\Models\Db::get_instance( $this );
 
-		$this->filter = Models\Filter::get_instance( $this );
+		$this->filter = \Technote\Models\Filter::get_instance( $this );
 	}
 
 	/**

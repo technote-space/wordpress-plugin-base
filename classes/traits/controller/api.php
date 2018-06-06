@@ -19,7 +19,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 /**
  * Trait Api
  * @package Technote\Traits\Controller
- * @property \Technote\Technote $app
+ * @property \Technote $app
  */
 trait Api {
 

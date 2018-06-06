@@ -23,10 +23,10 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 interface Singleton {
 
 	/**
-	 * @param \Technote\Technote $app
+	 * @param \Technote $app
 	 *
 	 * @return \Technote\Traits\Singleton
 	 */
-	public static function get_instance( \Technote\Technote $app );
+	public static function get_instance( \Technote $app );
 
 }

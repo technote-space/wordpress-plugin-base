@@ -29,8 +29,23 @@ define( 'TECHNOTE_BOOTSTRAP', __FILE__ );
 
 define( 'TECHNOTE_VERSION', '0.0.0.0.0' );
 
+define( 'TECHNOTE_REQUIRED_PHP_VERSION', '5.4' );
+
 if ( ! defined( 'DS' ) ) {
 	define( 'DS', DIRECTORY_SEPARATOR );
+}
+
+if ( defined( 'WP_INSTALLING' ) && WP_INSTALLING ) {
+	require_once dirname( __FILE__ ) . DS . 'classes' . DS . 'technote_mock.php';
+
+	return;
+}
+
+if ( version_compare( phpversion(), TECHNOTE_REQUIRED_PHP_VERSION, '<' ) ) {
+	// unsupported version
+	require_once dirname( __FILE__ ) . DS . 'classes' . DS . 'technote_mock.php';
+
+	return;
 }
 
 require_once dirname( __FILE__ ) . DS . 'classes' . DS . 'technote.php';
