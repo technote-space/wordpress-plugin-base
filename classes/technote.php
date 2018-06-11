@@ -33,11 +33,15 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * @property \Technote\Models\Log $log
  * @property \Technote\Models\Input $input
  * @property \Technote\Models\Db $db
+ * @property \Technote\Models\Uninstall $uninstall
  */
 class Technote {
 
-	/** @var array */
+	/** @var array of \Technote */
 	private static $instances = array();
+
+	/** @var bool $initialized */
+	private $initialized = false;
 
 	/** @var string $original_plugin_name */
 	public $original_plugin_name;
@@ -73,6 +77,8 @@ class Technote {
 	public $input;
 	/** @var \Technote\Models\Db $db */
 	public $db;
+	/** @var \Technote\Models\Uninstall $db */
+	public $uninstall;
 
 	/**
 	 * Technote constructor.
@@ -85,8 +91,13 @@ class Technote {
 		require_once __DIR__ . DS . 'interfaces' . DS . 'singleton.php';
 		require_once __DIR__ . DS . 'models' . DS . 'define.php';
 
-		add_action( 'init', function () use ( $plugin_name, $plugin_file ) {
-			$this->initialize( $plugin_name, $plugin_file );
+		$this->original_plugin_name = $plugin_name;
+		$this->plugin_file          = $plugin_file;
+		$this->plugin_name          = strtolower( $this->original_plugin_name );
+		$this->define               = \Technote\Models\Define::get_instance( $this );
+
+		add_action( 'init', function () {
+			$this->initialize();
 		}, 1 );
 	}
 
@@ -97,43 +108,42 @@ class Technote {
 	 * @return Technote
 	 */
 	public static function get_instance( $plugin_name, $plugin_file ) {
-		if ( ! isset( static::$instances[ $plugin_name ] ) ) {
-			static::$instances[ $plugin_name ] = new static( $plugin_name, $plugin_file );
+		if ( ! isset( self::$instances[ $plugin_name ] ) ) {
+			self::$instances[ $plugin_name ] = new static( $plugin_name, $plugin_file );
 		}
 
-		return static::$instances[ $plugin_name ];
+		return self::$instances[ $plugin_name ];
 	}
 
 	/**
-	 * @param string $plugin_name
-	 * @param string $plugin_file
+	 * initialize
 	 */
-	private function initialize( $plugin_name, $plugin_file ) {
-		$this->setup_property( $plugin_name, $plugin_file );
+	private function initialize() {
+		if ( $this->initialized ) {
+			return;
+		}
+		$this->initialized = true;
+		$this->setup_property();
 		$this->setup_update();
 		$this->setup_textdomain();
 	}
 
 	/**
-	 * @param string $plugin_name
-	 * @param string $plugin_file
+	 * setup property
 	 */
-	private function setup_property( $plugin_name, $plugin_file ) {
+	private function setup_property() {
 		if ( ! function_exists( 'get_plugin_data' ) ) {
 			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 		}
-		$this->original_plugin_name = $plugin_name;
-		$this->plugin_name          = strtolower( $plugin_name );
-		$this->plugin_file          = $plugin_file;
-		$this->plugin_data          = get_plugin_data( $this->plugin_file );
-		$this->define               = \Technote\Models\Define::get_instance( $this );
+		$this->plugin_data = get_plugin_data( $this->plugin_file );
 		spl_autoload_register( array( $this, 'load_class' ) );
 
-		$this->input   = \Technote\Models\Input::get_instance( $this );
-		$this->config  = \Technote\Models\Config::get_instance( $this );
-		$this->setting = \Technote\Models\Setting::get_instance( $this );
-		$this->option  = \Technote\Models\Option::get_instance( $this );
-		$this->log     = \Technote\Models\Log::get_instance( $this );
+		$this->uninstall = \Technote\Models\Uninstall::get_instance( $this );
+		$this->input     = \Technote\Models\Input::get_instance( $this );
+		$this->config    = \Technote\Models\Config::get_instance( $this );
+		$this->setting   = \Technote\Models\Setting::get_instance( $this );
+		$this->option    = \Technote\Models\Option::get_instance( $this );
+		$this->log       = \Technote\Models\Log::get_instance( $this );
 
 		$this->device = \Technote\Models\Device::get_instance( $this );
 		$this->minify = \Technote\Models\Minify::get_instance( $this );
@@ -290,6 +300,46 @@ class Technote {
 	 */
 	public function get_page_slug( $file ) {
 		return basename( $file, '.php' );
+	}
+
+	/**
+	 * @param $name
+	 * @param $arguments
+	 */
+	public static function __callStatic( $name, $arguments ) {
+		if ( preg_match( '#register_uninstall_(.+)$#', $name, $matches ) ) {
+			$plugin_base_name = $matches[1];
+			self::uninstall( $plugin_base_name );
+		}
+	}
+
+	/**
+	 * @param string $plugin_base_name
+	 */
+	private static function uninstall( $plugin_base_name ) {
+		$app = self::find_plugin( $plugin_base_name );
+		if ( ! isset( $app ) ) {
+			return;
+		}
+		$app->initialize();
+		$app->uninstall->uninstall();
+	}
+
+	/**
+	 * @param string $plugin_base_name
+	 *
+	 * @return \Technote|null
+	 */
+	private static function find_plugin( $plugin_base_name ) {
+
+		/** @var \Technote $instance */
+		foreach ( self::$instances as $plugin_name => $instance ) {
+			if ( $instance->define->plugin_base_name === $plugin_base_name ) {
+				return $instance;
+			}
+		}
+
+		return null;
 	}
 }
 

@@ -20,9 +20,9 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * Class Db
  * @package Technote\Models
  */
-class Db implements \Technote\Interfaces\Singleton {
+class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \Technote\Interfaces\Uninstall {
 
-	use \Technote\Traits\Singleton;
+	use \Technote\Traits\Singleton, \Technote\Traits\Hook, \Technote\Traits\Uninstall;
 
 	/** @var array */
 	protected $table_defines = null;
@@ -63,7 +63,7 @@ class Db implements \Technote\Interfaces\Singleton {
 			return '%f';
 		}
 
-		return '%s';
+		return $this->apply_filters( 'type2format', '%s', $type );
 	}
 
 	/**
@@ -167,7 +167,7 @@ class Db implements \Technote\Interfaces\Singleton {
 			);
 		}
 
-		return array( $id, $columns );
+		return $this->apply_filters( 'setup_table_columns', array( $id, $columns ), $table, $define, $id, $columns );
 	}
 
 	/**
@@ -227,6 +227,8 @@ class Db implements \Technote\Interfaces\Singleton {
 				}
 			}
 		}
+
+		$this->do_action( 'db_updated' );
 	}
 
 	/**
@@ -335,7 +337,7 @@ class Db implements \Technote\Interfaces\Singleton {
 	 * @return bool
 	 */
 	private function is_logical( $define ) {
-		return 'physical' !== Utility::array_get( $define, 'delete', 'logical' );
+		return $this->apply_filters( 'is_logical', 'physical' !== Utility::array_get( $define, 'delete', 'logical' ), $define );
 	}
 
 	/**
@@ -364,8 +366,8 @@ class Db implements \Technote\Interfaces\Singleton {
 	 * @param $delete
 	 */
 	private function set_update_params( &$data, $create, $update, $delete ) {
-		$now  = date( 'Y-m-d H:i:s' );
-		$user = $this->app->user->user_name;
+		$now  = $this->apply_filters( 'set_update_params_date', date( 'Y-m-d H:i:s' ) );
+		$user = $this->apply_filters( 'set_update_params_user', $this->app->user->user_name );
 
 		if ( $create ) {
 			$data['created_at'] = $now;
@@ -563,6 +565,19 @@ class Db implements \Technote\Interfaces\Singleton {
 		list ( $_where, $_where_format ) = $this->filter( $where, $columns );
 
 		return $wpdb->delete( $this->get_table( $table ), $_where, $_where_format );
+	}
+
+	/**
+	 * uninstall
+	 */
+	public function uninstall() {
+		/** @var \wpdb $wpdb */
+		global $wpdb;
+
+		foreach ( $this->table_defines as $table => $define ) {
+			$sql = 'DROP TABLE IF EXISTS `' . $this->get_table( $table ) . '`';
+			$wpdb->query( $sql );
+		}
 	}
 
 }

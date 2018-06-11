@@ -125,7 +125,6 @@ class Define implements \Technote\Interfaces\Singleton {
 
 		$this->lib_assets_url    = plugins_url( 'assets', TECHNOTE_BOOTSTRAP );
 		$this->plugin_assets_url = plugins_url( 'assets', $this->plugin_file );
-
 	}
 
 }
