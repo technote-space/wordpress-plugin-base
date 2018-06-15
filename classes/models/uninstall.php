@@ -41,11 +41,29 @@ class Uninstall implements \Technote\Interfaces\Singleton {
 	 * uninstall
 	 */
 	public function uninstall() {
-		foreach ( $this->uninstall as $item ) {
-			if ( is_callable( $item ) ) {
-				call_user_func( $item );
+		if ( ! is_multisite() ) {
+			foreach ( $this->uninstall as $item ) {
+				if ( is_callable( $item ) ) {
+					call_user_func( $item );
+				}
 			}
+		} else {
+			/** @var \wpdb $wpdb */
+			global $wpdb;
+			$current_blog_id = get_current_blog_id();
+			$blog_ids        = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" );
+			foreach ( $blog_ids as $blog_id ) {
+				switch_to_blog( $blog_id );
+
+				foreach ( $this->uninstall as $item ) {
+					if ( is_callable( $item ) ) {
+						call_user_func( $item );
+					}
+				}
+			}
+			switch_to_blog( $current_blog_id );
 		}
+
 		$this->uninstall = array();
 	}
 
