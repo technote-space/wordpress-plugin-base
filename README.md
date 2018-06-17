@@ -48,7 +48,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 @require_once dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
-$example = \Technote\Technote::get_instance( 'Example', __FILE__ );
+$example = Technote::get_instance( 'Example', __FILE__ );
 ```
 
 ```
@@ -167,6 +167,22 @@ $this->app->db->delete( 'test', array(
     'id' => 4,
 ) );
 ```
+select 以外は 内部でWordPress標準の関数を使用しているため、  
+条件の指定の仕方は 'key' => 'value' (key = value) のみ可能です。  
+select の条件指定はライブラリ側で構築しており、  
+key = value  
+```
+key' => 'value'
+```
+key in ( val1, val2, val3 )
+```
+'key' => array( 'in', array( val1, val2, val3 ) )  
+```
+key like '%value%'
+```
+'key' => array( 'like', '%value%' )
+```
+などが指定可能です。
 
 - configs/setting.php
 
@@ -306,9 +322,13 @@ test
 ```
 
 ## API の追加
+今後ドキュメント追加予定
 
 ## filterの追加
+今後ドキュメント追加予定
 
+## サンプルプラグイン
+追加予定
 
 
 # Author
