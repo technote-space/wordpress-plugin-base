@@ -20,13 +20,13 @@ return array(
 	'plugin_title'         => '',
 
 	// contact url
-	'contact_url'          => 'https://technote.space/contact',
+	'contact_url'          => '',
 
 	// twitter
 	'twitter'              => '',
 
 	// github
-	'github'               => 'technote-space',
+	'github'               => '',
 
 	// plugin version
 	'plugin_version'       => '0.0.0.0.0',

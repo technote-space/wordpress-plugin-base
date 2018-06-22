@@ -40,7 +40,7 @@ class Loader implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	protected function initialize() {
 		foreach ( $this->get_relative_namespaces( $this->app->define->lib_classes_dir . DS . 'models' . DS . 'loader' ) as $namespace ) {
 			$class = $this->get_class( $namespace );
-			if ( class_exists( $class ) ) {
+			if ( class_exists( $class ) && is_subclass_of( $class, '\Technote\Interfaces\Singleton' ) ) {
 				try {
 					/** @var \Technote\Traits\Singleton $class */
 					$loader = $class::get_instance( $this->app );

@@ -113,7 +113,7 @@ trait Loader {
 	 * @return bool|Singleton
 	 */
 	protected function get_class_instance( $class, $instanceof ) {
-		if ( false !== $class && class_exists( $class ) ) {
+		if ( false !== $class && class_exists( $class ) && is_subclass_of( $class, '\Technote\Interfaces\Singleton' ) ) {
 			try {
 				/** @var Singleton $class */
 				$instance = $class::get_instance( $this->app );
