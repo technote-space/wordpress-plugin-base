@@ -48,7 +48,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 @require_once dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
-$example = Technote::get_instance( 'Example', __FILE__ );
+Technote::get_instance( 'Example', __FILE__ );
 ```
 
 ```
@@ -275,6 +275,8 @@ class Test extends \Technote\Controllers\Admin\Base {
 }
 ```
 
+POST の時に行う動作は事前にnonce checkが行われます。
+
 - views/admin に PHP ファイルを追加
 ```
 <?php
@@ -286,7 +288,16 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 /** @var string $test */
 ?>
 
+<?php $instance->form( 'open', $args ); ?>
+
 <?php $instance->h( $test ); ?>
+<?php $instance->form( 'input/submit', $args, array(
+	'name'  => 'update',
+	'value' => 'Update',
+	'class' => 'button-primary'
+) ); ?>
+
+<?php $instance->form( 'close', $args ); ?>
 ```
 
 - $instance
