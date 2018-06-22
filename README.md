@@ -364,7 +364,8 @@ class Sample extends \Technote\Tests\Base {
 
 - 管理画面から実行
 
-![build](https://raw.githubusercontent.com/technote-space/wordpress-plugin-base/images/test.png)
+![test1](https://raw.githubusercontent.com/technote-space/wordpress-plugin-base/images/test1.png)
+![test2](https://raw.githubusercontent.com/technote-space/wordpress-plugin-base/images/test2.png)
 
 ## サンプルプラグイン
 追加予定
