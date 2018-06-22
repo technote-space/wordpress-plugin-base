@@ -33,7 +33,7 @@ class Filter implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	protected function initialize() {
 		$this->filter = $this->apply_filters( 'filter', $this->app->config->load( 'filter' ) );
 		foreach ( $this->filter as $class => $tags ) {
-			$app = $class;
+			$app = false;
 			if ( strpos( $class, '->' ) !== false ) {
 				$app      = $this->app;
 				$exploded = explode( '->', $class );
@@ -48,6 +48,15 @@ class Filter implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 			} else {
 				if ( property_exists( $this->app, $class ) ) {
 					$app = $this->app->$class;
+				}
+			}
+			if ( false === $app ) {
+				if ( class_exists( $class ) && is_subclass_of( $class, '\Technote\Interfaces\Singleton' ) ) {
+					try {
+						/** @var \Technote\Interfaces\Singleton $class */
+						$app = $class::get_instance( $this->app );
+					} catch ( \Exception $e ) {
+					}
 				}
 			}
 			if ( false !== $app && is_callable( array( $app, 'add_filter' ) ) ) {
