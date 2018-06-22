@@ -20,6 +20,8 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * Trait Singleton
  * @package TechnoteTraits
  * @property \Technote $app
+ * @property string $class_name
+ * @property \ReflectionClass $reflection
  */
 trait Singleton {
 

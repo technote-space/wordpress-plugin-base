@@ -59,6 +59,16 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 	}
 
 	/**
+	 * @return string
+	 */
+	private function get_plugin_title() {
+		$plugin_title = $this->app->get_config( 'config', 'plugin_title' );
+		empty( $plugin_title ) and $plugin_title = $this->app->original_plugin_name;
+
+		return $this->apply_filters( 'get_plugin_title', $plugin_title );
+	}
+
+	/**
 	 * @return \Technote\Controllers\Admin\Base|null
 	 */
 	private function load_page() {
@@ -110,8 +120,8 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 		ksort( $pages );
 
 		$hook = add_menu_page(
-			$this->apply_filters( 'admin_page_title', $this->app->original_plugin_name ),
-			$this->apply_filters( 'admin_menu_title', $this->app->original_plugin_name ),
+			$this->get_plugin_title(),
+			$this->get_plugin_title(),
 			$capability,
 			$this->get_menu_slug(),
 			function () {

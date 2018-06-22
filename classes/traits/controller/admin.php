@@ -17,7 +17,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 }
 
 /**
- * Trait Controller Admin
+ * Trait Admin
  * @package Technote\Traits\Controller
  * @property \Technote $app
  */

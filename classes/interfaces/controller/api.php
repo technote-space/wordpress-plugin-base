@@ -17,7 +17,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 }
 
 /**
- * Interface Controller Api
+ * Interface Api
  * @package Technote\Interfaces\Controller
  */
 interface Api {

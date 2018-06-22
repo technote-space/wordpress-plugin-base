@@ -16,8 +16,8 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 
 return array(
 
-	// url
-	'home_url'             => 'https://technote.space',
+	// plugin title
+	'plugin_title'         => '',
 
 	// contact url
 	'contact_url'          => 'https://technote.space/contact',

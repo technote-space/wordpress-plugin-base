@@ -17,7 +17,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 }
 
 /**
- * Interface Controller Admin
+ * Interface Admin
  * @package Technote\Interfaces\Controller
  */
 interface Admin extends \Technote\Interfaces\Controller, \Technote\Interfaces\Nonce {
