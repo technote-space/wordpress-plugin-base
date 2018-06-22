@@ -20,15 +20,37 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * Class Base
  * @package Technote\Tests
  */
-abstract class Base extends \PHPUnit\Framework\TestCase implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook {
+abstract class Base extends \PHPUnit\Framework\TestCase implements \Technote\Interfaces\Test {
 
-	use \Technote\Traits\Singleton, \Technote\Traits\Hook;
+	use \Technote\Traits\Test;
+
+	/** @var \Technote */
+	protected static $test_app;
 
 	/**
 	 * initialize
 	 */
 	protected function initialize() {
 
+	}
+
+	/**
+	 * @param \Technote $app
+	 */
+	public static function set_app( $app ) {
+		static::$test_app = $app;
+	}
+
+	/**
+	 * @throws \ReflectionException
+	 */
+	public function setUp() {
+		$class = get_called_class();
+		if ( false === $class ) {
+			$class = get_class();
+		}
+		$reflection = new \ReflectionClass( $class );
+		$this->init( static::$test_app, $reflection );
 	}
 
 }

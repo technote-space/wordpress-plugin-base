@@ -119,6 +119,26 @@ class Utility {
 	}
 
 	/**
+	 * @param array $array
+	 * @param string $key
+	 * @param mixed $default
+	 * @param bool $filter
+	 *
+	 * @return array
+	 */
+	public static function array_pluck( array $array, $key, $default = null, $filter = false ) {
+		return array_map( function ( $d ) use ( $key, $default ) {
+			is_object( $d ) and $d = (array) $d;
+
+			return is_array( $d ) && array_key_exists( $key, $d ) ? $d[ $key ] : $default;
+		}, $filter ? array_filter( $array, function ( $d ) use ( $key ) {
+			is_object( $d ) and $d = (array) $d;
+
+			return is_array( $d ) && array_key_exists( $key, $d );
+		} ) : $array );
+	}
+
+	/**
 	 * @param string $string
 	 * @param array $data
 	 *

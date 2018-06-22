@@ -32,13 +32,30 @@ trait Singleton {
 	/** @var \Technote */
 	protected $app;
 
+	/** @var string */
+	public $class_name;
+
+	/** @var \ReflectionClass */
+	public $reflection;
+
 	/**
 	 * Singleton constructor.
 	 *
 	 * @param \Technote $app
+	 * @param \ReflectionClass $reflection
 	 */
-	private function __construct( \Technote $app ) {
-		$this->app = $app;
+	private function __construct( \Technote $app, $reflection ) {
+		$this->init( $app, $reflection );
+	}
+
+	/**
+	 * @param \Technote $app
+	 * @param \ReflectionClass $reflection
+	 */
+	protected function init( \Technote $app, $reflection ) {
+		$this->app        = $app;
+		$this->reflection = $reflection;
+		$this->class_name = $reflection->getName();
 	}
 
 	/**
@@ -56,16 +73,23 @@ trait Singleton {
 		if ( false === $class ) {
 			$class = get_class();
 		}
-		if ( ! isset( self::$instances[ $app->plugin_name ][ $class ] ) ) {
-			$instance = new static( $app );
-			$instance->initialize();
-			if ( $instance instanceof \Technote\Interfaces\Uninstall && $app->uninstall ) {
-				$app->uninstall->add_uninstall( array( $instance, 'uninstall' ) );
+		try {
+			$reflection = new \ReflectionClass( $class );
+
+			if ( ! isset( self::$instances[ $app->plugin_name ][ $class ] ) ) {
+				$instance = new static( $app, $reflection );
+				$instance->initialize();
+				if ( $instance instanceof \Technote\Interfaces\Uninstall && $app->uninstall ) {
+					$app->uninstall->add_uninstall( array( $instance, 'uninstall' ) );
+				}
+				self::$instances[ $app->plugin_name ][ $class ] = $instance;
 			}
-			self::$instances[ $app->plugin_name ][ $class ] = $instance;
+
+			return self::$instances[ $app->plugin_name ][ $class ];
+		} catch ( \Exception $e ) {
 		}
 
-		return self::$instances[ $app->plugin_name ][ $class ];
+		return null;
 	}
 
 	/**

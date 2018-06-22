@@ -21,6 +21,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * @package Technote\Models
  * @property \Technote\Models\Loader\Controller\Admin $admin
  * @property \Technote\Models\Loader\Controller\Api $api
+ * @property \Technote\Models\Loader\Test $test
  */
 class Loader implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook {
 
@@ -30,6 +31,8 @@ class Loader implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	public $admin;
 	/** @var \Technote\Models\Loader\Controller\Api $api */
 	public $api;
+	/** @var \Technote\Models\Loader\Test $test */
+	public $test;
 
 	/**
 	 * initialize

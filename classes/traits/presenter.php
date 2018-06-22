@@ -138,6 +138,7 @@ trait Presenter {
 			$value = $this->app->translate( $value );
 		}
 		$value = esc_html( $value );
+		$value = nl2br( $value );
 		if ( $echo ) {
 			echo $value;
 		}

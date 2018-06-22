@@ -20,6 +20,6 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * Interface Test
  * @package Technote\Interfaces
  */
-interface Test {
+interface Test extends Singleton, Hook {
 
 }

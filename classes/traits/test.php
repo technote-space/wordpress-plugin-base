@@ -23,4 +23,23 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  */
 trait Test {
 
+	use Singleton, Hook;
+
+	/**
+	 * Test constructor.
+	 */
+	public function __construct() {
+		$args = func_get_args();
+		if ( count( $args ) > 0 ) {
+			$this->init( ...$args );
+		}
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_test_slug() {
+		return $this->get_file_slug();
+	}
+
 }

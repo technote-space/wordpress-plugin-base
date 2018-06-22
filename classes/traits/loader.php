@@ -37,18 +37,34 @@ trait Loader {
 
 	/**
 	 * @param string $dir
-	 * @param string $instanceof
 	 *
 	 * @return \Generator
 	 */
-	protected function get_classes( $dir, $instanceof ) {
+	protected function get_class_strings( $dir ) {
 		if ( is_dir( $dir ) ) {
 			foreach ( scandir( $dir ) as $file ) {
 				if ( preg_match( "/^[^\\.].*\\.php$/", $file ) ) {
-					$instance = $this->get_class_instance( $this->get_class_string( $this->app->get_page_slug( $file ) ), $instanceof );
-					if ( false !== $instance ) {
-						yield $instance;
-					}
+					yield $this->get_class_string( $this->app->get_page_slug( $file ) );
+				}
+			}
+		}
+	}
+
+	/**
+	 * @param string $dir
+	 * @param string $instanceof
+	 * @param bool $return_instance
+	 *
+	 * @return \Generator
+	 */
+	protected function get_classes( $dir, $instanceof, $return_instance = true ) {
+		foreach ( $this->get_class_strings( $dir ) as $class_string ) {
+			$instance = $this->get_class_instance( $class_string, $instanceof );
+			if ( false !== $instance ) {
+				if ( $return_instance ) {
+					yield $instance;
+				} else {
+					yield $class_string;
 				}
 			}
 		}
