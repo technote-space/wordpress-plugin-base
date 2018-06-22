@@ -122,7 +122,7 @@ trait Singleton {
 	 */
 	public function add_filter( $tag, $method, $priority, $accepted_args ) {
 		add_filter( $tag, function () use ( $method ) {
-			$this->$method( ...func_get_args() );
+			return $this->$method( ...func_get_args() );
 		}, $priority, $accepted_args );
 	}
 
