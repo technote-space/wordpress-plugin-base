@@ -60,6 +60,9 @@ example - example.php
     |           |
     |           - admin
     |           - api
+    |
+    - tests
+    |
     - views
     |   |
     |   - admin
@@ -327,9 +330,44 @@ test
 ## filterの追加
 今後ドキュメント追加予定
 
+## テストの追加
+
+- PHPUnitの追加  
+```composer require --dev phpunit/phpunit```
+
+- classes/tests に PHP ファイルを追加
+```
+<?php
+
+namespace Example\Tests;
+
+if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
+	exit;
+}
+
+/**
+ * Class Base
+ * @package Technote\Tests
+ */
+class Sample extends \Technote\Tests\Base {
+
+	public function test_sample1(){
+		$this->assertEquals(2, 1 + 1);
+	}
+
+	public function test_sample2() {
+		$this->assertEquals( 1, 1 + 1 );
+	}
+
+}
+```
+
+- 管理画面から実行
+
+![build](https://raw.githubusercontent.com/technote-space/wordpress-plugin-base/images/test.png)
+
 ## サンプルプラグイン
 追加予定
-
 
 # Author
 
