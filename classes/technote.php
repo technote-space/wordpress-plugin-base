@@ -237,27 +237,29 @@ class Technote {
 
 	/**
 	 * @param string $message
+	 * @param bool $escape
 	 */
-	public function add_error( $message ) {
+	public function add_error( $message, $escape = true ) {
 		if ( ! isset( $this->loader->admin ) ) {
-			add_action( 'admin_notices', function () use ( $message ) {
-				$this->loader->admin->add_error( $message );
+			add_action( 'admin_notices', function () use ( $message, $escape ) {
+				$this->loader->admin->add_error( $message, $escape );
 			}, 9 );
 		} else {
-			$this->loader->admin->add_error( $message );
+			$this->loader->admin->add_error( $message, $escape );
 		}
 	}
 
 	/**
 	 * @param string $message
+	 * @param bool $escape
 	 */
-	public function add_message( $message ) {
+	public function add_message( $message, $escape = true ) {
 		if ( ! isset( $this->loader->admin ) ) {
-			add_action( 'admin_notices', function () use ( $message ) {
-				$this->loader->admin->add_message( $message );
+			add_action( 'admin_notices', function () use ( $message, $escape ) {
+				$this->loader->admin->add_message( $message, $escape );
 			}, 9 );
 		} else {
-			$this->loader->admin->add_message( $message );
+			$this->loader->admin->add_message( $message, $escape );
 		}
 	}
 

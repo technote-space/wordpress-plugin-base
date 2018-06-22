@@ -256,16 +256,18 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 
 	/**
 	 * @param string $message
+	 * @param bool $escape
 	 */
-	public function add_error( $message ) {
-		$this->errors[] = $message;
+	public function add_error( $message, $escape = true ) {
+		$this->errors[] = array( $message, $escape );
 	}
 
 	/**
 	 * @param string $message
+	 * @param bool $escape
 	 */
-	public function add_message( $message ) {
-		$this->messages[] = $message;
+	public function add_message( $message, $escape = true ) {
+		$this->messages[] = array( $message, $escape );
 	}
 
 }

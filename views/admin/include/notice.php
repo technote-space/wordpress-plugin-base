@@ -20,8 +20,8 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 <?php if ( ! empty( $errors ) ): ?>
     <div class="error <?php $instance->id(); ?>-admin-message">
         <ul>
-			<?php foreach ( $errors as $m ): ?>
-                <li><p><?php $instance->h( $m, true ); ?></p></li>
+			<?php foreach ( $errors as list( $m, $escape ) ): ?>
+                <li><p><?php $instance->h( $m, true, true, $escape ); ?></p></li>
 			<?php endforeach; ?>
         </ul>
     </div>
@@ -29,8 +29,8 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 <?php if ( ! empty( $messages ) ): ?>
     <div class="updated <?php $instance->id(); ?>-admin-message">
         <ul>
-			<?php foreach ( $messages as $m ): ?>
-                <li><p><?php $instance->h( $m, true ); ?></p></li>
+			<?php foreach ( $messages as list( $m, $escape ) ): ?>
+                <li><p><?php $instance->h( $m, true, true, $escape ); ?></p></li>
 			<?php endforeach; ?>
         </ul>
     </div>

@@ -130,15 +130,17 @@ trait Presenter {
 	 * @param string $value
 	 * @param bool $translate
 	 * @param bool $echo
+	 * @param bool $escape
 	 *
 	 * @return string
 	 */
-	public function h( $value, $translate = false, $echo = true ) {
+	public function h( $value, $translate = false, $echo = true, $escape = true ) {
 		if ( $translate ) {
 			$value = $this->app->translate( $value );
 		}
-		$value = esc_html( $value );
-		$value = nl2br( $value );
+		if ( $escape ) {
+			$value = esc_html( $value );
+		}
 		if ( $echo ) {
 			echo $value;
 		}
