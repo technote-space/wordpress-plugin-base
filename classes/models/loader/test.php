@@ -20,9 +20,9 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * Class Test
  * @package Technote\Models\Loader
  */
-class Test implements \Technote\Interfaces\Loader {
+class Test implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 
-	use \Technote\Traits\Loader;
+	use \Technote\Traits\Loader, \Technote\Traits\Nonce;
 
 	/** @var bool $is_valid */
 	private $is_valid = false;
@@ -38,10 +38,6 @@ class Test implements \Technote\Interfaces\Loader {
 			$autoload = $this->app->define->lib_vendor_dir . DS . 'autoload.php';
 			if ( ! file_exists( $autoload ) ) {
 				return;
-			}
-
-			if ( ! defined( 'PHPUNIT_TESTSUITE' ) ) {
-				define( 'PHPUNIT_TESTSUITE', 'PHPUNIT_TESTSUITE' );
 			}
 			require_once $this->app->define->lib_vendor_dir . DS . 'autoload.php';
 
@@ -117,11 +113,9 @@ class Test implements \Technote\Interfaces\Loader {
 			return array();
 		}
 
-		$command = new \PHPUnit_TextUI_Command();
-
 		$results = array();
 		foreach ( $this->get_tests() as $slug => $class ) {
-			$results[ $slug ] = $slug . "\n\n" . $this->do_test( $class, $command );
+			$results[] = $this->do_test( $class );
 		}
 
 		return $results;
@@ -129,20 +123,25 @@ class Test implements \Technote\Interfaces\Loader {
 
 	/**
 	 * @param \Technote\Tests\Base $class
-	 * @param \PHPUnit_TextUI_Command $command
 	 *
+	 * @return array
+	 */
+	private function do_test( $class ) {
+		$suite = new \PHPUnit_Framework_TestSuite( $class->class_name );
+		$suite->addTestFile( $class->reflection->getFileName() );
+		$suite->setBackupGlobals( false );
+		$result = $suite->run();
+
+		return array(
+			$result->wasSuccessful(),
+			$this->get_view( 'admin/include/test_result', array( 'result' => $result, 'class' => $class ) ),
+		);
+	}
+
+	/**
 	 * @return string
 	 */
-	private function do_test( $class, $command ) {
-		ob_start();
-		$command->run( array(
-			"--no-globals-backup",
-			$class->class_name,
-			$class->reflection->getFileName()
-		), false );
-		$buffer = ob_get_contents();
-		ob_end_clean();
-
-		return $buffer;
+	public function get_nonce_slug() {
+		return '_admin_test';
 	}
 }
