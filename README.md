@@ -346,8 +346,8 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 }
 
 /**
- * Class Base
- * @package Technote\Tests
+ * Class Sample
+ * @package Example\Tests
  */
 class Sample extends \Technote\Tests\Base {
 
