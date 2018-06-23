@@ -57,11 +57,7 @@ class Test extends Base {
 
 	private function do_test() {
 		foreach ( $this->app->loader->test->do_tests() as list( $success, $result ) ) {
-			if ( $success ) {
-				$this->app->add_message( $result, false );
-			} else {
-				$this->app->add_error( $result, false );
-			}
+			$this->app->add_message( $result, 'test', ! $success, false );
 		}
 	}
 

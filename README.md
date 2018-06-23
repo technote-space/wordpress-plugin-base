@@ -362,8 +362,8 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  */
 class Sample extends \Technote\Tests\Base {
 
-	public function test_sample1(){
-		$this->assertEquals(2, 1 + 1);
+	public function test_sample1() {
+		$this->assertEquals( 2, 1 + 1 );
 	}
 
 	public function test_sample2() {

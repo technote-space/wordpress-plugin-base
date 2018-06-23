@@ -54,7 +54,7 @@ class Logs extends Base {
 				@unlink( $file );
 			}
 			if ( ! file_exists( $file ) ) {
-				$this->app->add_message( 'File deleted.' );
+				$this->app->add_message( 'File deleted.', 'logs' );
 			}
 		}
 	}

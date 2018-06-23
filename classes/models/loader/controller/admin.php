@@ -31,9 +31,6 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 	/** @var array $messages */
 	private $messages = array();
 
-	/** @var array $errors */
-	private $errors = array();
-
 	/** @var \Technote\Controllers\Admin\Base */
 	public $page;
 
@@ -248,7 +245,6 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 	private function admin_notice() {
 		if ( $this->app->user_can() ) {
 			$this->get_view( 'admin/include/notice', array(
-				'errors'   => $this->errors,
 				'messages' => $this->messages
 			), true );
 		}
@@ -256,18 +252,12 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 
 	/**
 	 * @param string $message
+	 * @param string $group
 	 * @param bool $escape
+	 * @param bool $error
 	 */
-	public function add_error( $message, $escape = true ) {
-		$this->errors[] = array( $message, $escape );
-	}
-
-	/**
-	 * @param string $message
-	 * @param bool $escape
-	 */
-	public function add_message( $message, $escape = true ) {
-		$this->messages[] = array( $message, $escape );
+	public function add_message( $message, $group = '', $error = false, $escape = true ) {
+		$this->messages[ $group ][ $error ? 'error' : 'updated' ][] = array( $message, $escape );
 	}
 
 }

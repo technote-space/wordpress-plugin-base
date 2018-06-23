@@ -237,29 +237,17 @@ class Technote {
 
 	/**
 	 * @param string $message
+	 * @param string $group
+	 * @param bool $error
 	 * @param bool $escape
 	 */
-	public function add_error( $message, $escape = true ) {
+	public function add_message( $message, $group = '', $error = false, $escape = true ) {
 		if ( ! isset( $this->loader->admin ) ) {
-			add_action( 'admin_notices', function () use ( $message, $escape ) {
-				$this->loader->admin->add_error( $message, $escape );
+			add_action( 'admin_notices', function () use ( $message, $group, $error, $escape ) {
+				$this->loader->admin->add_message( $message, $group, $error, $escape );
 			}, 9 );
 		} else {
-			$this->loader->admin->add_error( $message, $escape );
-		}
-	}
-
-	/**
-	 * @param string $message
-	 * @param bool $escape
-	 */
-	public function add_message( $message, $escape = true ) {
-		if ( ! isset( $this->loader->admin ) ) {
-			add_action( 'admin_notices', function () use ( $message, $escape ) {
-				$this->loader->admin->add_message( $message, $escape );
-			}, 9 );
-		} else {
-			$this->loader->admin->add_message( $message, $escape );
+			$this->loader->admin->add_message( $message, $group, $error, $escape );
 		}
 	}
 
