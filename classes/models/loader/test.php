@@ -128,7 +128,6 @@ class Test implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 	 */
 	private function do_test( $class ) {
 		$suite = new \PHPUnit_Framework_TestSuite( $class->class_name );
-		$suite->addTestFile( $class->reflection->getFileName() );
 		$suite->setBackupGlobals( false );
 		$result = $suite->run();
 

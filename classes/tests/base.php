@@ -44,13 +44,21 @@ abstract class Base extends \PHPUnit\Framework\TestCase implements \Technote\Int
 	/**
 	 * @throws \ReflectionException
 	 */
-	public function setUp() {
+	public final function setUp() {
 		$class = get_called_class();
 		if ( false === $class ) {
 			$class = get_class();
 		}
 		$reflection = new \ReflectionClass( $class );
 		$this->init( static::$test_app, $reflection );
+		$this->_setup();
+	}
+
+	/**
+	 * setup
+	 */
+	public function _setup() {
+
 	}
 
 }

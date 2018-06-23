@@ -27,11 +27,32 @@ trait Test {
 
 	/**
 	 * Test constructor.
+	 *
+	 * @param $arg1
+	 * @param $arg2
+	 * @param $arg3
+	 *
+	 * @throws \ReflectionException
 	 */
-	public function __construct() {
+	public function __construct( $arg1 = null, $arg2 = array(), $arg3 = '' ) {
 		$args = func_get_args();
-		if ( count( $args ) > 0 ) {
+		if ( count( $args ) > 1 && $args[0] instanceof \Technote && $args[1] instanceof \ReflectionClass ) {
+			// Singleton
 			$this->init( ...$args );
+		} elseif ( count( $args ) > 2 ) {
+			// \PHPUnit_Framework_TestCase
+			$reflectionClass = new \ReflectionClass( '\PHPUnit_Framework_TestCase' );
+			if ( $arg1 !== null ) {
+				$this->setName( $arg1 );
+			}
+			$data = $reflectionClass->getProperty( 'data' );
+			$data->setAccessible( true );
+			$data->setValue( $this, $arg2 );
+			$data->setAccessible( false );
+			$dataName = $reflectionClass->getProperty( 'dataName' );
+			$dataName->setAccessible( true );
+			$dataName->setValue( $this, $arg3 );
+			$dataName->setAccessible( false );
 		}
 	}
 
