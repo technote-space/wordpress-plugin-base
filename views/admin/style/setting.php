@@ -16,3 +16,8 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 /** @var \Technote\Traits\Presenter $instance */
 $instance->add_style_view( 'admin/style/table' );
 ?>
+<style>
+    #<?php $instance->id();?>-main-contents table .<?php $instance->id(); ?>-setting-detail {
+        float: right;
+    }
+</style>

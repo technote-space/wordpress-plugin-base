@@ -45,13 +45,7 @@ trait Presenter {
 		$view = '';
 		if ( isset( $path ) ) {
 			unset( $name );
-			$args['field']       = array_merge( \Technote\Models\Utility::array_get( $args, 'field', array() ), $this->app->input->all() );
-			$args['nonce_key']   = $this->get_nonce_key();
-			$args['nonce_value'] = $this->create_nonce();
-			$args['instance']    = $this;
-			$args['action']      = $this->app->input->server( "REQUEST_URI" );
-			$args['is_admin']    = is_admin();
-			$args['user_can']    = $this->app->user_can();
+			$args = $this->get_presenter_args( $args );
 			extract( $args, EXTR_SKIP );
 
 			ob_start();
@@ -67,6 +61,32 @@ trait Presenter {
 		}
 
 		return $view;
+	}
+
+	/**
+	 * @param array $args
+	 *
+	 * @return array
+	 */
+	private function get_presenter_args( $args ) {
+		$args['field']       = array_merge( \Technote\Models\Utility::array_get( $args, 'field', array() ), $this->app->input->all() );
+		$args['nonce_key']   = $this->get_nonce_key();
+		$args['nonce_value'] = $this->create_nonce();
+		$args['instance']    = $this;
+		$args['action']      = $this->app->input->server( "REQUEST_URI" );
+		$args['is_admin']    = is_admin();
+		$args['user_can']    = $this->app->user_can();
+
+		return $this->filter_presenter_args( $args );
+	}
+
+	/**
+	 * @param array $args
+	 *
+	 * @return array
+	 */
+	protected function filter_presenter_args( $args ) {
+		return $args;
 	}
 
 	/**

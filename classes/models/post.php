@@ -39,6 +39,26 @@ class Post implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 	}
 
 	/**
+	 * @param bool $check_query
+	 *
+	 * @return int
+	 */
+	public function get_post_id( $check_query = false ) {
+		global $post, $wp_query;
+		if ( ! isset( $post ) ) {
+			if ( $check_query && isset( $wp_query, $wp_query->query_vars['p'] ) ) {
+				$post_id = $wp_query->query_vars['p'];
+			} else {
+				$post_id = 0;
+			}
+		} else {
+			$post_id = $post->ID;
+		}
+
+		return $post_id;
+	}
+
+	/**
 	 * @param string $key
 	 * @param int|null $post_id
 	 * @param bool $single
@@ -48,16 +68,7 @@ class Post implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 	 */
 	public function get( $key, $post_id = null, $single = true, $default = '' ) {
 		if ( ! isset( $post_id ) ) {
-			global $post, $wp_query;
-			if ( is_null( $post ) ) {
-				if ( isset( $wp_query, $wp_query->query_vars['p'] ) ) {
-					$post_id = $wp_query->query_vars['p'];
-				} else {
-					$post_id = 0;
-				}
-			} else {
-				$post_id = $post->ID;
-			}
+			$post_id = $this->get_post_id( true );
 		}
 		if ( $post_id <= 0 ) {
 			return $this->apply_filters( 'get_post_meta', $default, $key, $post_id, $single, $default );

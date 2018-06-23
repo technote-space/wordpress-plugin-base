@@ -50,7 +50,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
                         <label for="<?php $instance->h( $detail['key'] ); ?>">
 							<?php $instance->h( $detail['label'], true ); ?>
 							<?php if ( ! empty( $detail['info'] ) ): ?>
-                                [<?php $instance->h( implode( ', ', $detail['info'] ) ); ?>]
+                                <span class="<?php $instance->id(); ?>-setting-detail">[<?php $instance->h( implode( ', ', $detail['info'] ) ); ?>]</span>
 							<?php endif; ?>
                         </label>
                     </td>

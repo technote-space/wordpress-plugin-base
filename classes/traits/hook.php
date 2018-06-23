@@ -100,6 +100,9 @@ trait Hook {
 				if ( isset( $setting['max'] ) && $value > (int) $setting['max'] ) {
 					$value = (int) $setting['max'];
 				}
+			} elseif ( isset( $setting['option'] ) ) {
+				$default = isset( $setting['option_default'] ) ? (int) $setting['option_default'] : $default;
+				$value   = (int) $this->app->get_option( $setting['option'], $default );
 			}
 		} else {
 			$value = $default;
@@ -126,6 +129,9 @@ trait Hook {
 				if ( isset( $setting['max'] ) && $value > (float) $setting['max'] ) {
 					$value = (float) $setting['max'];
 				}
+			} elseif ( isset( $setting['option'] ) ) {
+				$default = isset( $setting['option_default'] ) ? (float) $setting['option_default'] : $default;
+				$value   = (float) $this->app->get_option( $setting['option'], $default );
 			}
 		} else {
 			$value = $default;

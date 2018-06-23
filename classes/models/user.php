@@ -139,13 +139,16 @@ class User implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 	}
 
 	/**
-	 * @param null|string $capability
+	 * @param null|string|false $capability
 	 *
 	 * @return bool
 	 */
 	public function user_can( $capability = null ) {
 		if ( ! isset( $capability ) ) {
 			$capability = $this->app->get_config( 'capability', 'default_user', 'manage_options' );
+		}
+		if ( false === $capability ) {
+			return true;
 		}
 
 		return current_user_can( $this->apply_filters( 'user_can', $capability ) );
