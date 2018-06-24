@@ -384,12 +384,15 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	}
 
 	/**
-	 * @param array $fields
+	 * @param array|string $fields
 	 * @param array $columns
 	 *
 	 * @return array
 	 */
 	private function build_fields( $fields, $columns ) {
+		if ( is_string( $fields ) ) {
+			$fields = array( $fields );
+		}
 		foreach ( $fields as $k => $option ) {
 			$key = $k;
 			if ( is_int( $key ) ) {
@@ -546,7 +549,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	/**
 	 * @param string $table
 	 * @param array $where
-	 * @param array $fields
+	 * @param array|string $fields
 	 * @param null|int $limit
 	 * @param null|int $offset
 	 * @param null|array $order_by
