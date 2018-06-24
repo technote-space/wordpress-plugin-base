@@ -23,7 +23,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  */
 trait Controller {
 
-	use Presenter;
+	use Singleton, Presenter;
 
 	/**
 	 * @return bool

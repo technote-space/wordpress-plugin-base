@@ -40,14 +40,12 @@ class Setting extends Base {
 	 * post
 	 */
 	public function post_action() {
-
 		foreach ( $this->app->setting->get_groups() as $group ) {
 			foreach ( $this->app->setting->get_settings( $group ) as $setting ) {
 				$this->app->option->set_post_value( \Technote\Models\Utility::array_get( $this->app->setting->get_setting( $setting, true ), 'name', '' ) );
 			}
 		}
 		$this->app->add_message( 'Settings Updated.', 'setting' );
-
 	}
 
 	/**

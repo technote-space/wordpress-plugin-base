@@ -20,7 +20,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * Interface Controller
  * @package Technote\Interfaces
  */
-interface Controller {
+interface Controller extends Singleton, Presenter {
 
 	/**
 	 * @return null|string|false

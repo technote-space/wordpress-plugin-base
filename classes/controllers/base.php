@@ -20,9 +20,9 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * Class Base
  * @package Technote\Controllers
  */
-abstract class Base implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \Technote\Interfaces\Controller, \Technote\Interfaces\Presenter {
+abstract class Base implements \Technote\Interfaces\Hook, \Technote\Interfaces\Controller {
 
-	use \Technote\Traits\Singleton, \Technote\Traits\Hook, \Technote\Traits\Controller;
+	use \Technote\Traits\Hook, \Technote\Traits\Controller;
 
 	/**
 	 * initialize

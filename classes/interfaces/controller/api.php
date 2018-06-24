@@ -20,7 +20,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * Interface Api
  * @package Technote\Interfaces\Controller
  */
-interface Api {
+interface Api extends \Technote\Interfaces\Controller {
 
 	/**
 	 * @return string
