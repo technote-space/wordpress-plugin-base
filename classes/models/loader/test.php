@@ -133,10 +133,15 @@ class Test implements \Technote\Interfaces\Loader {
 		$result = $suite->run();
 
 		$dump = array();
-		foreach ( array_reverse( $result->topTestSuite()->tests() ) as $item ) {
+		foreach ( $result->topTestSuite()->tests() as $item ) {
 			if ( $item instanceof \Technote\Interfaces\Test ) {
-				$dump = $item->get_dump_objects();
-				break;
+				$dump = array_merge( $dump, $item->get_dump_objects() );
+			} elseif ( $item instanceof \PHPUnit_Framework_TestSuite_DataProvider ) {
+				foreach ( $item->tests() as $item2 ) {
+					if ( $item2 instanceof \Technote\Interfaces\Test ) {
+						$dump = array_merge( $dump, $item2->get_dump_objects() );
+					}
+				}
 			}
 		}
 

@@ -22,4 +22,19 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  */
 interface Test extends Singleton, Hook {
 
+	/**
+	 * @return string
+	 */
+	public function get_test_slug();
+
+	/**
+	 * @return bool
+	 */
+	public function has_dump_objects();
+
+	/**
+	 * @return array
+	 */
+	public function get_dump_objects();
+
 }
