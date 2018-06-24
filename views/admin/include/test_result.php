@@ -17,6 +17,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 /** @var array $args */
 /** @var \PHPUnit_Framework_TestResult $result */
 /** @var \Technote\Tests\Base $class */
+/** @var array $dump */
 $instance->add_style_view( 'admin/style/table' );
 ?>
 
@@ -100,5 +101,19 @@ $instance->add_style_view( 'admin/style/table' );
 			<?php endif; ?>
         </td>
     </tr>
+	<?php if ( ! empty( $dump ) ): ?>
+        <tr>
+            <td><?php $instance->h( 'Dump', true ); ?></td>
+            <td>
+                <ul>
+					<?php foreach ( $dump as $item ): ?>
+                        <li>
+                            <pre><?php $instance->h( $item ); ?></pre>
+                        </li>
+					<?php endforeach; ?>
+                </ul>
+            </td>
+        </tr>
+	<?php endif; ?>
 </table>
 

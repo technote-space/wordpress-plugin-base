@@ -132,9 +132,21 @@ class Test implements \Technote\Interfaces\Loader {
 		$suite->setBackupGlobals( false );
 		$result = $suite->run();
 
+		$dump = array();
+		foreach ( array_reverse( $result->topTestSuite()->tests() ) as $item ) {
+			if ( $item instanceof \Technote\Interfaces\Test ) {
+				$dump = $item->get_dump_objects();
+				break;
+			}
+		}
+
 		return array(
 			$result->wasSuccessful(),
-			$this->get_view( 'admin/include/test_result', array( 'result' => $result, 'class' => $class ) ),
+			$this->get_view( 'admin/include/test_result', array(
+				'result' => $result,
+				'class'  => $class,
+				'dump'   => $dump
+			) ),
 		);
 	}
 

@@ -25,6 +25,9 @@ trait Test {
 
 	use Singleton, Hook;
 
+	/** @var array $objects */
+	private $objects = array();
+
 	/**
 	 * Test constructor.
 	 *
@@ -61,6 +64,27 @@ trait Test {
 	 */
 	public function get_test_slug() {
 		return $this->get_file_slug();
+	}
+
+	/**
+	 * @param mixed $obj
+	 */
+	protected function dump( $obj ) {
+		$this->objects[] = print_r( $obj, true );
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function has_dump_objects() {
+		return ! empty( $this->objects );
+	}
+
+	/**
+	 * @return array
+	 */
+	public function get_dump_objects() {
+		return $this->objects;
 	}
 
 }
