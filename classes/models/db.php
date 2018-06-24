@@ -384,28 +384,54 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	}
 
 	/**
-	 * @param string $table
-	 * @param array $where
-	 * @param null|int $limit
-	 * @param int $offset
+	 * @param array $fields
+	 * @param array $columns
 	 *
-	 * @return array|bool|null
+	 * @return array
 	 */
-	public function select( $table, $where = array(), $limit = null, $offset = 0, $for_update = false ) {
-		if ( ! isset( $this->table_defines[ $table ] ) ) {
-			return false;
+	private function build_fields( $fields, $columns ) {
+		foreach ( $fields as $k => $option ) {
+			$key = $k;
+			if ( is_int( $key ) ) {
+				$key    = $option;
+				$option = null;
+			}
+			if ( $key !== '*' && ! isset( $columns[ $key ] ) ) {
+				unset( $fields[ $k ] );
+				continue;
+			}
+			$name = $key === '*' ? $key : $columns[ $key ]['name'];
+			if ( is_array( $option ) ) {
+				$group_func   = $option[0];
+				$fields[ $k ] = "$group_func( $name )";
+				if ( count( $option ) >= 2 ) {
+					$fields[ $k ] .= ' AS ' . $option[1];
+				}
+			} else {
+				$fields[ $k ] = $name;
+			}
 		}
-
-		/** @var \wpdb $wpdb */
-		global $wpdb;
-		$columns = $this->table_defines[ $table ]['columns'];
-
-		if ( $this->is_logical( $this->table_defines[ $table ] ) ) {
-			$where['deleted_at'] = null;
+		if ( empty( $fields ) ) {
+			$fields = array();
+			foreach ( $columns as $key => $column ) {
+				$name     = Utility::array_get( $column, 'name' );
+				$fields[] = $name === $key ? $name : $name . ' AS ' . $key;
+			}
 		}
+		empty( $fields ) and $fields = array( '*' );
+		$fields = implode( ', ', $fields );
 
+		return $fields;
+	}
+
+	/**
+	 * @param array $where
+	 * @param array $columns
+	 *
+	 * @return array
+	 */
+	private function build_conditions( $where, $columns ) {
 		list ( $_where, $_where_format ) = $this->filter( $where, $columns );
-
 		$conditions = $values = array();
 		$index      = 0;
 		foreach ( $_where as $field => $value ) {
@@ -438,25 +464,120 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 			$values[]     = $val;
 		}
 		$conditions = implode( ' AND ', $conditions );
-		$table      = $this->get_table( $table );
-		$fields     = array();
-		foreach ( $columns as $key => $column ) {
-			$name     = Utility::array_get( $column, 'name' );
-			$fields[] = $name . ' AS ' . $key;
+
+		return array( $conditions, $values );
+	}
+
+	/**
+	 * @param null|array $group_by
+	 * @param array $columns
+	 *
+	 * @return string
+	 */
+	private function build_group_by( $group_by, $columns ) {
+		$sql = '';
+		if ( ! empty( $group_by ) ) {
+			$items = array();
+			foreach ( $group_by as $k ) {
+				if ( ! isset( $columns[ $k ] ) ) {
+					continue;
+				}
+				$k       = $columns[ $k ]['name'];
+				$items[] = $k;
+			}
+			if ( ! empty( $items ) ) {
+				$sql .= ' GROUP BY ' . implode( ', ', $items );
+			}
 		}
-		empty( $fields ) and $fields = array( '*' );
-		$fields = implode( ', ', $fields );
-		$sql    = "SELECT {$fields} FROM `$table`";
-		if ( ! empty( $conditions ) ) {
-			$sql .= " WHERE $conditions";
+
+		return $sql;
+	}
+
+	/**
+	 * @param null|array $order_by
+	 * @param array $columns
+	 *
+	 * @return string
+	 */
+	private function build_order_by( $order_by, $columns ) {
+		$sql = '';
+		if ( ! empty( $order_by ) ) {
+			$items = array();
+			foreach ( $order_by as $k => $order ) {
+				if ( is_int( $k ) ) {
+					$k     = $order;
+					$order = 'ASC';
+				} else {
+					$order = trim( strtoupper( $order ) );
+				}
+				if ( ! isset( $columns[ $k ] ) || ( $order !== 'DESC' && $order !== 'ASC' ) ) {
+					continue;
+				}
+				$k       = $columns[ $k ]['name'];
+				$items[] = "$k $order";
+			}
+			if ( ! empty( $items ) ) {
+				$sql .= ' ORDER BY ' . implode( ', ', $items );
+			}
 		}
-		if ( isset( $limit ) && $limit > 1 ) {
-			if ( $offset > 0 ) {
+
+		return $sql;
+	}
+
+	/**
+	 * @param null|int $limit
+	 * @param null|int $offset
+	 *
+	 * @return string
+	 */
+	private function build_limit( $limit, $offset ) {
+		$sql = '';
+		if ( isset( $limit ) && $limit > 0 ) {
+			if ( isset( $offset ) && $offset > 0 ) {
 				$sql .= " LIMIT {$offset}, {$limit}";
 			} else {
 				$sql .= " LIMIT {$limit}";
 			}
 		}
+
+		return $sql;
+	}
+
+	/**
+	 * @param string $table
+	 * @param array $where
+	 * @param array $fields
+	 * @param null|int $limit
+	 * @param null|int $offset
+	 * @param null|array $order_by
+	 * @param null|array $group_by
+	 * @param bool $for_update
+	 *
+	 * @return array|bool|null
+	 */
+	public function select( $table, $where = array(), $fields = array( '*' ), $limit = null, $offset = null, $order_by = null, $group_by = null, $for_update = false ) {
+		if ( ! isset( $this->table_defines[ $table ] ) ) {
+			return false;
+		}
+
+		/** @var \wpdb $wpdb */
+		global $wpdb;
+		$columns = $this->table_defines[ $table ]['columns'];
+
+		if ( $this->is_logical( $this->table_defines[ $table ] ) ) {
+			$where['deleted_at'] = null;
+		}
+
+		list( $conditions, $values ) = $this->build_conditions( $where, $columns );
+		$table  = $this->get_table( $table );
+		$fields = $this->build_fields( $fields, $columns );
+		$sql    = "SELECT {$fields} FROM `$table`";
+		if ( ! empty( $conditions ) ) {
+			$sql .= " WHERE $conditions";
+		}
+		$sql .= $this->build_group_by( $group_by, $columns );
+		$sql .= $this->build_order_by( $order_by, $columns );
+		$sql .= $this->build_limit( $limit, $offset );
 		if ( $for_update ) {
 			$sql .= ' FOR UPDATE';
 		}
@@ -466,6 +587,34 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 		}
 
 		return $wpdb->get_results( empty( $values ) ? $sql : $wpdb->prepare( $sql, $values ), ARRAY_A );
+	}
+
+	/**
+	 * @param $table
+	 * @param array $where
+	 * @param null $limit
+	 * @param int $offset
+	 * @param array $order_by
+	 * @param array $group_by
+	 * @param bool $for_update
+	 *
+	 * @return int
+	 */
+	public function select_count( $table, $where = array(), $limit = null, $offset = 0, $order_by = array(), $group_by = array(), $for_update = false ) {
+		$result = $this->select( $table, $where, array(
+			'*' => array(
+				'COUNT',
+				'num'
+			)
+		), $limit, $offset, $order_by, $group_by, $for_update );
+		if ( empty( $result ) ) {
+			return 0;
+		}
+		if ( $limit == 1 ) {
+			return isset( $result['num'] ) ? $result['num'] - 0 : 0;
+		}
+
+		return isset( $result[0]['num'] ) ? $result[0]['num'] - 0 : 0;
 	}
 
 	/**
