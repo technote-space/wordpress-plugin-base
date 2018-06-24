@@ -391,7 +391,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	 *
 	 * @return array|bool|null
 	 */
-	public function select( $table, $where = array(), $limit = null, $offset = 0 ) {
+	public function select( $table, $where = array(), $limit = null, $offset = 0, $for_update = false ) {
 		if ( ! isset( $this->table_defines[ $table ] ) ) {
 			return false;
 		}
@@ -448,7 +448,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 		$fields = implode( ', ', $fields );
 		$sql    = "SELECT {$fields} FROM `$table`";
 		if ( ! empty( $conditions ) ) {
-			$sql .= "WHERE $conditions";
+			$sql .= " WHERE $conditions";
 		}
 		if ( isset( $limit ) && $limit > 1 ) {
 			if ( $offset > 0 ) {
@@ -456,6 +456,9 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 			} else {
 				$sql .= " LIMIT {$limit}";
 			}
+		}
+		if ( $for_update ) {
+			$sql .= ' FOR UPDATE';
 		}
 
 		if ( isset( $limit ) && $limit == 1 ) {
@@ -565,6 +568,84 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 		list ( $_where, $_where_format ) = $this->filter( $where, $columns );
 
 		return $wpdb->delete( $this->get_table( $table ), $_where, $_where_format );
+	}
+
+	/**
+	 * @param $table
+	 *
+	 * @return bool|false|int
+	 */
+	public function truncate( $table ) {
+		if ( ! isset( $this->table_defines[ $table ] ) ) {
+			return false;
+		}
+
+		if ( $this->is_logical( $this->table_defines[ $table ] ) ) {
+			return $this->delete( $table, array() );
+		}
+
+		/** @var \wpdb $wpdb */
+		global $wpdb;
+		$sql = 'TRUNCATE TABLE `' . $this->get_table( $table ) . '`';
+
+		return $wpdb->query( $sql );
+	}
+
+	/**
+	 * @return false|int
+	 */
+	public function begin() {
+		/** @var \wpdb $wpdb */
+		global $wpdb;
+
+		return $wpdb->query( 'START TRANSACTION' );
+	}
+
+	/**
+	 * @param string $table
+	 * @param bool $write
+	 *
+	 * @return bool|string
+	 */
+	public function lock( $table, $write ) {
+		if ( ! isset( $this->table_defines[ $table ] ) ) {
+			return false;
+		}
+
+		/** @var \wpdb $wpdb */
+		global $wpdb;
+
+		return $wpdb->query( 'LOCK TABLES `' . $this->get_table( $table ) ) . '` ' . ( $write ? 'WRITE' : 'READ' );
+	}
+
+	/**
+	 * @return false|int
+	 */
+	public function unlock() {
+		/** @var \wpdb $wpdb */
+		global $wpdb;
+
+		return $wpdb->query( 'UNLOCK TABLES' );
+	}
+
+	/**
+	 * @return false|int
+	 */
+	public function commit() {
+		/** @var \wpdb $wpdb */
+		global $wpdb;
+
+		return $wpdb->query( 'COMMIT' );
+	}
+
+	/**
+	 * @return false|int
+	 */
+	public function rollback() {
+		/** @var \wpdb $wpdb */
+		global $wpdb;
+
+		return $wpdb->query( 'ROLLBACK' );
 	}
 
 	/**
