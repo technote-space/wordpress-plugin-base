@@ -126,6 +126,7 @@ class Technote {
 		$this->setup_property();
 		$this->setup_update();
 		$this->setup_textdomain();
+		$this->filter->do_action( 'app_initialized' );
 	}
 
 	/**

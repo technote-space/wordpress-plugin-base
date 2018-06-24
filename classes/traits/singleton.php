@@ -58,12 +58,24 @@ trait Singleton {
 		$this->app        = $app;
 		$this->reflection = $reflection;
 		$this->class_name = $reflection->getName();
+		if ( $this instanceof \Technote\Interfaces\Hook ) {
+			add_action( $this->get_filter_prefix() . 'app_initialized', function () {
+				$this->initialized();
+			} );
+		}
 	}
 
 	/**
 	 * initialize
 	 */
 	protected abstract function initialize();
+
+	/**
+	 * initialized
+	 */
+	protected function initialized() {
+
+	}
 
 	/**
 	 * @param \Technote $app
