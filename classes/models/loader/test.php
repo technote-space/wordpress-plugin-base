@@ -20,9 +20,9 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * Class Test
  * @package Technote\Models\Loader
  */
-class Test implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
+class Test implements \Technote\Interfaces\Loader {
 
-	use \Technote\Traits\Loader, \Technote\Traits\Nonce;
+	use \Technote\Traits\Loader;
 
 	/** @var bool $is_valid */
 	private $is_valid = false;
@@ -95,10 +95,11 @@ class Test implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 
 	/**
 	 * @param $page
+	 * @param $add_namespace
 	 *
 	 * @return array
 	 */
-	protected function get_namespaces( $page ) {
+	protected function get_namespaces( $page, $add_namespace ) {
 		return array(
 			$this->app->define->plugin_namespace . '\\Tests',
 			$this->app->define->lib_namespace . '\\Tests',
@@ -137,10 +138,4 @@ class Test implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 		);
 	}
 
-	/**
-	 * @return string
-	 */
-	public function get_nonce_slug() {
-		return '_admin_test';
-	}
 }

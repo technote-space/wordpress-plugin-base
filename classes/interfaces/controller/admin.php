@@ -38,6 +38,16 @@ interface Admin extends \Technote\Interfaces\Controller, \Technote\Interfaces\No
 	public function get_menu_name();
 
 	/**
+	 * @param string $relative_namespace
+	 */
+	public function set_relative_namespace( $relative_namespace );
+
+	/**
+	 * @return string
+	 */
+	public function get_page_slug();
+
+	/**
 	 * get
 	 */
 	public function get_action();
@@ -51,5 +61,10 @@ interface Admin extends \Technote\Interfaces\Controller, \Technote\Interfaces\No
 	 * @return string
 	 */
 	public function presenter();
+
+	/**
+	 * setup help
+	 */
+	public function setup_help();
 
 }

@@ -25,6 +25,9 @@ trait Admin {
 
 	use \Technote\Traits\Controller, \Technote\Traits\Nonce;
 
+	/** @var string $relative_namespace */
+	private $relative_namespace;
+
 	/**
 	 * @return int
 	 */
@@ -45,10 +48,17 @@ trait Admin {
 	}
 
 	/**
+	 * @param string $relative_namespace
+	 */
+	public function set_relative_namespace( $relative_namespace ) {
+		$this->relative_namespace = $relative_namespace;
+	}
+
+	/**
 	 * @return string
 	 */
 	public function get_page_slug() {
-		return $this->get_file_slug();
+		return str_replace( '\\', '-', strtolower( $this->relative_namespace ) ) . $this->get_file_slug();
 	}
 
 	/**

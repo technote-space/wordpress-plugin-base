@@ -20,9 +20,9 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * Class Admin
  * @package Technote\Models\Loader\Controller
  */
-class Api implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
+class Api implements \Technote\Interfaces\Loader {
 
-	use \Technote\Traits\Loader, \Technote\Traits\Nonce;
+	use \Technote\Traits\Loader;
 
 	/** @var array */
 	private $api_controllers = null;
@@ -35,13 +35,6 @@ class Api implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 		if ( ! empty( $apis ) ) {
 			wp_enqueue_script( 'wp-api' );
 		}
-	}
-
-	/**
-	 * @return string
-	 */
-	public function get_nonce_slug() {
-		return 'wp_rest';
 	}
 
 	/**
@@ -91,7 +84,7 @@ class Api implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 			register_rest_route( $this->get_api_namespace(), $api->get_endpoint(), array(
 				'methods'             => strtoupper( $api->get_method() ),
 				'permission_callback' => function () use ( $api ) {
-					return current_user_can( $api->get_capability() );
+					return $this->app->user_can( $api->get_capability() );
 				},
 				'args'                => $api->get_args_setting(),
 				'callback'            => array( $api, 'callback' ),
@@ -101,10 +94,11 @@ class Api implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 
 	/**
 	 * @param string $page
+	 * @param string $add_namespace
 	 *
 	 * @return array
 	 */
-	protected function get_namespaces( $page ) {
+	protected function get_namespaces( $page, $add_namespace ) {
 		return array(
 			$this->app->define->plugin_namespace . '\\Controllers\\Api\\',
 			$this->app->define->lib_namespace . '\\Controllers\\Api\\',

@@ -74,14 +74,18 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 			$pattern = "#^{$prefix}(.+)#";
 			if ( isset( $_GET['page'] ) && preg_match( $pattern, $_GET['page'], $matches ) ) {
 
-				$page     = $matches[1];
-				$instance = $this->get_class_instance( $this->get_class_string( $page ), '\Technote\Controllers\Admin\Base' );
+				$page          = $matches[1];
+				$exploded      = explode( '-', $page );
+				$page          = array_pop( $exploded );
+				$add_namespace = implode( '\\', array_map( 'ucfirst', $exploded ) );
+				! empty( $add_namespace ) and $add_namespace .= '\\';
+				$instance = $this->get_class_instance( $this->get_class_setting( $page, $add_namespace ), '\Technote\Controllers\Admin\Base' );
 				if ( false !== $instance ) {
-
 					/** @var \Technote\Controllers\Admin\Base $instance */
 					return $instance;
 				}
 			}
+			$this->app->log( ( isset( $_GET['page'] ) ? $_GET['page'] : 'Page' ) . ' not found.' );
 		} catch ( \Exception $e ) {
 			$this->app->log( $e );
 		}
@@ -149,9 +153,11 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 					$this->load();
 				}
 			);
-			add_action( "load-$hook", function () {
-				$this->page->setup_help();
-			} );
+			if ( $this->page ) {
+				add_action( "load-$hook", function () {
+					$this->page->setup_help();
+				} );
+			}
 		}
 	}
 
@@ -210,10 +216,11 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 
 	/**
 	 * @param string $page
+	 * @param string $add_namespace
 	 *
 	 * @return array
 	 */
-	protected function get_namespaces( $page ) {
+	protected function get_namespaces( $page, $add_namespace ) {
 		return array(
 			$this->app->define->plugin_namespace . '\\Controllers\\Admin\\',
 			$this->app->define->lib_namespace . '\\Controllers\\Admin\\',

@@ -37,14 +37,23 @@ trait Loader {
 
 	/**
 	 * @param string $dir
+	 * @param string $add_namespace
 	 *
 	 * @return \Generator
 	 */
-	protected function get_class_strings( $dir ) {
+	protected function get_class_settings( $dir, $add_namespace = '' ) {
+		$dir = rtrim( $dir, DS );
 		if ( is_dir( $dir ) ) {
 			foreach ( scandir( $dir ) as $file ) {
-				if ( preg_match( "/^[^\\.].*\\.php$/", $file ) ) {
-					yield $this->get_class_string( $this->app->get_page_slug( $file ) );
+				if ( $file == '.' || $file == '..' ) {
+					continue;
+				}
+				if ( is_file( $dir . DS . $file ) && preg_match( "/^[^\\.].*\\.php$/", $file ) ) {
+					yield $this->get_class_setting( $this->app->get_page_slug( $file ), $add_namespace );
+				} elseif ( is_dir( $dir . DS . $file ) ) {
+					foreach ( $this->get_class_settings( $dir . DS . $file, $add_namespace . ucfirst( $file ) . '\\' ) as $class_setting ) {
+						yield $class_setting;
+					}
 				}
 			}
 		}
@@ -58,13 +67,13 @@ trait Loader {
 	 * @return \Generator
 	 */
 	protected function get_classes( $dir, $instanceof, $return_instance = true ) {
-		foreach ( $this->get_class_strings( $dir ) as $class_string ) {
-			$instance = $this->get_class_instance( $class_string, $instanceof );
+		foreach ( $this->get_class_settings( $dir ) as $class_setting ) {
+			$instance = $this->get_class_instance( $class_setting, $instanceof );
 			if ( false !== $instance ) {
 				if ( $return_instance ) {
 					yield $instance;
 				} else {
-					yield $class_string;
+					yield $class_setting;
 				}
 			}
 		}
@@ -81,24 +90,25 @@ trait Loader {
 
 	/**
 	 * @param string $page
+	 * @param string $add_namespace
 	 *
-	 * @return false|string
+	 * @return false|array
 	 */
-	protected function get_class_string( $page ) {
+	protected function get_class_setting( $page, $add_namespace = '' ) {
 		if ( 'base' === $page ) {
 			return false;
 		}
-		if ( isset( $this->cache[ $page ] ) ) {
-			return $this->cache[ $page ];
+		if ( isset( $this->cache[ $add_namespace . $page ] ) ) {
+			return $this->cache[ $add_namespace . $page ];
 		}
-		$namespaces = $this->get_namespaces( $page );
+		$namespaces = $this->get_namespaces( $page, $add_namespace );
 		if ( ! empty( $namespaces ) ) {
 			foreach ( $namespaces as $namespace ) {
-				$class = rtrim( $namespace, '\\' ) . '\\' . $this->get_class_name( $page );
+				$class = rtrim( $namespace, '\\' ) . '\\' . $add_namespace . $this->get_class_name( $page );
 				if ( class_exists( $class ) ) {
-					$this->cache[ $page ] = $class;
+					$this->cache[ $add_namespace . $page ] = array( $class, $add_namespace );
 
-					return $class;
+					return $this->cache[ $add_namespace . $page ];
 				}
 			}
 		}
@@ -107,17 +117,21 @@ trait Loader {
 	}
 
 	/**
-	 * @param $class
-	 * @param $instanceof
+	 * @param array $class_setting
+	 * @param string $instanceof
 	 *
 	 * @return bool|Singleton
 	 */
-	protected function get_class_instance( $class, $instanceof ) {
-		if ( false !== $class && class_exists( $class ) && is_subclass_of( $class, '\Technote\Interfaces\Singleton' ) ) {
+	protected function get_class_instance( $class_setting, $instanceof ) {
+		if ( false !== $class_setting && class_exists( $class_setting[0] ) && is_subclass_of( $class_setting[0], '\Technote\Interfaces\Singleton' ) ) {
 			try {
-				/** @var Singleton $class */
-				$instance = $class::get_instance( $this->app );
+				/** @var Singleton $class_setting */
+				$instance = $class_setting[0]::get_instance( $this->app );
 				if ( $instance instanceof $instanceof ) {
+					if ( $instance instanceof \Technote\Interfaces\Controller\Admin ) {
+						$instance->set_relative_namespace( $class_setting[1] );
+					}
+
 					return $instance;
 				}
 			} catch ( \Exception $e ) {
@@ -129,9 +143,10 @@ trait Loader {
 
 	/**
 	 * @param string $page
+	 * @param string $add_namespace
 	 *
 	 * @return array
 	 */
-	protected abstract function get_namespaces( $page );
+	protected abstract function get_namespaces( $page, $add_namespace );
 
 }
