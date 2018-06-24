@@ -43,6 +43,42 @@ interface Api {
 	public function get_args_setting();
 
 	/**
+	 * @return bool
+	 */
+	public function is_valid();
+
+	/**
+	 * @return bool
+	 */
+	public function is_only_admin();
+
+	/**
+	 * @return bool
+	 */
+	public function is_only_front();
+
+	/**
+	 * @param string $class
+	 *
+	 * @return false|string
+	 */
+	public function common_script( $class );
+
+	/**
+	 * @param string $class
+	 *
+	 * @return false|string
+	 */
+	public function admin_script( $class );
+
+	/**
+	 * @param string $class
+	 *
+	 * @return false|string
+	 */
+	public function front_script( $class );
+
+	/**
 	 * @param \WP_REST_Request $params
 	 *
 	 * @return int|\WP_Error|\WP_REST_Response

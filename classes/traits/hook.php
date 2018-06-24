@@ -46,7 +46,7 @@ trait Hook {
 			$setting = $this->app->setting->get_setting( $key );
 			$default = \Technote\Models\Utility::array_get( $setting, 'default', $default );
 			$value   = $this->app->get_option( $args[0], null );
-			if ( ! isset( $value ) ) {
+			if ( ! isset( $value ) || $value === '' ) {
 				$value = $default;
 			}
 

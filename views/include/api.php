@@ -19,10 +19,11 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 /** @var string $nonce */
 /** @var array $functions */
 /** @var string $class */
+/** @var array $scripts */
 ?>
 
 <script>
-    (function ($) {
+    (function () {
         class <?php $instance->h( $class );?> {
             constructor() {
                 this.endpoint = '<?php $instance->h( $endpoint . $namespace );?>/';
@@ -36,9 +37,6 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
                     const method = setting.method.toUpperCase();
                     const config = {
                         method: method,
-                        beforeSend: function (xhr) {
-                            xhr.setRequestHeader('X-WP-Nonce', '<?php $instance->h( $nonce );?>');
-                        }
                     };
                     switch (method) {
                         case 'POST':
@@ -47,28 +45,108 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
                             break;
                         default:
                             const query = [];
+                            args._ = (new Date()).getTime();
                             for (const prop in args) {
                                 if (args.hasOwnProperty(prop)) {
                                     query.push(prop + '=' + encodeURIComponent(args[prop]));
                                 }
                             }
-                            if (query.length) {
-                                url += '?' + query.join('&');
-                            }
+                            url += '?' + query.join('&');
                             break;
                     }
                     config.url = url;
-                    return $.ajax(config);
+                    return this._ajax(config);
                 } else {
-                    const defer = $.Deferred();
-                    setTimeout(function () {
-                        defer.reject();
-                    }, 1);
-                    return defer;
+                    return new Promise((resolve, reject) => {
+                        setTimeout(function () {
+                            reject(-1, null, null);
+                        }, 1);
+                    });
                 }
+            }
+
+
+            _param(a) {
+                const s = [];
+                const add = function (key, value) {
+                    s[s.length] = encodeURIComponent(key) + "=" + encodeURIComponent(value == null ? "" : value);
+                };
+
+                if (Array.isArray(a)) {
+                    this._each(a, function () {
+                        add(this.name, this.value);
+                    });
+                } else {
+                    for (const prefix in a) {
+                        if (a.hasOwnProperty(prefix)) {
+                            this._buildParams(prefix, a[prefix], add);
+                        }
+                    }
+                }
+                return s.join('&');
+            }
+
+            _buildParams(prefix, obj, add) {
+                const self = this;
+                if (Array.isArray(obj)) {
+                    this._each(obj, function (i, v) {
+                        self._buildParams(prefix + "[" + (typeof v === "object" && v != null ? i : "") + "]", v, add);
+                    });
+                } else if ("object" === typeof obj) {
+                    for (const name in obj) {
+                        self._buildParams(prefix + "[" + name + "]", obj[name], add);
+                    }
+                } else {
+                    add(prefix, obj);
+                }
+            }
+
+            _each(obj, fn) {
+                if (obj.length === undefined) {
+                    for (const i in obj) {
+                        if (obj.hasOwnProperty(i)) {
+                            fn.call(obj[i], i, obj[i]);
+                        }
+                    }
+                }
+                else {
+                    for (let i = 0, ol = obj.length, val = obj[0];
+                         i < ol && fn.call(val, i, val) !== false; val = obj[++i]) {
+                    }
+                }
+                return obj;
+            }
+
+            _ajax(config) {
+                return new Promise((resolve, reject) => {
+                    const xhr = window.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest();
+
+                    xhr.open(config.method, config.url, true);
+                    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    xhr.setRequestHeader('X-WP-Nonce', '<?php $instance->h( $nonce );?>');
+                    xhr.onreadystatechange = function () {
+                        if (4 === xhr.readyState) {
+                            if (200 === xhr.status) {
+                                try {
+                                    const json = JSON.parse(xhr.responseText);
+                                    resolve(json, xhr);
+                                } catch (e) {
+                                    reject(xhr.status, e, xhr);
+                                }
+                            } else {
+                                reject(xhr.status, null, xhr);
+                            }
+                        }
+                    };
+                    if (config.data) {
+                        xhr.send(this._param(config.data));
+                    } else {
+                        xhr.send();
+                    }
+                });
             }
         }
 
         window.<?php $instance->h( $class );?> = new <?php $instance->h( $class );?> ();
-    })(jQuery);
+    })();
 </script>

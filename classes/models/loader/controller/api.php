@@ -31,10 +31,7 @@ class Api implements \Technote\Interfaces\Loader {
 	 * initialize
 	 */
 	protected function initialize() {
-		$apis = $this->get_api_controllers();
-		if ( ! empty( $apis ) ) {
-			wp_enqueue_script( 'wp-api' );
-		}
+
 	}
 
 	/**
@@ -49,13 +46,19 @@ class Api implements \Technote\Interfaces\Loader {
 	 */
 	private function register_script() {
 		$functions = array();
+		$scripts   = array();
+		$class     = $this->get_js_class();
 		/** @var \Technote\Traits\Controller\Api $api */
-		foreach ( $this->get_api_controllers() as $api ) {
+		foreach ( $this->get_api_controllers( true ) as $api ) {
 			$name               = $api->get_call_function_name();
 			$functions[ $name ] = array(
 				'method'   => $api->get_method(),
 				'endpoint' => $api->get_endpoint(),
 			);
+			$script             = is_admin() ? $api->admin_script( $class ) : $api->front_script( $class );
+			if ( ! empty( $script ) ) {
+				$scripts[] = $script;
+			}
 		}
 		if ( ! empty( $functions ) ) {
 			$this->add_script_view( 'include/api', array(
@@ -63,8 +66,11 @@ class Api implements \Technote\Interfaces\Loader {
 				'namespace' => $this->get_api_namespace(),
 				'nonce'     => wp_create_nonce( 'wp_rest' ),
 				'functions' => $functions,
-				'class'     => $this->get_js_class(),
+				'class'     => $class,
 			), 9 );
+			foreach ( $scripts as $script ) {
+				$this->add_script( $script );
+			}
 		}
 	}
 
@@ -79,7 +85,7 @@ class Api implements \Technote\Interfaces\Loader {
 	 * register api
 	 */
 	private function register_api() {
-		foreach ( $this->get_api_controllers() as $api ) {
+		foreach ( $this->get_api_controllers( false ) as $api ) {
 			/** @var \Technote\Controllers\Api\Base $api */
 			register_rest_route( $this->get_api_namespace(), $api->get_endpoint(), array(
 				'methods'             => strtoupper( $api->get_method() ),
@@ -106,9 +112,11 @@ class Api implements \Technote\Interfaces\Loader {
 	}
 
 	/**
+	 * @param bool $filter
+	 *
 	 * @return array
 	 */
-	private function get_api_controllers() {
+	private function get_api_controllers( $filter ) {
 		if ( ! isset( $this->api_controllers ) ) {
 			$this->api_controllers = array();
 			/** @var \Technote\Traits\Controller\Api $class */
@@ -123,6 +131,22 @@ class Api implements \Technote\Interfaces\Loader {
 				$name = $class->get_call_function_name();
 				if ( ! isset( $this->api_controllers[ $name ] ) ) {
 					$this->api_controllers[ $name ] = $class;
+				}
+			}
+
+			foreach ( $this->api_controllers as $name => $class ) {
+				if ( $class->is_only_admin() && ! is_admin() ) {
+					unset( $this->api_controllers[ $name ] );
+				} elseif ( $class->is_only_front() && is_admin() ) {
+					unset( $this->api_controllers[ $name ] );
+				}
+			}
+		}
+
+		if ( $filter ) {
+			foreach ( $this->api_controllers as $name => $class ) {
+				if ( ! $class->is_valid() ) {
+					unset( $this->api_controllers[ $name ] );
 				}
 			}
 		}

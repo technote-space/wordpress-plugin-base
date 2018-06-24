@@ -48,6 +48,54 @@ trait Api {
 	}
 
 	/**
+	 * @return bool
+	 */
+	public function is_valid() {
+		return true;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function is_only_admin() {
+		return false;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function is_only_front() {
+		return false;
+	}
+
+	/**
+	 * @param string $class
+	 *
+	 * @return false|string
+	 */
+	public function common_script( $class ) {
+		return false;
+	}
+
+	/**
+	 * @param string $class
+	 *
+	 * @return false|string
+	 */
+	public function admin_script( $class ) {
+		return $this->common_script( $class );
+	}
+
+	/**
+	 * @param string $class
+	 *
+	 * @return false|string
+	 */
+	public function front_script( $class ) {
+		return $this->common_script( $class );
+	}
+
+	/**
 	 * @param \WP_REST_Request $params
 	 *
 	 * @return int|\WP_Error|\WP_REST_Response
