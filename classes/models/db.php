@@ -696,6 +696,31 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	}
 
 	/**
+	 * @param $table
+	 * @param $data
+	 * @param $where
+	 *
+	 * @return bool|false|int
+	 */
+	public function insert_or_update( $table, $data, $where ) {
+		if ( ! isset( $this->table_defines[ $table ] ) ) {
+			return false;
+		}
+
+		if ( $this->is_logical( $this->table_defines[ $table ] ) ) {
+			$where['deleted_at'] = null;
+		}
+
+		$row = $this->select( $table, $where, '*', 1 );
+		if ( empty( $row ) ) {
+			return $this->insert( $table, $data );
+		}
+		$where = array( 'id' => $row['id'] );
+
+		return $this->update( $table, $data, $where );
+	}
+
+	/**
 	 * @param string $table
 	 * @param array $where
 	 *
