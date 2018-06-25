@@ -405,10 +405,17 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 			}
 			$name = $key === '*' ? $key : $columns[ $key ]['name'];
 			if ( is_array( $option ) ) {
-				$group_func   = $option[0];
-				$fields[ $k ] = "$group_func( $name )";
-				if ( count( $option ) >= 2 ) {
-					$fields[ $k ] .= ' AS ' . $option[1];
+				$group_func = $option[0];
+				if ( strtoupper( $group_func ) == 'AS' ) {
+					$fields[ $k ] = $name;
+					if ( count( $option ) >= 2 ) {
+						$fields[ $k ] .= ' AS ' . $option[1];
+					}
+				} else {
+					$fields[ $k ] = "$group_func( $name )";
+					if ( count( $option ) >= 2 ) {
+						$fields[ $k ] .= ' AS ' . $option[1];
+					}
 				}
 			} else {
 				$fields[ $k ] = $name;

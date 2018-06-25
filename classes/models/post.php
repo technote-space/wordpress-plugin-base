@@ -125,11 +125,24 @@ class Post implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 			AND   meta_value LIKE %s
 SQL;
 		$results = $wpdb->get_results( $wpdb->prepare( $query, $this->get_post_prefix() . $key, $value ) );
-		$results = array_map( function ( $d ) {
-			return $d->post_id;
-		}, $results );
 
-		return $this->apply_filters( "find_post_meta", $results, $key, $value );
+		return $this->apply_filters( 'find_post_meta', Utility::array_pluck( $results, 'post_id' ), $key, $value );
+	}
+
+	/**
+	 * @param string $key
+	 *
+	 * @return array
+	 */
+	public function get_meta_post_ids( $key ) {
+		global $wpdb;
+		$query   = <<< SQL
+		SELECT post_id FROM {$wpdb->postmeta}
+		WHERE meta_key LIKE %s
+SQL;
+		$results = $wpdb->get_results( $wpdb->prepare( $query, $this->get_post_prefix() . $key ) );
+
+		return $this->apply_filters( 'find_post_meta', Utility::array_pluck( $results, 'post_id' ), $key );
 	}
 
 	/**

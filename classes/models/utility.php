@@ -127,6 +127,10 @@ class Utility {
 	 * @return array
 	 */
 	public static function array_pluck( array $array, $key, $default = null, $filter = false ) {
+		if ( empty( $array ) ) {
+			return array();
+		}
+
 		return array_map( function ( $d ) use ( $key, $default ) {
 			is_object( $d ) and $d = (array) $d;
 
