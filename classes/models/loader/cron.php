@@ -28,13 +28,6 @@ class Cron implements \Technote\Interfaces\Loader {
 	protected $crons = null;
 
 	/**
-	 * initialize
-	 */
-	protected function initialize() {
-
-	}
-
-	/**
 	 * initialized
 	 */
 	protected function initialized() {

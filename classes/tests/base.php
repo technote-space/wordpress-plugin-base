@@ -28,13 +28,6 @@ abstract class Base extends \PHPUnit\Framework\TestCase implements \Technote\Int
 	protected static $test_app;
 
 	/**
-	 * initialize
-	 */
-	protected function initialize() {
-
-	}
-
-	/**
 	 * @param \Technote $app
 	 */
 	public static function set_app( $app ) {

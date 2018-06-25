@@ -35,13 +35,6 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 	public $page;
 
 	/**
-	 * initialize
-	 */
-	protected function initialize() {
-
-	}
-
-	/**
 	 * @return string
 	 */
 	private function get_setting_slug() {

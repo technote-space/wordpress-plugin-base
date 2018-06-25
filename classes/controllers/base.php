@@ -24,11 +24,4 @@ abstract class Base implements \Technote\Interfaces\Hook, \Technote\Interfaces\C
 
 	use \Technote\Traits\Hook, \Technote\Traits\Controller;
 
-	/**
-	 * initialize
-	 */
-	protected function initialize() {
-
-	}
-
 }

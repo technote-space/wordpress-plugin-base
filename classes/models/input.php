@@ -31,13 +31,6 @@ class Input implements \Technote\Interfaces\Singleton {
 	private static $php_input = null;
 
 	/**
-	 * initialize
-	 */
-	protected function initialize() {
-
-	}
-
-	/**
 	 * @return array
 	 */
 	public function all() {

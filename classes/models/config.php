@@ -28,13 +28,6 @@ class Config implements \Technote\Interfaces\Singleton {
 	private static $configs = array();
 
 	/**
-	 * initialize
-	 */
-	protected function initialize() {
-
-	}
-
-	/**
 	 * @param string $name
 	 *
 	 * @return array

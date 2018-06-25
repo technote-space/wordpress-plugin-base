@@ -37,13 +37,6 @@ class Minify implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	private $end_footer = false;
 
 	/**
-	 * initialize
-	 */
-	protected function initialize() {
-
-	}
-
-	/**
 	 * @param string $script
 	 * @param int $priority
 	 */

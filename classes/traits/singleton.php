@@ -68,7 +68,9 @@ trait Singleton {
 	/**
 	 * initialize
 	 */
-	protected abstract function initialize();
+	protected function initialize() {
+
+	}
 
 	/**
 	 * initialized

@@ -25,13 +25,6 @@ class Post implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 	use \Technote\Traits\Singleton, \Technote\Traits\Hook, \Technote\Traits\Uninstall;
 
 	/**
-	 * initialize
-	 */
-	protected function initialize() {
-
-	}
-
-	/**
 	 * @return string
 	 */
 	private function get_post_prefix() {

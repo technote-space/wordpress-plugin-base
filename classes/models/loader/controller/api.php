@@ -28,13 +28,6 @@ class Api implements \Technote\Interfaces\Loader {
 	private $api_controllers = null;
 
 	/**
-	 * initialize
-	 */
-	protected function initialize() {
-
-	}
-
-	/**
 	 * @return string
 	 */
 	private function get_js_class() {
