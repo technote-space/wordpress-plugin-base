@@ -65,7 +65,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 					<?php foreach ( $data as list( $a, $b ) ): ?>
                         <tr>
                             <td><?php $instance->h( $a ); ?></td>
-                            <td><?php $instance->h( $b ); ?></td>
+                            <td><?php $instance->h( $b, false, true, false ); ?></td>
                         </tr>
 					<?php endforeach; ?>
 				<?php endif; ?>

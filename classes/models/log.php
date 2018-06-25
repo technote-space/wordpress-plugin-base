@@ -72,7 +72,7 @@ class Log implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook {
 
 			return false;
 		}
-		@error_log( sprintf( "[%s] %s\n", date( 'Y-m-d H:i:s' ), $this->apply_filters( 'log_message', is_string( $message ) ? $this->app->translate( $message ) : json_encode( $message ), $message ) ), 3, $this->path );
+		@error_log( sprintf( "[%s] %s\n", date( DATE_W3C ), $this->apply_filters( 'log_message', is_string( $message ) ? $this->app->translate( $message ) : json_encode( $message ), $message ) ), 3, $this->path );
 
 		return true;
 	}

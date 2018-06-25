@@ -159,17 +159,17 @@ class Logs extends Base {
 			$time     = false;
 			$buffer   = '';
 			foreach ( $exploded as $item ) {
-				if ( preg_match( '#^\[(\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2})\] (.+)#', $item, $matches ) ) {
+				if ( preg_match( '#^\[(\d{4}\-\d{2}\-\d{2}\T\d{2}:\d{2}:\d{2}(\s*[+-]\d{2}:\d{2})?)\] (.+)#', $item, $matches ) ) {
 					if ( '' !== $buffer ) {
 						$ret[]  = array( $time, $buffer );
 						$buffer = '';
 					}
-					$item = $matches[2];
+					$item = $matches[3];
 					$time = $matches[1];
 				}
 
 				if ( '' !== $buffer ) {
-					$buffer .= "\n";
+					$buffer .= "<br>";
 				}
 				$buffer .= $item;
 			}
