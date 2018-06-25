@@ -283,7 +283,7 @@ trait Presenter {
 	 *
 	 * @return string
 	 */
-	protected function get_assets_url( $path, $default = '', $append_version = true ) {
+	public function get_assets_url( $path, $default = '', $append_version = true ) {
 		return $this->get_assets( $path, $default, true, $append_version );
 	}
 
@@ -304,7 +304,7 @@ trait Presenter {
 	 *
 	 * @return string
 	 */
-	protected function get_img_url( $path, $default = 'img/no_img.png', $append_version = true ) {
+	public function get_img_url( $path, $default = 'img/no_img.png', $append_version = true ) {
 		return empty( $path ) ? '' : $this->get_assets_url( 'img/' . $path, $default, $append_version );
 	}
 
@@ -355,6 +355,26 @@ trait Presenter {
 	}
 
 	/**
+	 * @param array $args
+	 * @param bool $echo
+	 *
+	 * @return string
+	 */
+	public function loading( $args = array(), $echo = true ) {
+		return $this->img( 'loading.gif', $args, $echo );
+	}
+
+	/**
+	 * @param array $args
+	 * @param bool $echo
+	 *
+	 * @return string
+	 */
+	public function no_img( $args = array(), $echo = true ) {
+		return $this->img( 'no_img.png', $args, $echo );
+	}
+
+	/**
 	 * @param string $path
 	 * @param int $priority
 	 *
@@ -386,6 +406,15 @@ trait Presenter {
 		}
 
 		return false;
+	}
+
+	/**
+	 * @param bool $echo
+	 *
+	 * @return string
+	 */
+	public function modal_class( $echo = true ) {
+		return $this->h( $this->get_slug( 'modal_class', '_modal' ), false, $echo );
 	}
 
 }

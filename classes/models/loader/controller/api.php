@@ -54,7 +54,7 @@ class Api implements \Technote\Interfaces\Loader {
 			}
 		}
 		if ( ! empty( $functions ) ) {
-			$this->add_script_view( 'include/api', array(
+			$this->add_script_view( 'include/script/api', array(
 				'endpoint'  => rest_url(),
 				'namespace' => $this->get_api_namespace(),
 				'nonce'     => wp_create_nonce( 'wp_rest' ),
@@ -124,14 +124,6 @@ class Api implements \Technote\Interfaces\Loader {
 				$name = $class->get_call_function_name();
 				if ( ! isset( $this->api_controllers[ $name ] ) ) {
 					$this->api_controllers[ $name ] = $class;
-				}
-			}
-
-			foreach ( $this->api_controllers as $name => $class ) {
-				if ( $class->is_only_admin() && ! is_admin() ) {
-					unset( $this->api_controllers[ $name ] );
-				} elseif ( $class->is_only_front() && is_admin() ) {
-					unset( $this->api_controllers[ $name ] );
 				}
 			}
 		}

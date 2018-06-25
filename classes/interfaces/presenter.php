@@ -109,6 +109,24 @@ interface Presenter {
 	public function url( $url, $contents, $translate = false, $new_tab = false, $args = array(), $echo = true );
 
 	/**
+	 * @param string $path
+	 * @param string $default
+	 * @param bool $append_version
+	 *
+	 * @return string
+	 */
+	public function get_assets_url( $path, $default = '', $append_version = true );
+
+	/**
+	 * @param string $path
+	 * @param string $default
+	 * @param bool $append_version
+	 *
+	 * @return string
+	 */
+	public function get_img_url( $path, $default = 'img/no_img.png', $append_version = true );
+
+	/**
 	 * @param string $url
 	 * @param string $view
 	 * @param array $args
@@ -129,6 +147,22 @@ interface Presenter {
 	public function img( $path, $args = array(), $echo = true );
 
 	/**
+	 * @param array $args
+	 * @param bool $echo
+	 *
+	 * @return string
+	 */
+	public function loading( $args = array(), $echo = true );
+
+	/**
+	 * @param array $args
+	 * @param bool $echo
+	 *
+	 * @return string
+	 */
+	public function no_img( $args = array(), $echo = true );
+
+	/**
 	 * @param string $path
 	 * @param int $priority
 	 *
@@ -143,5 +177,12 @@ interface Presenter {
 	 * @return bool
 	 */
 	public function js( $path, $priority = 10 );
+
+	/**
+	 * @param bool $echo
+	 *
+	 * @return string
+	 */
+	public function modal_class( $echo = true );
 
 }

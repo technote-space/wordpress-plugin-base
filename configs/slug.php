@@ -40,4 +40,7 @@ return array(
 	// js class
 	'js_class'      => '',
 
+	// modal class
+	'modal_class'   => '',
+
 );

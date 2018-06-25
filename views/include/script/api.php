@@ -1,6 +1,6 @@
 <?php
 /**
- * Technote Views Include Img
+ * Technote Views Include Script Api
  *
  * @version 0.0.0.0.0
  * @author technote-space
@@ -28,6 +28,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
             constructor() {
                 this.endpoint = '<?php $instance->h( $endpoint . $namespace );?>/';
                 this.functions = <?php echo json_encode( $functions );?>;
+                this.xhr = null;
             }
 
             ajax(func, args) {
@@ -118,6 +119,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
             }
 
             _ajax(config) {
+                const $this = this;
                 return new Promise((resolve, reject) => {
                     const xhr = window.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest();
 
@@ -136,6 +138,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
                             } else {
                                 reject(xhr.status, null, xhr);
                             }
+                            $this.xhr = null;
                         }
                     };
                     if (config.data) {
@@ -143,7 +146,15 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
                     } else {
                         xhr.send();
                     }
+                    this.xhr = xhr;
                 });
+            }
+
+            abort() {
+                if (this.xhr !== null) {
+                    this.xhr.abort();
+                    this.xhr = null;
+                }
             }
         }
 
