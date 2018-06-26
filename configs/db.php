@@ -54,24 +54,4 @@ return array(
 //		'delete'  => 'logical', // physical or logical [default = logical]
 //	),
 
-	'cron' => array(
-		'columns' => array(
-			'name'   => array(
-				'type' => 'VARCHAR(32)',
-				'null' => false,
-			),
-			'expire' => array(
-				'type' => 'INT(11)',
-				'null' => false,
-			),
-		),
-		'index'   => array(
-			'key' => array(
-				'name'   => array( 'name' ),
-				'expire' => array( 'expire' ),
-			),
-		),
-		'delete'  => 'physical',
-	),
-
 );

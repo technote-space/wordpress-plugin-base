@@ -42,7 +42,7 @@ trait Cron {
 		$interval = $this->get_interval();
 		if ( $interval > 0 ) {
 			if ( ! wp_next_scheduled( $this->get_hook_name() ) ) {
-				if ( ! $this->check_cron_process() ) {
+				if ( $this->is_process_running() ) {
 					return;
 				}
 				wp_schedule_single_event( time() + $interval, $this->get_hook_name() );
@@ -53,25 +53,26 @@ trait Cron {
 	/**
 	 * @return bool
 	 */
-	private function check_cron_process() {
-		$expire = get_transient( $this->get_transient_key() );
-		if ( false === $expire ) {
-			$cron = $this->app->db->select( 'cron', array( 'name' => $this->get_hook_name() ), 'expire', 1, null, array( 'expire' => 'desc' ) );
-			if ( ! empty( $cron ) ) {
-				$expire = $cron['expire'];
-			} else {
-				$expire = 0;
-			}
-			if ( $expire <= time() ) {
-				$expire = time() + $this->get_interval();
-				set_transient( $this->get_transient_key(), $expire, 15 );
-
-				return true;
-			}
-			set_transient( $this->get_transient_key(), $expire, 10 );
+	private function is_process_running() {
+		if ( get_site_transient( $this->get_transient_key() ) ) {
+			return true;
 		}
 
-		return $expire <= time();
+		return false;
+	}
+
+	/**
+	 * lock
+	 */
+	private function lock_process() {
+		set_site_transient( $this->get_transient_key(), microtime(), $this->apply_filters( 'cron_process_expire', $this->get_expire(), $this->get_hook_name() ) );
+	}
+
+	/**
+	 * unlock
+	 */
+	private function unlock_process() {
+		delete_site_transient( $this->get_transient_key() );
 	}
 
 	/**
@@ -121,15 +122,12 @@ trait Cron {
 	 */
 	public final function run() {
 		set_time_limit( 0 );
-		$this->app->db->insert( 'cron', array(
-			'name'   => $this->get_hook_name(),
-			'expire' => time() + $this->get_expire()
-		) );
+		$this->lock_process();
 		$this->do_action( 'before_cron_run', $this->get_hook_name() );
 		$this->execute();
 		$this->do_action( 'after_cron_run', $this->get_hook_name() );
 		$this->set_event();
-		$this->app->db->delete( 'cron', array( 'name' => $this->get_hook_name() ) );
+		$this->unlock_process();
 	}
 
 	/**
