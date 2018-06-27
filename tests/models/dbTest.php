@@ -249,7 +249,7 @@ class DbTest extends \Technote\Tests\TestCase {
 		$this->assertNotEmpty( $results );
 		$this->assertCount( 1, $results );
 		$result = reset( $results );
-		$this->assertArrayHasKey( 'technote_test_table2_id', $result );
+		$this->assertArrayHasKey( 'id', $result );
 		$this->assertArrayHasKey( 'value3', $result );
 		$this->assertArrayHasKey( 'value4', $result );
 		$this->assertEquals( 'text3', $result['value3'] );

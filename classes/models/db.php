@@ -185,6 +185,10 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	 * @return string
 	 */
 	public function get_table( $table ) {
+		if ( ! isset( $this->table_defines[ $table ] ) ) {
+			return $table;
+		}
+
 		return $this->get_table_prefix() . $table;
 	}
 
@@ -347,16 +351,68 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	 * @return array
 	 */
 	private function filter( $data, $columns ) {
-		$_format = array();
-		$_data   = array();
+		$_format  = array();
+		$_data    = array();
+		$_columns = $columns;
 		foreach ( $data as $k => $v ) {
+			$columns = $_columns;
+			list( $name, $columns ) = $this->get_field_data( $k, $columns );
 			if ( isset( $columns[ $k ] ) ) {
-				$_format[]                       = $columns[ $k ]['format'];
-				$_data[ $columns[ $k ]['name'] ] = $v;
+				$_format[] = $columns[ $k ]['format'];
+			} else {
+				$_format[] = '%s';
 			}
+			$_data[ $name ] = $v;
 		}
 
 		return array( $_data, $_format );
+	}
+
+	/**
+	 * @param string $k
+	 * @param array|null $columns
+	 *
+	 * @return array
+	 */
+	private function get_field_data( $k, $columns ) {
+		$table = null;
+		if ( strpos( $k, '.' ) !== false ) {
+			$exploded = explode( '.', $k );
+			$table    = trim( $exploded[0], '`' );
+			$k        = trim( $exploded[1], '`' );
+			if ( isset( $this->table_defines[ $table ]['columns'][ $k ] ) ) {
+				$name    = $this->table_defines[ $table ]['columns'][ $k ]['name'];
+				$columns = $this->table_defines[ $table ];
+				$table   = $this->get_table( $table );
+			} else {
+				$name = $k;
+			}
+		} else {
+			if ( empty( $columns ) ) {
+				return array( $k, $columns );
+			}
+			$k = trim( $k, '`' );
+			if ( isset( $columns[ $k ] ) ) {
+				$name = $columns[ $k ]['name'];
+			} else {
+				$name = $k;
+			}
+		}
+		if ( ! empty( $table ) ) {
+			$name = $table . '.' . $name;
+		}
+
+		return array( $name, $columns );
+	}
+
+	/**
+	 * @param string $k
+	 * @param array|null $columns
+	 *
+	 * @return string
+	 */
+	private function get_field_name( $k, $columns ) {
+		return $this->get_field_data( $k, $columns )[0];
 	}
 
 	/**
@@ -400,7 +456,15 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 				$option = null;
 			}
 			if ( $key === '*' ) {
-				$name = '*';
+				if ( ! is_array( $option ) ) {
+					unset ( $fields[ $k ] );
+					foreach ( $columns as $key => $column ) {
+						$name     = Utility::array_get( $column, 'name' );
+						$fields[] = $name === $key ? $name : $name . ' AS ' . $key;
+					}
+					continue;
+				}
+				$name = $key;
 			} elseif ( isset( $columns[ $key ] ) ) {
 				$name = $columns[ $key ]['name'];
 			} else {
@@ -420,10 +484,10 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 					}
 				}
 			} else {
-				$fields[ $k ] = $name;
+				$fields[ $k ] = $name === $key ? $name : $name . ' AS ' . $key;
 			}
 		}
-		if ( empty( $fields ) ) {
+		if ( empty( $fields ) || ! is_array( $fields ) ) {
 			$fields = array();
 			foreach ( $columns as $key => $column ) {
 				$name     = Utility::array_get( $column, 'name' );
@@ -449,7 +513,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 		foreach ( $_where as $field => $value ) {
 			$format = $_where_format[ $index ++ ];
 			if ( is_null( $value ) ) {
-				$conditions[] = "`$field` IS NULL";
+				$conditions[] = "$field IS NULL";
 				continue;
 			}
 
@@ -462,7 +526,12 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 						foreach ( $val as $v ) {
 							$values[] = $v;
 						}
-						$conditions[] = "`$field` $op (" . str_repeat( $format . ',', count( $val ) - 1 ) . $format . ')';
+						$conditions[] = "$field $op (" . str_repeat( $format . ',', count( $val ) - 1 ) . $format . ')';
+						continue;
+					}
+					if ( count( $value ) > 2 ) {
+						$val          = $this->get_field_name( $val, $columns );
+						$conditions[] = "$field $op $val";
 						continue;
 					}
 				} else {
@@ -472,7 +541,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 				$val = $value;
 			}
 
-			$conditions[] = "`$field` $op " . $format;
+			$conditions[] = "$field $op $format";
 			$values[]     = $val;
 		}
 		$conditions = implode( ' AND ', $conditions );
@@ -491,11 +560,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 		if ( ! empty( $group_by ) ) {
 			$items = array();
 			foreach ( $group_by as $k ) {
-				if ( ! isset( $columns[ $k ] ) ) {
-					continue;
-				}
-				$k       = $columns[ $k ]['name'];
-				$items[] = $k;
+				$items[] = $this->get_field_name( $k, $columns );
 			}
 			if ( ! empty( $items ) ) {
 				$sql .= ' GROUP BY ' . implode( ', ', $items );
@@ -522,14 +587,74 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 				} else {
 					$order = trim( strtoupper( $order ) );
 				}
-				if ( ! isset( $columns[ $k ] ) || ( $order !== 'DESC' && $order !== 'ASC' ) ) {
+				if ( $order !== 'DESC' && $order !== 'ASC' ) {
 					continue;
 				}
-				$k       = $columns[ $k ]['name'];
+				$k       = $this->get_field_name( $k, $columns );
 				$items[] = "$k $order";
 			}
 			if ( ! empty( $items ) ) {
 				$sql .= ' ORDER BY ' . implode( ', ', $items );
+			}
+		}
+
+		return $sql;
+	}
+
+	/**
+	 * @param null|array $join
+	 *
+	 * @return string
+	 */
+	private function build_join( $join ) {
+		$sql = '';
+		if ( ! empty( $join ) ) {
+			$items = array();
+			foreach ( $join as $data ) {
+				if ( ! is_array( $data ) || count( $data ) < 3 ) {
+					continue;
+				}
+				$table = $data[0];
+				$rule  = $data[1];
+				$rule  = strtoupper( $rule );
+				if ( ! in_array( $rule, array(
+					'JOIN',
+					'INNER JOIN',
+					'LEFT JOIN',
+					'RIGHT JOIN',
+				) ) ) {
+					continue;
+				}
+
+				$conditions = $data[2];
+				if ( empty( $conditions ) ) {
+					continue;
+				}
+				$check = reset( $conditions );
+				if ( ! is_array( $check ) ) {
+					$conditions = array( $conditions );
+				}
+				$values = array();
+				foreach ( $conditions as $condition ) {
+					if ( ! is_array( $condition ) || count( $condition ) < 3 ) {
+						continue;
+					}
+					$left     = $condition[0];
+					$op       = $condition[1];
+					$right    = $condition[2];
+					$values[] = $this->get_field_name( $left, null ) . " $op " . $this->get_field_name( $right, null );
+				}
+				if ( ! empty( $values ) ) {
+					$as = null;
+					if ( is_array( $table ) && count( $table ) > 1 ) {
+						$as    = $table[1];
+						$table = $table[0];
+					}
+					$items[] = $rule . ' ' . $this->get_table( $table ) . ( isset( $as ) ? " AS $as" : '' ) . ' ON ' . implode( ' AND ', $values );
+				}
+			}
+			if ( ! empty( $items ) ) {
+				$sql .= ' ' . implode( ' ', $items );
 			}
 		}
 
@@ -556,7 +681,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	}
 
 	/**
-	 * @param string $table
+	 * @param array|string $tables
 	 * @param array $where
 	 * @param array|string $fields
 	 * @param null|int $limit
@@ -567,7 +692,22 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	 *
 	 * @return string|false
 	 */
-	public function get_select_sql( $table, $where = array(), $fields = array( '*' ), $limit = null, $offset = null, $order_by = null, $group_by = null, $for_update = false ) {
+	public function get_select_sql( $tables, $where = array(), $fields = array( '*' ), $limit = null, $offset = null, $order_by = null, $group_by = null, $for_update = false ) {
+		$as = null;
+		if ( is_array( $tables ) ) {
+			if ( empty( $tables ) ) {
+				return false;
+			}
+			$table = array_shift( $tables );
+			$join  = $tables;
+			if ( count( $table ) > 1 ) {
+				$as = $table[1];
+			}
+			$table = $table[0];
+		} else {
+			$table = $tables;
+			$join  = null;
+		}
 		if ( ! isset( $this->table_defines[ $table ] ) ) {
 			return false;
 		}
@@ -581,7 +721,11 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 		list( $conditions, $values ) = $this->build_conditions( $where, $columns );
 		$table  = $this->get_table( $table );
 		$fields = $this->build_fields( $fields, $columns );
-		$sql    = "SELECT {$fields} FROM `$table`";
+		$sql    = "SELECT {$fields} FROM $table";
+		if ( isset( $as ) ) {
+			$sql .= " AS $as";
+		}
+		$sql .= $this->build_join( $join );
 		if ( ! empty( $conditions ) ) {
 			$sql .= " WHERE $conditions";
 		}
@@ -599,7 +743,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	}
 
 	/**
-	 * @param string $table
+	 * @param array|string $tables
 	 * @param array $where
 	 * @param array|string $fields
 	 * @param null|int $limit
@@ -610,8 +754,8 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	 *
 	 * @return array|bool|null
 	 */
-	public function select( $table, $where = array(), $fields = array( '*' ), $limit = null, $offset = null, $order_by = null, $group_by = null, $for_update = false ) {
-		$sql = $this->get_select_sql( $table, $where, $fields, $limit, $offset, $order_by, $group_by, $for_update );
+	public function select( $tables, $where = array(), $fields = array( '*' ), $limit = null, $offset = null, $order_by = null, $group_by = null, $for_update = false ) {
+		$sql = $this->get_select_sql( $tables, $where, $fields, $limit, $offset, $order_by, $group_by, $for_update );
 		if ( false === $sql ) {
 			return false;
 		}
