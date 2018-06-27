@@ -62,7 +62,10 @@ $instance->add_style_view( 'admin/style/table' );
 				<?php if ( $result->errorCount() > 0 ): ?>
                     <ul>
 						<?php foreach ( $result->errors() as $item ): ?>
-                            <li><?php $instance->h( $item->toString() ); ?></li>
+                            <li>
+								<?php $instance->h( $item->toString() ); ?>
+								<?php $instance->dump( $item->thrownException()->getTraceAsString() ); ?>
+                            </li>
 						<?php endforeach; ?>
                     </ul>
 				<?php endif; ?>
