@@ -42,7 +42,7 @@ trait Hook {
 		}
 		$default = call_user_func_array( 'apply_filters', $args );
 
-		if ( isset( $this->app->setting ) && $this->app->setting->is_setting( $key ) ) {
+		if ( !empty( $this->app->setting ) && $this->app->setting->is_setting( $key ) ) {
 			$setting = $this->app->setting->get_setting( $key );
 			$default = \Technote\Models\Utility::array_get( $setting, 'default', $default );
 			$value   = $this->app->get_option( $args[0], null );

@@ -51,34 +51,55 @@ class Technote {
 	public $plugin_file;
 	/** @var array $plugin_data */
 	public $plugin_data;
-	/** @var \Technote\Models\Define $define */
-	public $define;
-	/** @var \Technote\Models\Config $config */
-	public $config;
-	/** @var \Technote\Models\Setting $setting */
-	public $setting;
-	/** @var \Technote\Models\Option $option */
-	public $option;
-	/** @var \Technote\Models\Device $device */
-	public $device;
-	/** @var \Technote\Models\Minify $minify */
-	public $minify;
-	/** @var \Technote\Models\Filter $filter */
-	public $filter;
-	/** @var \Technote\Models\User $user */
-	public $user;
-	/** @var \Technote\Models\Post $post */
-	public $post;
-	/** @var \Technote\Models\Loader $loader */
-	public $loader;
-	/** @var \Technote\Models\Log $log */
-	public $log;
-	/** @var \Technote\Models\Input $input */
-	public $input;
-	/** @var \Technote\Models\Db $db */
-	public $db;
-	/** @var \Technote\Models\Uninstall $db */
-	public $uninstall;
+
+	/** @var array $properties */
+	private $properties = array(
+		'define'    => '\Technote\Models\Define',
+		'config'    => '\Technote\Models\Config',
+		'setting'   => '\Technote\Models\Setting',
+		'option'    => '\Technote\Models\Option',
+		'device'    => '\Technote\Models\Device',
+		'minify'    => '\Technote\Models\Minify',
+		'filter'    => '\Technote\Models\Filter',
+		'user'      => '\Technote\Models\User',
+		'post'      => '\Technote\Models\Post',
+		'loader'    => '\Technote\Models\Loader',
+		'log'       => '\Technote\Models\Log',
+		'input'     => '\Technote\Models\Input',
+		'db'        => '\Technote\Models\Db',
+		'uninstall' => '\Technote\Models\Uninstall',
+	);
+
+	/** @var array $property_instances */
+	private $property_instances = array();
+
+	/**
+	 * @param string $name
+	 *
+	 * @return \Technote\Interfaces\Singleton
+	 * @throws \Exception
+	 */
+	public function __get( $name ) {
+		if ( isset( $this->properties[ $name ] ) ) {
+			if ( ! isset( $this->property_instances[ $name ] ) ) {
+				/** @var \Technote\Interfaces\Singleton $class */
+				$class                             = $this->properties[ $name ];
+				$this->property_instances[ $name ] = $class::get_instance( $this );
+			}
+
+			return $this->property_instances[ $name ];
+		}
+		throw new \Exception( $name . ' is undefined.' );
+	}
+
+	/**
+	 * @param string $name
+	 *
+	 * @return bool
+	 */
+	public function __isset( $name ) {
+		return array_key_exists( $name, $this->properties );
+	}
 
 	/**
 	 * Technote constructor.
@@ -94,7 +115,6 @@ class Technote {
 		$this->original_plugin_name = $plugin_name;
 		$this->plugin_file          = $plugin_file;
 		$this->plugin_name          = strtolower( $this->original_plugin_name );
-		$this->define               = \Technote\Models\Define::get_instance( $this );
 
 		add_action( 'init', function () {
 			$this->initialize();
@@ -138,22 +158,6 @@ class Technote {
 		}
 		$this->plugin_data = get_plugin_data( $this->plugin_file );
 		spl_autoload_register( array( $this, 'load_class' ) );
-
-		$this->uninstall = \Technote\Models\Uninstall::get_instance( $this );
-		$this->input     = \Technote\Models\Input::get_instance( $this );
-		$this->config    = \Technote\Models\Config::get_instance( $this );
-		$this->setting   = \Technote\Models\Setting::get_instance( $this );
-		$this->option    = \Technote\Models\Option::get_instance( $this );
-		$this->log       = \Technote\Models\Log::get_instance( $this );
-
-		$this->device = \Technote\Models\Device::get_instance( $this );
-		$this->minify = \Technote\Models\Minify::get_instance( $this );
-		$this->user   = \Technote\Models\User::get_instance( $this );
-		$this->post   = \Technote\Models\Post::get_instance( $this );
-		$this->loader = \Technote\Models\Loader::get_instance( $this );
-		$this->db     = \Technote\Models\Db::get_instance( $this );
-
-		$this->filter = \Technote\Models\Filter::get_instance( $this );
 	}
 
 	/**

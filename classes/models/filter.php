@@ -38,7 +38,7 @@ class Filter implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 				$app      = $this->app;
 				$exploded = explode( '->', $class );
 				foreach ( $exploded as $property ) {
-					if ( property_exists( $app, $property ) ) {
+					if ( isset( $app->$property ) ) {
 						$app = $app->$property;
 					} else {
 						$app = false;
@@ -46,7 +46,7 @@ class Filter implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 					}
 				}
 			} else {
-				if ( property_exists( $this->app, $class ) ) {
+				if ( isset( $this->app->$class ) ) {
 					$app = $this->app->$class;
 				}
 			}
