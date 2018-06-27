@@ -38,6 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	$_SERVER['REQUEST_TIME']    = time();
 	$_SERVER['REMOTE_ADDR']     = '127.0.0.1';
 	$_SERVER['REQUEST_URI']     = '/';
+	$_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36';
 
 	// to use add_action
 	require_once( dirname( $wp_blog_header ) . DS . 'wp-includes' . DS . 'plugin.php' );

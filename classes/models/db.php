@@ -399,11 +399,13 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 				$key    = $option;
 				$option = null;
 			}
-			if ( $key !== '*' && ! isset( $columns[ $key ] ) ) {
-				unset( $fields[ $k ] );
-				continue;
+			if ( $key === '*' ) {
+				$name = '*';
+			} elseif ( isset( $columns[ $key ] ) ) {
+				$name = $columns[ $key ]['name'];
+			} else {
+				$name = $key;
 			}
-			$name = $key === '*' ? $key : $columns[ $key ]['name'];
 			if ( is_array( $option ) ) {
 				$group_func = $option[0];
 				if ( strtoupper( $group_func ) == 'AS' ) {
@@ -563,15 +565,13 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	 * @param null|array $group_by
 	 * @param bool $for_update
 	 *
-	 * @return array|bool|null
+	 * @return string|false
 	 */
-	public function select( $table, $where = array(), $fields = array( '*' ), $limit = null, $offset = null, $order_by = null, $group_by = null, $for_update = false ) {
+	public function get_select_sql( $table, $where = array(), $fields = array( '*' ), $limit = null, $offset = null, $order_by = null, $group_by = null, $for_update = false ) {
 		if ( ! isset( $this->table_defines[ $table ] ) ) {
 			return false;
 		}
 
-		/** @var \wpdb $wpdb */
-		global $wpdb;
 		$columns = $this->table_defines[ $table ]['columns'];
 
 		if ( $this->is_logical( $this->table_defines[ $table ] ) ) {
@@ -592,15 +592,43 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 			$sql .= ' FOR UPDATE';
 		}
 
-		if ( isset( $limit ) && $limit == 1 ) {
-			return $wpdb->get_row( empty( $values ) ? $sql : $wpdb->prepare( $sql, $values ), ARRAY_A );
+		/** @var \wpdb $wpdb */
+		global $wpdb;
+
+		return empty( $values ) ? $sql : $wpdb->prepare( $sql, $values );
+	}
+
+	/**
+	 * @param string $table
+	 * @param array $where
+	 * @param array|string $fields
+	 * @param null|int $limit
+	 * @param null|int $offset
+	 * @param null|array $order_by
+	 * @param null|array $group_by
+	 * @param bool $for_update
+	 *
+	 * @return array|bool|null
+	 */
+	public function select( $table, $where = array(), $fields = array( '*' ), $limit = null, $offset = null, $order_by = null, $group_by = null, $for_update = false ) {
+		$sql = $this->get_select_sql( $table, $where, $fields, $limit, $offset, $order_by, $group_by, $for_update );
+		if ( false === $sql ) {
+			return false;
 		}
 
-		return $wpdb->get_results( empty( $values ) ? $sql : $wpdb->prepare( $sql, $values ), ARRAY_A );
+		/** @var \wpdb $wpdb */
+		global $wpdb;
+
+		if ( isset( $limit ) && $limit == 1 ) {
+			return $wpdb->get_row( $sql, ARRAY_A );
+		}
+
+		return $wpdb->get_results( $sql, ARRAY_A );
 	}
 
 	/**
 	 * @param $table
+	 * @param string $field
 	 * @param array $where
 	 * @param null $limit
 	 * @param int $offset
@@ -610,9 +638,10 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	 *
 	 * @return int
 	 */
-	public function select_count( $table, $where = array(), $limit = null, $offset = 0, $order_by = array(), $group_by = array(), $for_update = false ) {
+	public function select_count( $table, $field = '*', $where = array(), $limit = null, $offset = 0, $order_by = array(), $group_by = array(), $for_update = false ) {
+		empty( $field ) and $field = '*';
 		$result = $this->select( $table, $where, array(
-			'*' => array(
+			$field => array(
 				'COUNT',
 				'num'
 			)
@@ -653,6 +682,16 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 		list ( $_data, $_format ) = $this->filter( $data, $columns );
 
 		return $wpdb->$method( $this->get_table( $table ), $_data, $_format );
+	}
+
+	/**
+	 * @return int
+	 */
+	public function get_insert_id() {
+		/** @var \wpdb $wpdb */
+		global $wpdb;
+
+		return $wpdb->insert_id;
 	}
 
 	/**
@@ -707,7 +746,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	 * @param $data
 	 * @param $where
 	 *
-	 * @return bool|false|int
+	 * @return int
 	 */
 	public function insert_or_update( $table, $data, $where ) {
 		if ( ! isset( $this->table_defines[ $table ] ) ) {
@@ -718,13 +757,16 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 			$where['deleted_at'] = null;
 		}
 
-		$row = $this->select( $table, $where, '*', 1 );
+		$row = $this->select( $table, $where, 'id', 1 );
 		if ( empty( $row ) ) {
-			return $this->insert( $table, $data );
+			$this->insert( $table, $data );
+
+			return $this->get_insert_id();
 		}
 		$where = array( 'id' => $row['id'] );
+		$this->update( $table, $data, $where );
 
-		return $this->update( $table, $data, $where );
+		return $row['id'];
 	}
 
 	/**

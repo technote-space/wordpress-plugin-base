@@ -41,66 +41,76 @@ $instance->add_style_view( 'admin/style/table' );
             </ul>
         </td>
     </tr>
-    <tr>
-        <td><?php $instance->h( 'Warning', true ); ?></td>
-        <td>
-			<?php if ( $result->warningCount() > 0 ): ?>
-                <ul>
-					<?php foreach ( $result->warnings() as $item ): ?>
-                        <li><?php $instance->h( $item->toString() ); ?></li>
-					<?php endforeach; ?>
-                </ul>
-			<?php endif; ?>
-        </td>
-    </tr>
-    <tr>
-        <td><?php $instance->h( 'Errors', true ); ?></td>
-        <td>
-			<?php if ( $result->errorCount() > 0 ): ?>
-                <ul>
-					<?php foreach ( $result->errors() as $item ): ?>
-                        <li><?php $instance->h( $item->toString() ); ?></li>
-					<?php endforeach; ?>
-                </ul>
-			<?php endif; ?>
-        </td>
-    </tr>
-    <tr>
-        <td><?php $instance->h( 'Failure', true ); ?></td>
-        <td>
-			<?php if ( $result->failureCount() > 0 ): ?>
-                <ul>
-					<?php foreach ( $result->failures() as $item ): ?>
-                        <li><?php $instance->h( $item->toString() ); ?></li>
-					<?php endforeach; ?>
-                </ul>
-			<?php endif; ?>
-        </td>
-    </tr>
-    <tr>
-        <td><?php $instance->h( 'Risky', true ); ?></td>
-        <td>
-			<?php if ( $result->riskyCount() > 0 ): ?>
-                <ul>
-					<?php foreach ( $result->risky() as $item ): ?>
-                        <li><?php $instance->h( $item->toString() ); ?></li>
-					<?php endforeach; ?>
-                </ul>
-			<?php endif; ?>
-        </td>
-    </tr>
-    <tr>
-        <td><?php $instance->h( 'Not Implemented', true ); ?></td>
-        <td>
-			<?php if ( $result->notImplementedCount() > 0 ): ?>
-                <ul>
-					<?php foreach ( $result->notImplemented() as $item ): ?>
-                        <li><?php $instance->h( $item->toString() ); ?></li>
-					<?php endforeach; ?>
-                </ul>
-			<?php endif; ?>
-        </td>
-    </tr>
+	<?php if ( method_exists( $result, 'warningCount' ) ): ?>
+        <tr>
+            <td><?php $instance->h( 'Warning', true ); ?></td>
+            <td>
+				<?php if ( $result->warningCount() > 0 ): ?>
+                    <ul>
+						<?php foreach ( $result->warnings() as $item ): ?>
+                            <li><?php $instance->h( $item->toString() ); ?></li>
+						<?php endforeach; ?>
+                    </ul>
+				<?php endif; ?>
+            </td>
+        </tr>
+	<?php endif; ?>
+	<?php if ( method_exists( $result, 'errorCount' ) ): ?>
+        <tr>
+            <td><?php $instance->h( 'Errors', true ); ?></td>
+            <td>
+				<?php if ( $result->errorCount() > 0 ): ?>
+                    <ul>
+						<?php foreach ( $result->errors() as $item ): ?>
+                            <li><?php $instance->h( $item->toString() ); ?></li>
+						<?php endforeach; ?>
+                    </ul>
+				<?php endif; ?>
+            </td>
+        </tr>
+	<?php endif; ?>
+	<?php if ( method_exists( $result, 'failureCount' ) ): ?>
+        <tr>
+            <td><?php $instance->h( 'Failure', true ); ?></td>
+            <td>
+				<?php if ( $result->failureCount() > 0 ): ?>
+                    <ul>
+						<?php foreach ( $result->failures() as $item ): ?>
+                            <li><?php $instance->h( $item->toString() ); ?></li>
+						<?php endforeach; ?>
+                    </ul>
+				<?php endif; ?>
+            </td>
+        </tr>
+	<?php endif; ?>
+	<?php if ( method_exists( $result, 'riskyCount' ) ): ?>
+        <tr>
+            <td><?php $instance->h( 'Risky', true ); ?></td>
+            <td>
+				<?php if ( $result->riskyCount() > 0 ): ?>
+                    <ul>
+						<?php foreach ( $result->risky() as $item ): ?>
+                            <li><?php $instance->h( $item->toString() ); ?></li>
+						<?php endforeach; ?>
+                    </ul>
+				<?php endif; ?>
+            </td>
+        </tr>
+	<?php endif; ?>
+	<?php if ( method_exists( $result, 'notImplementedCount' ) ): ?>
+        <tr>
+            <td><?php $instance->h( 'Not Implemented', true ); ?></td>
+            <td>
+				<?php if ( $result->notImplementedCount() > 0 ): ?>
+                    <ul>
+						<?php foreach ( $result->notImplemented() as $item ): ?>
+                            <li><?php $instance->h( $item->toString() ); ?></li>
+						<?php endforeach; ?>
+                    </ul>
+				<?php endif; ?>
+            </td>
+        </tr>
+	<?php endif; ?>
 	<?php if ( ! empty( $dump ) ): ?>
         <tr>
             <td><?php $instance->h( 'Dump', true ); ?></td>
