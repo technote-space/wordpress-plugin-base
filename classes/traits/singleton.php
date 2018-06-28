@@ -94,11 +94,11 @@ trait Singleton {
 
 			if ( ! isset( self::$instances[ $app->plugin_name ][ $class ] ) ) {
 				$instance = new static( $app, $reflection );
-				$instance->initialize();
 				if ( $instance instanceof \Technote\Interfaces\Uninstall && $app->uninstall ) {
 					$app->uninstall->add_uninstall( array( $instance, 'uninstall' ) );
 				}
 				self::$instances[ $app->plugin_name ][ $class ] = $instance;
+				$instance->initialize();
 			}
 
 			return self::$instances[ $app->plugin_name ][ $class ];

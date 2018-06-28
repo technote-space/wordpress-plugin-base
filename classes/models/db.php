@@ -193,6 +193,16 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	}
 
 	/**
+	 * @param string $table
+	 * @param string $key
+	 *
+	 * @return string
+	 */
+	public function get_field( $table, $key ) {
+		return Utility::array_get( Utility::array_get( $this->get_columns( $table ), $key, array() ), 'name', $key );
+	}
+
+	/**
 	 * @param $table
 	 *
 	 * @return array
@@ -736,10 +746,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 			$sql .= ' FOR UPDATE';
 		}
 
-		/** @var \wpdb $wpdb */
-		global $wpdb;
-
-		return empty( $values ) ? $sql : $wpdb->prepare( $sql, $values );
+		return $this->prepare( $sql, $values );
 	}
 
 	/**
@@ -954,21 +961,41 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 			return $this->delete( $table, array() );
 		}
 
-		/** @var \wpdb $wpdb */
-		global $wpdb;
 		$sql = 'TRUNCATE TABLE `' . $this->get_table( $table ) . '`';
 
+		return $this->query( $sql );
+	}
+
+	/**
+	 * @param string $sql
+	 *
+	 * @return false|int
+	 */
+	public function query( $sql ) {
+		/** @var \wpdb $wpdb */
+		global $wpdb;
+
 		return $wpdb->query( $sql );
+	}
+
+	/**
+	 * @param string $sql
+	 * @param array $values
+	 *
+	 * @return string
+	 */
+	public function prepare( $sql, $values ) {
+		/** @var \wpdb $wpdb */
+		global $wpdb;
+
+		return empty( $values ) ? $sql : $wpdb->prepare( $sql, $values );
 	}
 
 	/**
 	 * @return false|int
 	 */
 	public function begin() {
-		/** @var \wpdb $wpdb */
-		global $wpdb;
-
-		return $wpdb->query( 'START TRANSACTION' );
+		return $this->query( 'START TRANSACTION' );
 	}
 
 	/**
@@ -982,52 +1009,57 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 			return false;
 		}
 
-		/** @var \wpdb $wpdb */
-		global $wpdb;
-
-		return $wpdb->query( 'LOCK TABLES `' . $this->get_table( $table ) ) . '` ' . ( $write ? 'WRITE' : 'READ' );
+		return $this->query( 'LOCK TABLES `' . $this->get_table( $table ) ) . '` ' . ( $write ? 'WRITE' : 'READ' );
 	}
 
 	/**
 	 * @return false|int
 	 */
 	public function unlock() {
-		/** @var \wpdb $wpdb */
-		global $wpdb;
-
-		return $wpdb->query( 'UNLOCK TABLES' );
+		return $this->query( 'UNLOCK TABLES' );
 	}
 
 	/**
 	 * @return false|int
 	 */
 	public function commit() {
-		/** @var \wpdb $wpdb */
-		global $wpdb;
-
-		return $wpdb->query( 'COMMIT' );
+		return $this->query( 'COMMIT' );
 	}
 
 	/**
 	 * @return false|int
 	 */
 	public function rollback() {
-		/** @var \wpdb $wpdb */
-		global $wpdb;
+		return $this->query( 'ROLLBACK' );
+	}
 
-		return $wpdb->query( 'ROLLBACK' );
+	/**
+	 * @param callable $func
+	 *
+	 * @return bool
+	 */
+	public function transaction( $func ) {
+		try {
+			$this->begin();
+			$func();
+			$this->commit();
+
+			return true;
+		} catch ( \Exception $e ) {
+			$this->rollback();
+			$this->app->log( $e->getMessage() );
+		}
+
+		return false;
 	}
 
 	/**
 	 * uninstall
 	 */
 	public function uninstall() {
-		/** @var \wpdb $wpdb */
-		global $wpdb;
-
 		foreach ( $this->table_defines as $table => $define ) {
 			$sql = 'DROP TABLE IF EXISTS `' . $this->get_table( $table ) . '`';
-			$wpdb->query( $sql );
+			$this->query( $sql );
 		}
 	}
 

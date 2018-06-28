@@ -29,7 +29,7 @@ $instance->add_style_view( 'admin/style/table' );
     </tr>
     <tr>
         <td><?php $instance->h( 'Elapsed Time', true ); ?></td>
-        <td><?php $instance->h( $result->time() ); ?></td>
+        <td><?php $instance->h( round( $result->time(), 6 ) ); ?> sec</td>
     </tr>
     <tr>
         <td><?php $instance->h( 'Passed', true ); ?></td>
