@@ -28,7 +28,7 @@ trait Cron {
 	/**
 	 * initialize
 	 */
-	public final function initialize() {
+	protected final function initialize() {
 		add_action( $this->get_hook_name(), function () {
 			$this->run();
 		} );
@@ -153,7 +153,7 @@ trait Cron {
 	 */
 	public function uninstall() {
 		$this->clear_event();
-		delete_transient( $this->get_transient_key() );
+		$this->unlock_process();
 	}
 
 }
