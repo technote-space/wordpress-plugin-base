@@ -170,6 +170,7 @@ trait Presenter {
 		}
 		if ( $escape ) {
 			$value = esc_html( $value );
+			$value = nl2br( $value );
 		}
 		if ( $echo ) {
 			echo $value;
