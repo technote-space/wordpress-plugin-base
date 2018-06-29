@@ -121,6 +121,9 @@ trait Cron {
 	 * run
 	 */
 	public final function run() {
+		if ( $this->is_process_running() ) {
+			return;
+		}
 		set_time_limit( 0 );
 		$this->lock_process();
 		$this->do_action( 'before_cron_run', $this->get_hook_name() );
