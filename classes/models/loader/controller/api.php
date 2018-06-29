@@ -28,19 +28,11 @@ class Api implements \Technote\Interfaces\Loader {
 	private $api_controllers = null;
 
 	/**
-	 * @return string
-	 */
-	private function get_js_class() {
-		return $this->get_slug( 'js_class', '_rest_api' );
-	}
-
-	/**
 	 * register script
 	 */
 	private function register_script() {
 		$functions = array();
 		$scripts   = array();
-		$class     = $this->get_js_class();
 		/** @var \Technote\Traits\Controller\Api $api */
 		foreach ( $this->get_api_controllers( true ) as $api ) {
 			$name               = $api->get_call_function_name();
@@ -48,7 +40,7 @@ class Api implements \Technote\Interfaces\Loader {
 				'method'   => $api->get_method(),
 				'endpoint' => $api->get_endpoint(),
 			);
-			$script             = is_admin() ? $api->admin_script( $class ) : $api->front_script( $class );
+			$script             = is_admin() ? $api->admin_script() : $api->front_script();
 			if ( ! empty( $script ) ) {
 				$scripts[] = $script;
 			}
@@ -59,7 +51,6 @@ class Api implements \Technote\Interfaces\Loader {
 				'namespace' => $this->get_api_namespace(),
 				'nonce'     => wp_create_nonce( 'wp_rest' ),
 				'functions' => $functions,
-				'class'     => $class,
 			), 9 );
 			foreach ( $scripts as $script ) {
 				$this->add_script( $script );

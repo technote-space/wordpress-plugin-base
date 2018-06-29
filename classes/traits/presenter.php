@@ -64,6 +64,13 @@ trait Presenter {
 	}
 
 	/**
+	 * @return string
+	 */
+	private function get_api_class() {
+		return $this->get_slug( 'api_class', '_rest_api' );
+	}
+
+	/**
 	 * @param array $args
 	 *
 	 * @return array
@@ -74,10 +81,11 @@ trait Presenter {
 			$args['nonce_key']   = $this->get_nonce_key();
 			$args['nonce_value'] = $this->create_nonce();
 		}
-		$args['instance'] = $this;
-		$args['action']   = $this->app->input->server( "REQUEST_URI" );
-		$args['is_admin'] = is_admin();
-		$args['user_can'] = $this->app->user_can();
+		$args['instance']  = $this;
+		$args['action']    = $this->app->input->server( "REQUEST_URI" );
+		$args['is_admin']  = is_admin();
+		$args['user_can']  = $this->app->user_can();
+		$args['api_class'] = $this->get_api_class();
 
 		return $this->filter_presenter_args( $args );
 	}

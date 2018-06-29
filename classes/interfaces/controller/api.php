@@ -58,25 +58,19 @@ interface Api extends \Technote\Interfaces\Controller {
 	public function is_only_front();
 
 	/**
-	 * @param string $class
-	 *
 	 * @return false|string
 	 */
-	public function common_script( $class );
+	public function common_script();
 
 	/**
-	 * @param string $class
-	 *
 	 * @return false|string
 	 */
-	public function admin_script( $class );
+	public function admin_script();
 
 	/**
-	 * @param string $class
-	 *
 	 * @return false|string
 	 */
-	public function front_script( $class );
+	public function front_script();
 
 	/**
 	 * @param \WP_REST_Request $params

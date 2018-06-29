@@ -37,8 +37,8 @@ return array(
 	// api namespace
 	'api_namespace' => '',
 
-	// js class
-	'js_class'      => '',
+	// api class
+	'api_class'     => '',
 
 	// modal class
 	'modal_class'   => '',

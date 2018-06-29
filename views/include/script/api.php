@@ -18,13 +18,13 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 /** @var string $namespace */
 /** @var string $nonce */
 /** @var array $functions */
-/** @var string $class */
+/** @var string $api_class */
 /** @var array $scripts */
 ?>
 
 <script>
     (function () {
-        class <?php $instance->h( $class );?> {
+        class <?php $instance->h( $api_class );?> {
             constructor() {
                 this.endpoint = '<?php $instance->h( $endpoint . $namespace );?>/';
                 this.functions = <?php echo json_encode( $functions );?>;
@@ -32,6 +32,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
             }
 
             ajax(func, args) {
+                if (args === undefined) args = {};
                 if (this.functions[func]) {
                     const setting = this.functions[func];
                     let url = this.endpoint + setting.endpoint;
@@ -158,6 +159,6 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
             }
         }
 
-        window.<?php $instance->h( $class );?> = new <?php $instance->h( $class );?> ();
+        window.<?php $instance->h( $api_class );?> = new <?php $instance->h( $api_class );?> ();
     })();
 </script>

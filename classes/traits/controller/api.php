@@ -69,30 +69,24 @@ trait Api {
 	}
 
 	/**
-	 * @param string $class
-	 *
 	 * @return false|string
 	 */
-	public function common_script( $class ) {
+	public function common_script() {
 		return false;
 	}
 
 	/**
-	 * @param string $class
-	 *
 	 * @return false|string
 	 */
-	public function admin_script( $class ) {
-		return $this->common_script( $class );
+	public function admin_script() {
+		return $this->common_script();
 	}
 
 	/**
-	 * @param string $class
-	 *
 	 * @return false|string
 	 */
-	public function front_script( $class ) {
-		return $this->common_script( $class );
+	public function front_script() {
+		return $this->common_script();
 	}
 
 	/**
