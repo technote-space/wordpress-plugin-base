@@ -27,6 +27,9 @@ class Option implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	/** @var array */
 	private $options;
 
+	/** @var bool $suspend_reload */
+	private $suspend_reload = false;
+
 	/**
 	 * initialize
 	 */
@@ -38,6 +41,9 @@ class Option implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	 * reload options
 	 */
 	private function reload_options() {
+		if ( $this->suspend_reload ) {
+			return;
+		}
 		$this->options = wp_parse_args(
 			$this->get_option(), array()
 		);
@@ -104,10 +110,13 @@ class Option implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	 */
 	public function set( $key, $value ) {
 		$this->reload_options();
+		$suspend_reload        = $this->suspend_reload;
 		$prev                  = isset( $this->options[ $key ] ) ? $this->options[ $key ] : null;
 		$this->options[ $key ] = $value;
 		if ( $prev !== $value ) {
+			$this->suspend_reload = true;
 			$this->do_action( 'changed_option', $key, $value, $prev );
+			$this->suspend_reload = $suspend_reload;
 		}
 
 		return $this->save();
@@ -120,10 +129,13 @@ class Option implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	 */
 	public function delete( $key ) {
 		$this->reload_options();
+		$suspend_reload = $this->suspend_reload;
 		if ( array_key_exists( $key, $this->options ) ) {
 			$prev = $this->options[ $key ];
 			unset( $this->options[ $key ] );
+			$this->suspend_reload = true;
 			$this->do_action( 'deleted_option', $key, $prev );
+			$this->suspend_reload = $suspend_reload;
 
 			return $this->save();
 		}
