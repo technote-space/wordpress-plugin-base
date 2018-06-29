@@ -31,10 +31,37 @@ class Option implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	 * initialize
 	 */
 	protected function initialize() {
+		$this->reload_options();
+	}
+
+	/**
+	 * reload options
+	 */
+	private function reload_options() {
 		$this->options = wp_parse_args(
-			get_option( $this->get_option_name(), array() ), array()
+			$this->get_option(), array()
 		);
 		$this->unescape_options();
+	}
+
+	/**
+	 * @return array
+	 */
+	private function get_option() {
+		// get_option だとキャッシュされるため直接取得
+		/** @var \wpdb $wpdb */
+		global $wpdb;
+		$options = $wpdb->get_row( $wpdb->prepare( "SELECT option_value FROM $wpdb->options WHERE option_name = %s AND '' != %s", array(
+			$this->get_option_name(),
+			Utility::uuid(),
+		) ) );
+		if ( empty( $options ) ) {
+			$options = array();
+		} else {
+			$options = maybe_unserialize( $options->option_value );
+		}
+
+		return $options;
 	}
 
 	/**
@@ -76,7 +103,8 @@ class Option implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	 * @return bool
 	 */
 	public function set( $key, $value ) {
-		$prev                  = isseT( $this->options[ $key ] ) ? $this->options[ $key ] : null;
+		$this->reload_options();
+		$prev                  = isset( $this->options[ $key ] ) ? $this->options[ $key ] : null;
 		$this->options[ $key ] = $value;
 		if ( $prev !== $value ) {
 			$this->do_action( 'changed_option', $key, $value, $prev );
@@ -91,6 +119,7 @@ class Option implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	 * @return bool
 	 */
 	public function delete( $key ) {
+		$this->reload_options();
 		if ( array_key_exists( $key, $this->options ) ) {
 			$prev = $this->options[ $key ];
 			unset( $this->options[ $key ] );
