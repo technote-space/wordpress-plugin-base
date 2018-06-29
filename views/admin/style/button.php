@@ -34,4 +34,8 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
         float: right;
         margin-top: 10px !important;
     }
+
+    #<?php $instance->id();?>-main-contents .button-primary.left {
+        float: none;
+    }
 </style>
