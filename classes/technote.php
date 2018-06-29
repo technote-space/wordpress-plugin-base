@@ -136,28 +136,34 @@ class Technote {
 	}
 
 	/**
-	 * initialize
+	 * @param bool $uninstall
 	 */
-	private function initialize() {
+	private function initialize( $uninstall = false ) {
 		if ( $this->initialized ) {
 			return;
 		}
 		$this->initialized = true;
-		$this->setup_property();
+		$this->setup_property( $uninstall );
 		$this->setup_update();
 		$this->setup_textdomain();
 		$this->filter->do_action( 'app_initialized' );
 	}
 
 	/**
-	 * setup property
+	 * @param bool $uninstall
 	 */
-	private function setup_property() {
+	private function setup_property( $uninstall ) {
 		if ( ! function_exists( 'get_plugin_data' ) ) {
 			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 		}
 		$this->plugin_data = get_plugin_data( $this->plugin_file );
 		spl_autoload_register( array( $this, 'load_class' ) );
+
+		if ( $uninstall ) {
+			foreach ( $this->properties as $name => $class ) {
+				$this->$name;
+			}
+		}
 	}
 
 	/**
@@ -316,7 +322,7 @@ class Technote {
 		if ( ! isset( $app ) ) {
 			return;
 		}
-		$app->initialize();
+		$app->initialize( true );
 		$app->uninstall->uninstall();
 	}
 
