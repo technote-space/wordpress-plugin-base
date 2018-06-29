@@ -33,6 +33,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	protected function initialize() {
 		$this->load_table_defines();
 		$this->db_update();
+		$this->setup_wp_table_defines();
 	}
 
 	/**
@@ -81,6 +82,49 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 			}
 			$this->table_defines[ $table ]['id']      = $id;
 			$this->table_defines[ $table ]['columns'] = $columns;
+		}
+	}
+
+	/**
+	 * for wp table
+	 */
+	private function setup_wp_table_defines() {
+		/** @var \wpdb $wpdb */
+		global $wpdb;
+		$tables = array(
+			$wpdb->posts,
+			$wpdb->postmeta,
+			$wpdb->users,
+			$wpdb->usermeta,
+			$wpdb->options,
+		);
+		foreach ( $tables as $table ) {
+			$sql          = "DESCRIBE $table";
+			$columns      = $wpdb->get_results( $sql, ARRAY_A );
+			$table_define = array();
+			foreach ( $columns as $column ) {
+				$name = $column['Field'];
+				$key  = $name;
+				if ( isset( $column['Key'] ) && $column['Key'] === 'PRI' ) {
+					$key                = 'id';
+					$table_define['id'] = $name;
+				}
+				$type     = explode( ' ', $column['Type'] );
+				$unsigned = in_array( 'unsigned', $type );
+				$type     = reset( $type );
+				$null     = $column['Null'] != 'NO';
+
+				$table_define['columns'][ $key ] = array(
+					'name'     => $name,
+					'type'     => $type,
+					'format'   => $this->type2format( $type ),
+					'unsigned' => $unsigned,
+					'null'     => $null,
+				);
+			}
+			$table_define['delete']        = 'physical';
+			$table_define['wordpress']     = true;
+			$this->table_defines[ $table ] = $table_define;
 		}
 	}
 
@@ -185,7 +229,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	 * @return string
 	 */
 	public function get_table( $table ) {
-		if ( ! isset( $this->table_defines[ $table ] ) ) {
+		if ( ! isset( $this->table_defines[ $table ] ) || ! empty( $this->table_defines[ $table ]['wordpress'] ) ) {
 			return $table;
 		}
 
@@ -459,42 +503,44 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 		if ( is_string( $fields ) ) {
 			$fields = array( $fields );
 		}
-		foreach ( $fields as $k => $option ) {
-			$key = $k;
-			if ( is_int( $key ) ) {
-				$key    = $option;
-				$option = null;
-			}
-			if ( $key === '*' ) {
-				if ( ! is_array( $option ) ) {
-					unset ( $fields[ $k ] );
-					foreach ( $columns as $key => $column ) {
-						$name     = Utility::array_get( $column, 'name' );
-						$fields[] = $name === $key ? $name : $name . ' AS ' . $key;
-					}
-					continue;
+		if ( ! empty( $fields ) ) {
+			foreach ( $fields as $k => $option ) {
+				$key = $k;
+				if ( is_int( $key ) ) {
+					$key    = $option;
+					$option = null;
 				}
-				$name = $key;
-			} elseif ( isset( $columns[ $key ] ) ) {
-				$name = $columns[ $key ]['name'];
-			} else {
-				$name = $key;
-			}
-			if ( is_array( $option ) ) {
-				$group_func = $option[0];
-				if ( strtoupper( $group_func ) == 'AS' ) {
-					$fields[ $k ] = $name;
-					if ( count( $option ) >= 2 ) {
-						$fields[ $k ] .= ' AS ' . $option[1];
+				if ( $key === '*' ) {
+					if ( ! is_array( $option ) ) {
+						unset ( $fields[ $k ] );
+						foreach ( $columns as $key => $column ) {
+							$name     = Utility::array_get( $column, 'name' );
+							$fields[] = $name === $key ? $name : $name . ' AS ' . $key;
+						}
+						continue;
+					}
+					$name = $key;
+				} elseif ( isset( $columns[ $key ] ) ) {
+					$name = $columns[ $key ]['name'];
+				} else {
+					$name = $key;
+				}
+				if ( is_array( $option ) ) {
+					$group_func = $option[0];
+					if ( strtoupper( $group_func ) == 'AS' ) {
+						$fields[ $k ] = $name;
+						if ( count( $option ) >= 2 ) {
+							$fields[ $k ] .= ' AS ' . $option[1];
+						}
+					} else {
+						$fields[ $k ] = "$group_func( $name )";
+						if ( count( $option ) >= 2 ) {
+							$fields[ $k ] .= ' AS ' . $option[1];
+						}
 					}
 				} else {
-					$fields[ $k ] = "$group_func( $name )";
-					if ( count( $option ) >= 2 ) {
-						$fields[ $k ] .= ' AS ' . $option[1];
-					}
+					$fields[ $k ] = $name === $key ? $name : $name . ' AS ' . $key;
 				}
-			} else {
-				$fields[ $k ] = $name === $key ? $name : $name . ' AS ' . $key;
 			}
 		}
 		if ( empty( $fields ) || ! is_array( $fields ) ) {
@@ -527,6 +573,17 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 				continue;
 			}
 
+			if ( in_array( strtoupper( $field ), array(
+				'EXISTS',
+				'NOT EXISTS',
+			) ) ) {
+				! is_array( $value ) and $value = array( $value );
+				foreach ( $value as $sub_query ) {
+					$conditions[] = "$field ($sub_query)";
+				}
+				continue;
+			}
+
 			$op = '=';
 			if ( is_array( $value ) ) {
 				if ( count( $value ) > 1 ) {
@@ -545,6 +602,8 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 						continue;
 					}
 				} else {
+					$value        = reset( $value );
+					$conditions[] = "$field ($value)";
 					continue;
 				}
 			} else {
@@ -692,8 +751,8 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 
 	/**
 	 * @param array|string $tables
-	 * @param array $where
-	 * @param array|string $fields
+	 * @param null|array $where
+	 * @param null|array|string $fields
 	 * @param null|int $limit
 	 * @param null|int $offset
 	 * @param null|array $order_by
@@ -702,7 +761,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	 *
 	 * @return string|false
 	 */
-	public function get_select_sql( $tables, $where = array(), $fields = array( '*' ), $limit = null, $offset = null, $order_by = null, $group_by = null, $for_update = false ) {
+	public function get_select_sql( $tables, $where = null, $fields = null, $limit = null, $offset = null, $order_by = null, $group_by = null, $for_update = false ) {
 		$as = null;
 		if ( is_array( $tables ) ) {
 			if ( empty( $tables ) ) {
@@ -724,6 +783,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 
 		$columns = $this->table_defines[ $table ]['columns'];
 
+		! is_array( $where ) and $where = array();
 		if ( $this->is_logical( $this->table_defines[ $table ] ) ) {
 			$where['deleted_at'] = null;
 		}
@@ -757,11 +817,12 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	 * @param null|int $offset
 	 * @param null|array $order_by
 	 * @param null|array $group_by
+	 * @param string $output
 	 * @param bool $for_update
 	 *
 	 * @return array|bool|null
 	 */
-	public function select( $tables, $where = array(), $fields = array( '*' ), $limit = null, $offset = null, $order_by = null, $group_by = null, $for_update = false ) {
+	public function select( $tables, $where = array(), $fields = array( '*' ), $limit = null, $offset = null, $order_by = null, $group_by = null, $output = ARRAY_A, $for_update = false ) {
 		$sql = $this->get_select_sql( $tables, $where, $fields, $limit, $offset, $order_by, $group_by, $for_update );
 		if ( false === $sql ) {
 			return false;
@@ -771,10 +832,10 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 		global $wpdb;
 
 		if ( isset( $limit ) && $limit == 1 ) {
-			return $wpdb->get_row( $sql, ARRAY_A );
+			return $wpdb->get_row( $sql, $output );
 		}
 
-		return $wpdb->get_results( $sql, ARRAY_A );
+		return $wpdb->get_results( $sql, $output );
 	}
 
 	/**
