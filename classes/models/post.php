@@ -32,6 +32,15 @@ class Post implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 	}
 
 	/**
+	 * @param string $key
+	 *
+	 * @return string
+	 */
+	public function get_meta_key( $key ) {
+		return $this->get_post_prefix() . $key;
+	}
+
+	/**
 	 * @param bool $check_query
 	 *
 	 * @return int
@@ -67,7 +76,7 @@ class Post implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 			return $this->apply_filters( 'get_post_meta', $default, $key, $post_id, $single, $default );
 		}
 
-		return $this->apply_filters( 'get_post_meta', get_post_meta( $post_id, $this->get_post_prefix() . $key, $single ), $key, $post_id, $single, $default );
+		return $this->apply_filters( 'get_post_meta', get_post_meta( $post_id, $this->get_meta_key( $key ), $single ), $key, $post_id, $single, $default, $this->get_post_prefix() );
 	}
 
 	/**
@@ -82,7 +91,7 @@ class Post implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 			return false;
 		}
 
-		return update_post_meta( $post_id, $this->get_post_prefix() . $key, $value );
+		return update_post_meta( $post_id, $this->get_meta_key( $key ), $value );
 	}
 
 	/**
@@ -91,7 +100,7 @@ class Post implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 	 */
 	public function set_all( $key, $value ) {
 		global $wpdb;
-		$query = $wpdb->prepare( "UPDATE $wpdb->postmeta SET meta_value = %s WHERE meta_key LIKE %s", $value, $this->get_post_prefix() . $key );
+		$query = $wpdb->prepare( "UPDATE $wpdb->postmeta SET meta_value = %s WHERE meta_key LIKE %s", $value, $this->get_meta_key( $key ) );
 		$wpdb->query( $query );
 	}
 
@@ -100,7 +109,7 @@ class Post implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 	 */
 	public function delete_all( $key ) {
 		global $wpdb;
-		$query = $wpdb->prepare( "DELETE FROM $wpdb->postmeta WHERE meta_key LIKE %s", $this->get_post_prefix() . $key );
+		$query = $wpdb->prepare( "DELETE FROM $wpdb->postmeta WHERE meta_key LIKE %s", $this->get_meta_key( $key ) );
 		$wpdb->query( $query );
 	}
 
@@ -117,7 +126,7 @@ class Post implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 			WHERE meta_key LIKE %s
 			AND   meta_value LIKE %s
 SQL;
-		$results = $wpdb->get_results( $wpdb->prepare( $query, $this->get_post_prefix() . $key, $value ) );
+		$results = $wpdb->get_results( $wpdb->prepare( $query, $this->get_meta_key( $key ), $value ) );
 
 		return $this->apply_filters( 'find_post_meta', Utility::array_pluck( $results, 'post_id' ), $key, $value );
 	}
@@ -133,7 +142,7 @@ SQL;
 		SELECT post_id FROM {$wpdb->postmeta}
 		WHERE meta_key LIKE %s
 SQL;
-		$results = $wpdb->get_results( $wpdb->prepare( $query, $this->get_post_prefix() . $key ) );
+		$results = $wpdb->get_results( $wpdb->prepare( $query, $this->get_meta_key( $key ) ) );
 
 		return $this->apply_filters( 'find_post_meta', Utility::array_pluck( $results, 'post_id' ), $key );
 	}

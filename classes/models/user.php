@@ -85,6 +85,15 @@ class User implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 
 	/**
 	 * @param string $key
+	 *
+	 * @return string
+	 */
+	public function get_meta_key( $key ) {
+		return $this->get_user_prefix() . $key;
+	}
+
+	/**
+	 * @param string $key
 	 * @param int|null $user_id
 	 * @param bool $single
 	 * @param mixed $default
@@ -99,7 +108,7 @@ class User implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 			return $this->apply_filters( 'get_user_meta', $default, $key, $user_id, $single, $default );
 		}
 
-		return $this->apply_filters( 'get_user_meta', get_user_meta( $user_id, $this->get_user_prefix() . $key, $single ), $key, $user_id, $single, $default, $this->get_user_prefix() );
+		return $this->apply_filters( 'get_user_meta', get_user_meta( $user_id, $this->get_meta_key( $key ), $single ), $key, $user_id, $single, $default, $this->get_user_prefix() );
 	}
 
 	/**
@@ -117,7 +126,7 @@ class User implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 			return false;
 		}
 
-		return update_user_meta( $user_id, $this->get_user_prefix() . $key, $value );
+		return update_user_meta( $user_id, $this->get_meta_key( $key ), $value );
 	}
 
 	/**
@@ -135,7 +144,7 @@ class User implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 			return false;
 		}
 
-		return delete_user_meta( $user_id, $this->get_user_prefix() . $key, $meta_value );
+		return delete_user_meta( $user_id, $this->get_meta_key( $key ), $meta_value );
 	}
 
 	/**
