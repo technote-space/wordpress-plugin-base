@@ -61,9 +61,7 @@ class Filter implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 			}
 			if ( false !== $app && is_callable( array( $app, 'add_filter' ) ) ) {
 				foreach ( $tags as $tag => $methods ) {
-					if ( in_array( $tag, array( 'app_initialized' ) ) ) {
-						$tag = $this->get_filter_prefix() . $tag;
-					}
+					$tag = Utility::replace( $tag, array( 'prefix' => $this->get_filter_prefix() ) );
 					foreach ( $methods as $method => $params ) {
 						$this->call_add_filter( array( $app, 'add_filter' ), $tag, $method, $params );
 					}
