@@ -590,10 +590,14 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 					$op  = $value[0];
 					$val = $value[1];
 					if ( is_array( $val ) ) {
-						foreach ( $val as $v ) {
-							$values[] = $v;
+						if ( empty( $val ) ) {
+							$conditions[] = "1=0";
+						} else {
+							foreach ( $val as $v ) {
+								$values[] = $v;
+							}
+							$conditions[] = "$field $op (" . str_repeat( $format . ',', count( $val ) - 1 ) . $format . ')';
 						}
-						$conditions[] = "$field $op (" . str_repeat( $format . ',', count( $val ) - 1 ) . $format . ')';
 						continue;
 					}
 					if ( count( $value ) > 2 ) {
