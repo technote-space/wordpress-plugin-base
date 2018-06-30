@@ -54,20 +54,11 @@ class Option implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	 * @return array
 	 */
 	private function get_option() {
-		// get_option だとキャッシュされるため直接取得
-		/** @var \wpdb $wpdb */
-		global $wpdb;
-		$options = $wpdb->get_row( $wpdb->prepare( "SELECT option_value FROM $wpdb->options WHERE option_name = %s AND '' != %s", array(
-			$this->get_option_name(),
-			Utility::uuid(),
-		) ) );
-		if ( empty( $options ) ) {
-			$options = array();
-		} else {
-			$options = maybe_unserialize( $options->option_value );
+		if ( function_exists( 'wp_cache_init' ) ) {
+			wp_cache_init();
 		}
 
-		return $options;
+		return get_option( $this->get_option_name(), array() );
 	}
 
 	/**
