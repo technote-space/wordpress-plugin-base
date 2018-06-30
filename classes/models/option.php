@@ -54,8 +54,8 @@ class Option implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	 * @return array
 	 */
 	private function get_option() {
-		if ( function_exists( 'wp_cache_init' ) ) {
-			wp_cache_init();
+		if ( function_exists( 'wp_cache_flush' ) ) {
+			wp_cache_flush();
 		}
 
 		return get_option( $this->get_option_name(), array() );
