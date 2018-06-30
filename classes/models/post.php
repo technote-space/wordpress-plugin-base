@@ -80,9 +80,9 @@ class Post implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 	}
 
 	/**
-	 * @param $post_id
-	 * @param $key
-	 * @param $value
+	 * @param int $post_id
+	 * @param string $key
+	 * @param mixed $value
 	 *
 	 * @return bool|int
 	 */
@@ -92,6 +92,21 @@ class Post implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 		}
 
 		return update_post_meta( $post_id, $this->get_meta_key( $key ), $value );
+	}
+
+	/**
+	 * @param int $post_id
+	 * @param string $key
+	 * @param mixed $meta_value
+	 *
+	 * @return bool
+	 */
+	public function delete( $post_id, $key, $meta_value = '' ) {
+		if ( $post_id <= 0 ) {
+			return false;
+		}
+
+		return delete_post_meta( $post_id, $this->get_meta_key( $key ), $meta_value );
 	}
 
 	/**

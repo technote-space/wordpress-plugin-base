@@ -132,7 +132,7 @@ class User implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 	/**
 	 * @param string $key
 	 * @param int|null $user_id
-	 * @param string $meta_value
+	 * @param mixed $meta_value
 	 *
 	 * @return bool
 	 */
