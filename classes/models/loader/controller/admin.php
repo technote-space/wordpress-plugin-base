@@ -77,10 +77,11 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 					/** @var \Technote\Controllers\Admin\Base $instance */
 					return $instance;
 				}
-				$this->app->log( ( isset( $_GET['page'] ) ? $_GET['page'] : 'Page' ) . ' not found.' );
+				$page = isset( $_GET['page'] ) ? $_GET['page'] : 'Page';
+				$this->app->log( sprintf( '%s not found.', $page ) );
 			}
 		} catch ( \Exception $e ) {
-			$this->app->log( $e );
+			$this->app->log( $e->getMessage() );
 		}
 
 		return null;
@@ -138,8 +139,8 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 		foreach ( \Technote\Models\Utility::flatten( $pages ) as $page ) {
 			$hook = add_submenu_page(
 				$this->get_menu_slug(),
-				$page->get_page_title(),
-				$page->get_menu_name(),
+				$this->app->translate( $page->get_page_title() ),
+				$this->app->translate( $page->get_menu_name() ),
 				$capability,
 				$this->get_page_prefix() . $page->get_page_slug(),
 				function () {

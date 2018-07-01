@@ -111,13 +111,13 @@ class Setting implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Ho
 		$default      = $this->get_expression( Utility::array_get( $data, 'default', '' ), $type );
 		$data['info'] = array();
 		if ( '' !== $default ) {
-			$data['info'][] = 'default = ' . $default;
+			$data['info'][] = $this->app->translate( 'default' ) . ' = ' . $default;
 		}
 		if ( isset( $data['min'] ) ) {
-			$data['info'][] = 'min = ' . $this->get_expression( $data['min'], $type );
+			$data['info'][] = $this->app->translate( 'min' ) . ' = ' . $this->get_expression( $data['min'], $type );
 		}
 		if ( isset( $data['max'] ) ) {
-			$data['info'][] = 'max = ' . $this->get_expression( $data['max'], $type );
+			$data['info'][] = $this->app->translate( 'max' ) . ' = ' . $this->get_expression( $data['max'], $type );
 		}
 		$data['name']        = $this->get_filter_prefix() . $data['key'];
 		$data['saved']       = $this->app->get_option( $data['name'] );

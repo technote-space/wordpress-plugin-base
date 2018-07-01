@@ -18,14 +18,14 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 <script>
     (function ($) {
         $('#<?php $instance->id();?>-delete_log').click(function () {
-            return confirm('Are you sure you want to delete this file?');
+            return confirm('<?php $instance->h( 'Are you sure you want to delete this file?', true );?>');
         });
         $('#<?php $instance->id();?>-main-contents .close_button').click(function () {
             const ul = $('#<?php $instance->id();?>-main-contents .directory > ul');
             if ($(ul).hasClass('closed')) {
-                $(ul).removeClass('closed').slideDown().next('.close_button').val('<?php $instance->h( 'Close' );?>');
+                $(ul).removeClass('closed').slideDown().next('.close_button').val('<?php $instance->h( 'Close', true );?>');
             } else {
-                $(ul).addClass('closed').slideUp().next('.close_button').val('<?php $instance->h( 'Open' );?>');
+                $(ul).addClass('closed').slideUp().next('.close_button').val('<?php $instance->h( 'Open', true );?>');
             }
         });
     })(jQuery);

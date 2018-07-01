@@ -53,7 +53,7 @@ trait Presenter {
 			$view = ob_get_contents();
 			ob_end_clean();
 		} elseif ( $error ) {
-			$this->app->log( "View file [ {$name} ] not found." );
+			$this->app->log( sprintf( 'View file [ %s ] not found.', $name ) );
 		}
 
 		if ( $echo ) {

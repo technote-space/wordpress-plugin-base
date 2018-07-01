@@ -40,6 +40,9 @@ class Technote {
 	/** @var array of \Technote */
 	private static $instances = array();
 
+	/** @var bool $lib_language_loaded */
+	private static $lib_language_loaded = false;
+
 	/** @var bool $initialized */
 	private $initialized = false;
 
@@ -184,9 +187,14 @@ class Technote {
 	 * setup textdomain
 	 */
 	private function setup_textdomain() {
+		if ( ! static::$lib_language_loaded ) {
+			static::$lib_language_loaded = true;
+			load_plugin_textdomain( $this->define->lib_name, false, $this->define->lib_language_rel_path );
+		}
+
 		$text_domain = $this->get_config( 'config', 'text_domain' );
 		if ( ! empty( $text_domain ) ) {
-			load_plugin_textdomain( $this->get_config( 'config', 'text_domain' ), false, $this->define->plugin_languages_dir );
+			load_plugin_textdomain( $text_domain, false, $this->define->plugin_languages_rel_path );
 		}
 	}
 
@@ -198,7 +206,11 @@ class Technote {
 	public function translate( $value ) {
 		$text_domain = $this->get_config( 'config', 'text_domain' );
 		if ( ! empty( $text_domain ) ) {
-			$value = __( $value, $text_domain );
+			$translated = __( $value, $text_domain );
+			if ( $value !== $translated ) {
+				return $translated;
+			}
+			$value = __( $value, $this->define->lib_name );
 		}
 
 		return $value;

@@ -45,7 +45,7 @@ class Setting extends Base {
 				$this->app->option->set_post_value( \Technote\Models\Utility::array_get( $this->app->setting->get_setting( $setting, true ), 'name', '' ) );
 			}
 		}
-		$this->app->add_message( 'Settings Updated.', 'setting' );
+		$this->app->add_message( 'Settings updated.', 'setting' );
 	}
 
 	/**
