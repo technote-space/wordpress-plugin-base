@@ -210,10 +210,9 @@ class Technote {
 			if ( $value !== $translated ) {
 				return $translated;
 			}
-			$value = __( $value, $this->define->lib_name );
 		}
 
-		return $value;
+		return __( $value, $this->define->lib_name );
 	}
 
 	/**

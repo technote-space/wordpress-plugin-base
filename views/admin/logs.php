@@ -25,7 +25,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 ?>
 
 <div class="log">
-	<?php if ( ! $deleted && isset( $field['name'] ) && false !== $data ): ?>
+	<?php if ( ! $deleted && isset( $field['name'] ) ): ?>
         <h3><?php $instance->h( $field['name'] ); ?></h3>
 		<?php $instance->form( 'open', $args ); ?>
 		<?php $instance->form( 'input/hidden', $args, array(
