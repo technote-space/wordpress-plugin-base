@@ -28,7 +28,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
             constructor() {
                 this.endpoint = '<?php $instance->h( $endpoint . $namespace );?>/';
                 this.functions = <?php echo json_encode( $functions );?>;
-                this.xhr = null;
+                this.xhr = {};
             }
 
             ajax(func, args) {
@@ -57,7 +57,8 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
                             break;
                     }
                     config.url = url;
-                    return this._ajax(config);
+                    this.abort(func);
+                    return this._ajax(config, func);
                 } else {
                     return new Promise((resolve, reject) => {
                         setTimeout(function () {
@@ -119,7 +120,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
                 return obj;
             }
 
-            _ajax(config) {
+            _ajax(config, func) {
                 const $this = this;
                 return new Promise((resolve, reject) => {
                     const xhr = window.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest();
@@ -139,7 +140,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
                             } else {
                                 reject(xhr.status, null, xhr);
                             }
-                            $this.xhr = null;
+                            $this.xhr[func] = null;
                         }
                     };
                     if (config.data) {
@@ -147,14 +148,14 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
                     } else {
                         xhr.send();
                     }
-                    this.xhr = xhr;
+                    this.xhr[func] = xhr;
                 });
             }
 
-            abort() {
-                if (this.xhr !== null) {
-                    this.xhr.abort();
-                    this.xhr = null;
+            abort(func) {
+                if (this.xhr[func] !== undefined && this.xhr[func] !== null) {
+                    this.xhr[func].abort();
+                    this.xhr[func] = null;
                 }
             }
         }
