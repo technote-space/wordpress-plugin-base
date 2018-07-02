@@ -922,6 +922,52 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 
 	/**
 	 * @param string $table
+	 * @param array $fields
+	 * @param array $data_list
+	 *
+	 * @return bool|false|int
+	 */
+	public function bulk_insert( $table, $fields, $data_list ) {
+		if ( ! isset( $this->table_defines[ $table ] ) || empty( $fields ) || empty( $data_list ) ) {
+			return false;
+		}
+		$columns     = $this->table_defines[ $table ]['columns'];
+		$table       = $this->get_table( $table );
+		$sql         = "INSERT INTO {$table} ";
+		$names       = array();
+		$placeholder = array();
+		$time        = array();
+		$this->set_update_params( $time, true, true, false );
+		foreach ( $fields as $field ) {
+			if ( ! isset( $columns[ $field ] ) ) {
+				return false;
+			}
+			$names[]       = $columns[ $field ]['name'];
+			$placeholder[] = $columns[ $field ]['format'];
+		}
+		foreach ( $time as $k => $v ) {
+			$names[]       = $columns[ $k ]['name'];
+			$placeholder[] = $columns[ $k ]['format'];
+		}
+		$placeholder = '(' . implode( ', ', $placeholder ) . ')';
+		$sql         .= '(' . implode( ', ', $names ) . ') VALUES ';
+
+		$values = array();
+		foreach ( $data_list as $data ) {
+			$data += $time;
+			if ( count( $names ) != count( $data ) ) {
+				return false;
+			}
+
+			$values[] = $this->prepare( $placeholder, $data );
+		}
+		$sql .= implode( ', ', $values );
+
+		return $this->query( $sql );
+	}
+
+	/**
+	 * @param string $table
 	 * @param array $data
 	 *
 	 * @return bool|false|int
@@ -1098,21 +1144,32 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 		return $this->query( 'ROLLBACK' );
 	}
 
+	/** @var int $transaction_level */
+	private $transaction_level = 0;
+
 	/**
 	 * @param callable $func
 	 *
 	 * @return bool
 	 */
 	public function transaction( $func ) {
+		$level = $this->transaction_level;
+		$this->transaction_level ++;
 		try {
-			$this->begin();
+			if ( $level === 0 ) {
+				$this->begin();
+			}
 			$func();
-			$this->commit();
+			if ( $level === 0 ) {
+				$this->commit();
+			}
 
 			return true;
 		} catch ( \Exception $e ) {
 			$this->rollback();
 			$this->app->log( $e->getMessage() );
+		} finally {
+			$this->transaction_level = $level;
 		}
 
 		return false;
