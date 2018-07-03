@@ -1155,21 +1155,27 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	public function transaction( $func ) {
 		$level = $this->transaction_level;
 		$this->transaction_level ++;
-		try {
-			if ( $level === 0 ) {
+		if ( $level === 0 ) {
+			try {
 				$this->begin();
-			}
-			$func();
-			if ( $level === 0 ) {
+				$func();
 				$this->commit();
-			}
 
-			return true;
-		} catch ( \Exception $e ) {
-			$this->rollback();
-			$this->app->log( $e->getMessage() );
-		} finally {
-			$this->transaction_level = $level;
+				return true;
+			} catch ( \Exception $e ) {
+				$this->rollback();
+				$this->app->log( $e->getMessage() );
+			} finally {
+				$this->transaction_level = $level;
+			}
+		} else {
+			try {
+				$func();
+
+				return true;
+			} finally {
+				$this->transaction_level = $level;
+			}
 		}
 
 		return false;

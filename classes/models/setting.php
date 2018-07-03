@@ -101,6 +101,42 @@ class Setting implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Ho
 
 	/**
 	 * @param string $setting
+	 *
+	 * @return bool
+	 */
+	public function remove_setting( $setting ) {
+		if ( ! $this->is_setting( $setting ) ) {
+			return true;
+		}
+
+		$priority = $this->setting_priority[ $setting ];
+		unset( $this->settings[ $priority ][ $setting ] );
+		unset( $this->setting_priority[ $setting ] );
+		if ( empty( $this->settings[ $priority ] ) ) {
+			unset( $this->settings[ $priority ] );
+		}
+		foreach ( $this->groups as $group_priority => $groups ) {
+			foreach ( $groups as $group => $settings ) {
+				$key = array_search( $setting, $settings );
+				if ( false !== $key ) {
+					unset( $this->groups[ $group_priority ][ $group ][ $key ] );
+					if ( empty( $this->groups[ $group_priority ][ $group ] ) ) {
+						unset( $this->groups[ $group_priority ][ $group ] );
+						unset( $this->group_priority[ $group ] );
+						if ( empty( $this->groups[ $group_priority ] ) ) {
+							unset( $this->groups[ $group_priority ] );
+						}
+					}
+					break;
+				}
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * @param string $setting
 	 * @param array $data
 	 *
 	 * @return array

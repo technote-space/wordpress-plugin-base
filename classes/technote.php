@@ -180,6 +180,8 @@ class Technote {
 				$this->plugin_file,
 				$this->plugin_name
 			);
+		} else {
+			$this->setting->remove_setting( 'check_update' );
 		}
 	}
 
