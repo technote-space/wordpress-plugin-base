@@ -382,7 +382,7 @@ class Sample extends \Technote\Tests\Base {
 ![test2](https://raw.githubusercontent.com/technote-space/wordpress-plugin-base/images/test2.png)
 
 ## サンプルプラグイン
-追加予定
+[関連記事提供用プラグイン](https://github.com/technote-space/wp-related-post-jp)
 
 # Author
 
