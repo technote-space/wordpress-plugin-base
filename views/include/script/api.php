@@ -53,7 +53,11 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
                                     query.push(prop + '=' + encodeURIComponent(args[prop]));
                                 }
                             }
-                            url += '?' + query.join('&');
+                            if (url.indexOf('?') !== -1) {
+                                url += '&' + query.join('&');
+                            } else {
+                                url += '?' + query.join('&');
+                            }
                             break;
                     }
                     config.url = url;
