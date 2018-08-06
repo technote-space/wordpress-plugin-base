@@ -97,7 +97,7 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 		}
 
 		$this->page = $this->load_page();
-		if ( isset( $this->page ) && $this->app->user_can( $this->page->get_capability() ) ) {
+		if ( isset( $this->page ) && $this->app->user_can( $this->apply_filters( 'admin_menu_capability', $this->page->get_capability(), $this->page ) ) ) {
 			$this->page->action();
 		}
 

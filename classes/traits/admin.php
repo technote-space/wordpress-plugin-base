@@ -27,7 +27,7 @@ trait Admin {
 	 * @return null|string|false
 	 */
 	public function get_capability() {
-		return $this->apply_filters( 'admin_capability', 'manage_options' );
+		return $this->app->get_config( 'capability', 'admin_capability', 'manage_options' );
 	}
 
 }

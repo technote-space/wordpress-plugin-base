@@ -17,9 +17,12 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 return array(
 
 	// user can
-	'default_user' => 'manage_options',
+	'default_user'     => 'manage_options',
 
 	// admin menu
-	'admin_menu'   => 'manage_options',
+	'admin_menu'       => 'manage_options',
+
+	// admin
+	'admin_capability' => 'manage_options',
 
 );
