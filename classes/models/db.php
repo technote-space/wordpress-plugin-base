@@ -80,8 +80,9 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 			if ( empty( $id ) ) {
 				continue;
 			}
-			$this->table_defines[ $table ]['id']      = $id;
-			$this->table_defines[ $table ]['columns'] = $columns;
+			$this->table_defines[ $table ]['id']       = $id;
+			$this->table_defines[ $table ]['columns']  = $columns;
+			$this->table_defines[ $table ]['is_added'] = true;
 		}
 	}
 
@@ -1186,8 +1187,10 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	 */
 	public function uninstall() {
 		foreach ( $this->table_defines as $table => $define ) {
-			$sql = 'DROP TABLE IF EXISTS `' . $this->get_table( $table ) . '`';
-			$this->query( $sql );
+			if ( ! empty( $define['is_added'] ) ) {
+				$sql = 'DROP TABLE IF EXISTS `' . $this->get_table( $table ) . '`';
+				$this->query( $sql );
+			}
 		}
 	}
 
