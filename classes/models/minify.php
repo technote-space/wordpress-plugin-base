@@ -70,7 +70,7 @@ class Minify implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	/**
 	 * output js
 	 */
-	private function output_js() {
+	public function output_js() {
 		if ( empty( $this->script ) ) {
 			return;
 		}
@@ -129,7 +129,7 @@ class Minify implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	/**
 	 * output css
 	 */
-	private function output_css() {
+	public function output_css() {
 		if ( empty( $this->css ) ) {
 			return;
 		}
