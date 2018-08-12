@@ -862,7 +862,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 				'COUNT',
 				'num'
 			)
-		), $limit, $offset, $order_by, $group_by, $for_update );
+		), $limit, $offset, $order_by, $group_by, ARRAY_A, $for_update );
 		if ( empty( $result ) ) {
 			return 0;
 		}
