@@ -137,12 +137,12 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
                             if (200 === xhr.status) {
                                 try {
                                     const json = JSON.parse(xhr.responseText);
-                                    resolve(json, xhr);
+                                    resolve(json);
                                 } catch (e) {
-                                    reject(xhr.status, e, xhr);
+                                    reject([xhr.status, e, xhr]);
                                 }
                             } else {
-                                reject(xhr.status, null, xhr);
+                                reject([xhr.status, null, xhr]);
                             }
                             $this.xhr[func] = null;
                         }
