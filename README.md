@@ -134,7 +134,7 @@ example - example.php
     ),
     
     // 論理削除 or 物理削除
-    'delete'  => 'logical', // physical or logical [default = logical]
+    'delete'  => 'logical', // physical or logical [default = physical]
 ),
 ```
 
