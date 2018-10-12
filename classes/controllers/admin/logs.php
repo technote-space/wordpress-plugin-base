@@ -33,7 +33,7 @@ class Logs extends Base {
 	 * @return string
 	 */
 	public function get_page_title() {
-		return 'Logs';
+		return $this->apply_filters( 'logs_page_title', 'Logs' );
 	}
 
 	/**

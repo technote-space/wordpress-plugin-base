@@ -45,7 +45,7 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 	 * @return string
 	 */
 	private function get_menu_slug() {
-		return $this->apply_filters( 'get_menu_slug', $this->get_page_prefix() . $this->get_setting_slug() );
+		return $this->get_page_prefix() . $this->apply_filters( 'get_menu_slug', $this->get_setting_slug() );
 	}
 
 	/**
@@ -111,6 +111,9 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 				$priority = $this->apply_filters( 'admin_menu_priority', $page->get_priority(), $page );
 				if ( $priority < 0 ) {
 					continue;
+				}
+				if ( $this->get_menu_slug() === $this->get_page_prefix() . $page->get_page_slug() ) {
+					$priority = - 1;
 				}
 				$pages[ $priority ][] = $page;
 			}

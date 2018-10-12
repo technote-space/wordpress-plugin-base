@@ -33,7 +33,7 @@ class Setting extends Base {
 	 * @return string
 	 */
 	public function get_page_title() {
-		return 'Dashboard';
+		return $this->apply_filters( 'setting_page_title', 'Dashboard' );
 	}
 
 	/**

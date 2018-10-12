@@ -33,7 +33,7 @@ class Test extends Base {
 	 * @return string
 	 */
 	public function get_page_title() {
-		return 'Test';
+		return $this->apply_filters( 'test_page_title', 'Test' );
 	}
 
 	/**
