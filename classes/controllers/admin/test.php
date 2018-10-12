@@ -41,7 +41,7 @@ class Test extends Base {
 	 */
 	public function post_action() {
 		$action = $this->app->input->post( 'action' );
-		if ( method_exists( $this, $action ) && is_callable( array( $this, $action ) ) ) {
+		if ( method_exists( $this, $action ) && is_callable( [ $this, $action ] ) ) {
 			$this->$action();
 		}
 	}
@@ -50,9 +50,9 @@ class Test extends Base {
 	 * @return array
 	 */
 	public function get_view_args() {
-		return array(
-			'tests' => $this->app->loader->test->get_test_class_names()
-		);
+		return [
+			'tests' => $this->app->loader->test->get_test_class_names(),
+		];
 	}
 
 	/**
