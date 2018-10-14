@@ -123,6 +123,14 @@ class Technote {
 		add_action( 'init', function () {
 			$this->initialize();
 		}, 1 );
+
+		add_action( 'plugins_loaded', function () {
+			$functions = $this->define->plugin_dir . DS . 'functions.php';
+			if ( is_readable( $functions ) ) {
+				/** @noinspection PhpIncludeInspection */
+				require_once $functions;
+			}
+		} );
 	}
 
 	/**
