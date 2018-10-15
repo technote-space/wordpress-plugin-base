@@ -18,6 +18,6 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 ?>
 <?php if ( ! empty( $attributes ) && is_array( $attributes ) ): ?>
 	<?php foreach ( $attributes as $k => $v ): ?>
-		<?php $instance->h( $k ); ?>="<?php $instance->h( $v, 'value' === $k ); ?>"
+		<?php $instance->h( $k ); ?>="<?php $instance->h( $v ); ?>"
 	<?php endforeach; ?>
 <?php endif; ?>
