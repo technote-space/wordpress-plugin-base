@@ -163,7 +163,9 @@ class Setting implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Ho
 		$data['name']        = $this->get_filter_prefix() . $data['key'];
 		$data['saved']       = $this->app->get_option( $data['name'] );
 		$data['placeholder'] = $default;
-		$data['used']        = $this->get_expression( $this->apply_filters( $data['key'], $default ), $type );
+		$value               = $this->apply_filters( $data['key'], $default );
+		$data['value']       = $value;
+		$data['used']        = $this->get_expression( $value, $type );
 
 		return $data;
 	}
