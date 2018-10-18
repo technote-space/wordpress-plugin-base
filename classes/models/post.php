@@ -28,7 +28,7 @@ class Post implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 	 * @return string
 	 */
 	private function get_post_prefix() {
-		return $this->get_slug( 'post_prefix', '_post' );
+		return $this->get_slug( 'post_prefix', '_post' ) . '-';
 	}
 
 	/**
@@ -83,15 +83,28 @@ class Post implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 	 * @param int $post_id
 	 * @param string $key
 	 * @param mixed $value
+	 * @param bool $add
+	 * @param bool $unique
 	 *
 	 * @return bool|int
 	 */
-	public function set( $post_id, $key, $value ) {
+	public function set( $post_id, $key, $value, $add = false, $unique = false ) {
 		if ( $post_id <= 0 ) {
 			return false;
 		}
 
-		return update_post_meta( $post_id, $this->get_meta_key( $key ), $value );
+		if ( ! $add ) {
+			return update_post_meta( $post_id, $this->get_meta_key( $key ), $value );
+		}
+
+		if ( $unique ) {
+			$values = $this->get( $key, $post_id, false, [] );
+			if ( in_array( $value, $values ) ) {
+				return false;
+			}
+		}
+
+		return add_post_meta( $post_id, $this->get_meta_key( $key ), $value );
 	}
 
 	/**
@@ -132,7 +145,7 @@ class Post implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 	 * @param $key
 	 * @param $value
 	 *
-	 * @return mixed
+	 * @return array
 	 */
 	public function find( $key, $value ) {
 		global $wpdb;
@@ -144,6 +157,21 @@ SQL;
 		$results = $wpdb->get_results( $wpdb->prepare( $query, $this->get_meta_key( $key ), $value ) );
 
 		return $this->apply_filters( 'find_post_meta', Utility::array_pluck( $results, 'post_id' ), $key, $value );
+	}
+
+	/**
+	 * @param $key
+	 * @param $value
+	 *
+	 * @return false|int
+	 */
+	public function first( $key, $value ) {
+		$post_ids = $this->find( $key, $value );
+		if ( empty( $post_ids ) ) {
+			return false;
+		}
+
+		return reset( $post_ids );
 	}
 
 	/**

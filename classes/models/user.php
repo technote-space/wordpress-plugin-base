@@ -80,7 +80,7 @@ class User implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 	 * @return string
 	 */
 	private function get_user_prefix() {
-		return $this->get_slug( 'user_prefix', '_user' );
+		return $this->get_slug( 'user_prefix', '_user' ) . '-';
 	}
 
 	/**

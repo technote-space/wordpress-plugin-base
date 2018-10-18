@@ -114,7 +114,7 @@ trait Singleton {
 	 *
 	 * @return string
 	 */
-	public function get_slug( $config_name, $suffix ) {
+	public function get_slug( $config_name, $suffix = '-' ) {
 
 		if ( ! isset( self::$slugs[ $this->app->plugin_name ][ $config_name ] ) ) {
 			$default = $this->app->plugin_name . $suffix;
