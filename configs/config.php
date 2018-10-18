@@ -28,9 +28,6 @@ return [
 	// github
 	'github'               => '',
 
-	// plugin version
-	'plugin_version'       => '0.0.0.0.0',
-
 	// db version
 	'db_version'           => '0.0.0.0.0',
 
