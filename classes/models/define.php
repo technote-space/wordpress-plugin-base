@@ -135,8 +135,8 @@ class Define implements \Technote\Interfaces\Singleton {
 		$this->plugin_logs_dir           = $this->plugin_dir . DS . 'logs';
 
 		$this->lib_assets_url    = plugins_url( 'assets', TECHNOTE_BOOTSTRAP );
-		$this->plugin_url        = plugins_url( '/', $this->plugin_file );
-		$this->plugin_assets_url = $this->plugin_url . 'assets';
+		$this->plugin_url        = plugins_url( '', $this->plugin_file );
+		$this->plugin_assets_url = $this->plugin_url . '/assets';
 	}
 
 }
