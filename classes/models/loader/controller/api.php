@@ -2,7 +2,7 @@
 /**
  * Technote Models Loader Controller Api
  *
- * @version 1.1.13
+ * @version 1.1.20
  * @author technote-space
  * @since 1.0.0
  * @copyright technote All Rights Reserved
@@ -135,5 +135,23 @@ class Api implements \Technote\Interfaces\Loader {
 		return $this->api_controllers;
 	}
 
+	/**
+	 * @param $result
+	 * @param \WP_REST_Server $server
+	 * @param \WP_REST_Request $request
+	 *
+	 * @return mixed
+	 */
+	/** @noinspection PhpUnusedPrivateMethodInspection */
+	private function rest_pre_dispatch(
+		/** @noinspection PhpUnusedParameterInspection */
+		$result, $server, $request
+	) {
+		$namespaces = $request->get_route();
+		if ( strpos( $namespaces, $this->get_api_namespace() ) === 1 ) {
+			return null;
+		}
 
+		return $result;
+	}
 }
