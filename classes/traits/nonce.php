@@ -2,7 +2,7 @@
 /**
  * Technote Traits Nonce
  *
- * @version 1.1.13
+ * @version 1.1.21
  * @author technote-space
  * @since 1.0.0
  * @copyright technote All Rights Reserved

@@ -2,7 +2,7 @@
 /**
  * Technote Configs Filter
  *
- * @version 1.1.20
+ * @version 1.1.21
  * @author technote-space
  * @since 1.0.0
  * @copyright technote All Rights Reserved
@@ -47,7 +47,10 @@ return [
 
 	'loader->api' => [
 		'rest_api_init'     => [
-			'register_api' => [],
+			'register_rest_api' => [],
+		],
+		'init'              => [
+			'register_ajax_api' => [],
 		],
 		'wp_footer'         => [
 			'register_script' => [],
