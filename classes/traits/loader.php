@@ -88,6 +88,13 @@ trait Loader {
 	}
 
 	/**
+	 * @return int
+	 */
+	public function get_loaded_count() {
+		return count( $this->get_class_list() );
+	}
+
+	/**
 	 * @param string $dir
 	 * @param string $add_namespace
 	 *

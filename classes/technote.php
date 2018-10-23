@@ -244,6 +244,9 @@ class Technote {
 		if ( ! class_exists( '\WP_REST_Request' ) ) {
 			$this->setting->remove_setting( 'use_admin_ajax' );
 		}
+		if ( $this->loader->api->get_loaded_count() === 0 ) {
+			$this->setting->remove_setting( 'use_admin_ajax' );
+		}
 	}
 
 	/**
