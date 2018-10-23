@@ -29,7 +29,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
     (function () {
         class <?php $instance->h( $api_class );?> {
             constructor() {
-                this.endpoint = '<?php $instance->h( $is_admin_ajax ? $endpoint : $endpoint . $namespace );?>/';
+                this.endpoint = '<?php $instance->h( $is_admin_ajax ? $endpoint : $endpoint . $namespace . '/' );?>';
                 this.functions = <?php echo json_encode( $functions );?>;
                 this.xhr = {};
             }
