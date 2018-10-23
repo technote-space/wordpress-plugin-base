@@ -2,7 +2,7 @@
 /**
  * Technote Models Loader Controller Api
  *
- * @version 1.1.21
+ * @version 1.1.22
  * @author technote-space
  * @since 1.0.0
  * @copyright technote All Rights Reserved
