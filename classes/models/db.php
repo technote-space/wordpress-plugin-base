@@ -373,7 +373,12 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 			}
 		}
 		$sql .= implode( ",\n", $index );
-		$sql .= "\n) ENGINE = InnoDB DEFAULT CHARSET = {$char};";
+		$sql .= "\n) ENGINE = InnoDB DEFAULT CHARSET = {$char}";
+		if ( ! empty( $define['comment'] ) ) {
+			$define['comment'] = str_replace( '\'', '\\\'', $define['comment'] );
+			$sql               .= " COMMENT '{$define['comment']}'";
+		}
+		$sql .= ';';
 
 		return dbDelta( $sql );
 	}
