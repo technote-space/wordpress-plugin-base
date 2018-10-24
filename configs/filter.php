@@ -36,6 +36,12 @@ return [
 		],
 	],
 
+	'db' => [
+		'switch_blog' => [
+			'switch_blog' => [],
+		],
+	],
+
 	'loader->admin' => [
 		'admin_menu'    => [
 			'add_menu' => [],

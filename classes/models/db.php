@@ -87,6 +87,19 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	}
 
 	/**
+	 * switch blog
+	 */
+	/** @noinspection PhpUnusedPrivateMethodInspection */
+	private function switch_blog() {
+		foreach ( $this->table_defines as $table => $table_define ) {
+			if ( ! empty( $table_define['wordpress'] ) ) {
+				unset( $this->table_defines[ $table ] );
+			}
+		}
+		$this->setup_wp_table_defines();
+	}
+
+	/**
 	 * for wp table
 	 */
 	private function setup_wp_table_defines() {
