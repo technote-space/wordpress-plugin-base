@@ -90,6 +90,9 @@ class Api implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 		}
 	}
 
+	/**
+	 * @param callable $get_view_params
+	 */
 	private function register_script_common( $get_view_params ) {
 		$functions = [];
 		$scripts   = [];
