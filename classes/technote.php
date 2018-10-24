@@ -179,6 +179,13 @@ class Technote {
 	}
 
 	/**
+	 * @return bool
+	 */
+	public function has_initialized() {
+		return $this->initialized;
+	}
+
+	/**
 	 * load functions file
 	 */
 	private function load_functions() {
