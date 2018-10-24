@@ -230,7 +230,11 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	 * @return string
 	 */
 	public function get_table( $table ) {
-		if ( ! isset( $this->table_defines[ $table ] ) || ! empty( $this->table_defines[ $table ]['wordpress'] ) ) {
+		if (
+			! isset( $this->table_defines[ $table ] ) ||
+			! empty( $this->table_defines[ $table ]['wordpress'] ) ||
+			! empty( $this->table_defines[ $table ]['global'] )
+		) {
 			return $table;
 		}
 
