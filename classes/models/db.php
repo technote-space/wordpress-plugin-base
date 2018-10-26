@@ -499,7 +499,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	 * @param $delete
 	 */
 	private function set_update_params( &$data, $create, $update, $delete ) {
-		$now  = $this->apply_filters( 'set_update_params_date', date( 'Y-m-d H:i:s' ) );
+		$now  = $this->apply_filters( 'set_update_params_date', date_i18n( 'Y-m-d H:i:s' ) );
 		$user = $this->apply_filters( 'set_update_params_user', $this->app->user->user_name );
 
 		if ( $create ) {

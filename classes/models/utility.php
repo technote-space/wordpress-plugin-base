@@ -178,7 +178,7 @@ class Utility {
 					's',
 				] as $t
 			) {
-				self::$time[ $t ] = date( $t );
+				self::$time[ $t ] = date_i18n( $t );
 			}
 		}
 
