@@ -31,6 +31,7 @@ $attributes['name'] = $name;
 $attributes['size'] = isset( $size ) ? $size : '1';
 ! empty( $multiple ) and $attributes['multiple'] = 'multiple';
 ! empty( $disabled ) and $attributes['disabled'] = 'disabled';
+isset( $selected ) and ! is_array( $selected ) and $selected = [ $selected ];
 empty( $multiple ) and ! empty( $selected ) and count( $selected ) > 1 and $selected = array_splice( $selected, 0, 1 );
 ?>
 <select <?php $instance->get_view( 'include/attributes', array_merge( $args, [ 'attributes' => $attributes ] ), true ); ?> >
