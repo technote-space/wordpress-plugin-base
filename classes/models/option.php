@@ -40,7 +40,7 @@ class Option implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	/**
 	 * reload options
 	 */
-	private function reload_options() {
+	public function reload_options() {
 		if ( $this->suspend_reload ) {
 			return;
 		}
