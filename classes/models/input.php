@@ -67,6 +67,16 @@ class Input implements \Technote\Interfaces\Singleton {
 	 *
 	 * @return mixed
 	 */
+	public function request( $key = null, $default = null ) {
+		return func_num_args() === 0 ? $_REQUEST : Utility::array_get( $_REQUEST, $key, $default );
+	}
+
+	/**
+	 * @param string $key
+	 * @param mixed $default
+	 *
+	 * @return mixed
+	 */
 	public function file( $key = null, $default = null ) {
 		return func_num_args() === 0 ? $_FILES : Utility::array_get( $_FILES, $key, $default );
 	}
