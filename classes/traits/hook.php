@@ -2,7 +2,7 @@
 /**
  * Technote Traits Hook
  *
- * @version 1.1.26
+ * @version 1.1.30
  * @author technote-space
  * @since 1.0.0
  * @copyright technote All Rights Reserved
