@@ -39,11 +39,14 @@ define( 'TECHNOTE_IS_MOCK', false );
  */
 class Technote {
 
-	/** @var array of \Technote */
+	/** @var array|\Technote[] */
 	private static $instances = [];
 
 	/** @var bool $lib_language_loaded */
 	private static $lib_language_loaded = false;
+
+	/** @var array $shared_object */
+	private static $shared_object = [];
 
 	/** @var bool $initialized */
 	private $initialized = false;
@@ -431,6 +434,39 @@ class Technote {
 		}
 
 		return null;
+	}
+
+	/**
+	 * @param $key
+	 *
+	 * @return mixed
+	 */
+	public function get_shared_object( $key ) {
+		return isset( self::$shared_object[ $this->plugin_name ][ $key ] ) ? self::$shared_object[ $this->plugin_name ][ $key ] : null;
+	}
+
+	/**
+	 * @param string $key
+	 * @param mixed $object
+	 */
+	public function set_shared_object( $key, $object ) {
+		self::$shared_object[ $this->plugin_name ][ $key ] = $object;
+	}
+
+	/**
+	 * @param string $key
+	 *
+	 * @return bool
+	 */
+	public function isset_shared_object( $key ) {
+		return isset( self::$shared_object[ $this->plugin_name ] ) && array_key_exists( $key, self::$shared_object[ $this->plugin_name ] );
+	}
+
+	/**
+	 * @param string $key
+	 */
+	public function delete_shared_object( $key ) {
+		unset( self::$shared_object[ $this->plugin_name ][ $key ] );
 	}
 }
 
