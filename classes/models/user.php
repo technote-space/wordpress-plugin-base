@@ -28,6 +28,8 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * @property string $user_email
  * @property bool $logged_in
  * @property string|false $user_role
+ * @property array $user_roles
+ * @property array $user_caps
  */
 class User implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \Technote\Interfaces\Uninstall {
 
@@ -51,6 +53,10 @@ class User implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 	public $logged_in;
 	/** @var string|false $user_role */
 	public $user_role;
+	/** @var array $user_roles */
+	public $user_roles;
+	/** @var array $user_caps */
+	public $user_caps;
 
 	/**
 	 * initialize
@@ -78,10 +84,19 @@ class User implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 			$this->user_name = $this->app->input->ip();
 		}
 		if ( $this->logged_in && ! empty( $this->user_data->roles ) ) {
-			$roles           = array_values( $this->user_data->roles );
-			$this->user_role = $roles[0];
+			$roles            = array_values( $this->user_data->roles );
+			$this->user_roles = $roles;
+			$this->user_role  = $roles[0];
 		} else {
-			$this->user_role = false;
+			$this->user_roles = [];
+			$this->user_role  = false;
+		}
+		$this->user_caps = [];
+		foreach ( $this->user_roles as $r ) {
+			$role = get_role( $r );
+			if ( $role ) {
+				$this->user_caps = array_merge( $this->user_caps, $role->capabilities );
+			}
 		}
 	}
 
@@ -170,6 +185,15 @@ class User implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 		}
 
 		return current_user_can( $this->apply_filters( 'user_can', $capability, $capability ) );
+	}
+
+	/**
+	 * @param string $capability
+	 *
+	 * @return bool
+	 */
+	public function has_cap( $capability ) {
+		return ! empty( $this->user_caps[ $capability ] );
 	}
 
 	/**
