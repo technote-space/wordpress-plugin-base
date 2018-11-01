@@ -227,7 +227,7 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 	 */
 	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function admin_notice() {
-		if ( $this->app->user_can() ) {
+		if ( $this->app->user_can( $this->app->get_config( 'capability', 'admin_notice_capability', 'manage_options' ) ) ) {
 			$this->get_view( 'admin/include/notice', [
 				'messages' => $this->messages,
 			], true );
