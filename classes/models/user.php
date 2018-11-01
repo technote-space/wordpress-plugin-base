@@ -2,7 +2,7 @@
 /**
  * Technote Models User
  *
- * @version 1.1.34
+ * @version 1.1.35
  * @author technote-space
  * @since 1.0.0
  * @copyright technote All Rights Reserved
