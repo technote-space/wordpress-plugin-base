@@ -135,11 +135,11 @@ class Technote {
 
 		add_action( 'activated_plugin', function ( $plugin ) {
 			if ( ! $this->initialized ) {
-				if ( did_action( 'init' ) ) {
-					$this->initialize();
-				}
 				if ( did_action( 'plugins_loaded' ) ) {
 					$this->load_functions();
+				}
+				if ( did_action( 'init' ) ) {
+					$this->initialize();
 				}
 			}
 			if ( $this->define->plugin_base_name === $plugin ) {
