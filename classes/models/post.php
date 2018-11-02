@@ -191,6 +191,55 @@ SQL;
 	}
 
 	/**
+	 * @param array|string $tags
+	 *
+	 * @return bool
+	 */
+	public function has_shortcode( $tags ) {
+		if ( empty( $tags ) ) {
+			return false;
+		}
+
+		$tagnames = $this->app->get_shared_object( 'tagnames_cache', 'all' );
+		if ( ! isset( $tagnames ) ) {
+			$tagnames = $this->get_tagnames();
+			$this->app->set_shared_object( 'tagnames_cache', $tagnames, 'all' );
+		}
+		if ( empty( $tagnames ) ) {
+			return false;
+		}
+
+		! is_array( $tags ) and $tags = [ $tags ];
+
+		return ! empty( array_intersect( $tags, $tagnames ) );
+	}
+
+	/**
+	 * @return array|false
+	 */
+	private function get_tagnames() {
+		if ( ! is_page() ) {
+			return false;
+		}
+
+		global $shortcode_tags;
+		if ( empty( $shortcode_tags ) || ! is_array( $shortcode_tags ) ) {
+			return false;
+		}
+
+		$post    = get_post();
+		$content = $post->post_content;
+		if ( false === strpos( $content, '[' ) ) {
+			return false;
+		}
+
+		// Find all registered tag names in $content.
+		preg_match_all( '@\[([^<>&/\[\]\x00-\x20=]++)@', $content, $matches );
+
+		return array_intersect( array_keys( $shortcode_tags ), $matches[1] );
+	}
+
+	/**
 	 * uninstall
 	 */
 	public function uninstall() {
