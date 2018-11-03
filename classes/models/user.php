@@ -191,7 +191,7 @@ class User implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 			return true;
 		}
 
-		return current_user_can( $this->apply_filters( 'user_can', $capability, $capability ) );
+		return $this->has_cap( $capability );
 	}
 
 	/**
