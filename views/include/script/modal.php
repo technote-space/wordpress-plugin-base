@@ -29,6 +29,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
             $('#<?php $instance->id();?>-modal-message').click(function (e) {
                 e.stopPropagation();
             });
+            this.timer = null;
 
             this._modal = function () {
                 return $('#<?php $instance->id();?>-modal');
@@ -83,9 +84,13 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
                 this._message_wrap().show();
                 const $this = this;
                 let check_resize = function () {
+                    if ($this.timer) {
+                        clearTimeout($this.timer);
+                        $this.timer = null;
+                    }
                     if ($this._message_wrap().is(':visible')) {
                         $this._set_message_size();
-                        setTimeout(check_resize, 1000);
+                        $this.timer = setTimeout(check_resize, 1000);
                     }
                 };
                 check_resize();
