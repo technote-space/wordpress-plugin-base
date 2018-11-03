@@ -156,6 +156,20 @@ class Utility {
 	}
 
 	/**
+	 * @param array $array
+	 * @param string $key
+	 * @param string $value
+	 *
+	 * @return array
+	 */
+	public static function array_combine( array $array, $key, $value = null ) {
+		$keys   = self::array_pluck( $array, $key );
+		$values = empty( $value ) ? $array : self::array_pluck( $array, $value );
+
+		return array_combine( $keys, $values );
+	}
+
+	/**
 	 * @param string $string
 	 * @param array $data
 	 *
