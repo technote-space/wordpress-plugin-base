@@ -2,7 +2,7 @@
 /**
  * Technote Models Uninstall
  *
- * @version 1.1.13
+ * @version 1.1.39
  * @author technote-space
  * @since 1.0.0
  * @copyright technote All Rights Reserved
