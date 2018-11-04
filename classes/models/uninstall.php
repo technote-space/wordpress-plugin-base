@@ -28,9 +28,10 @@ class Uninstall implements \Technote\Interfaces\Singleton {
 	private $uninstall = [];
 
 	/**
-	 * initialize
+	 * register uninstall
 	 */
-	protected function initialize() {
+	/** @noinspection PhpUnusedPrivateMethodInspection */
+	private function register_uninstall() {
 		register_uninstall_hook( $this->app->define->plugin_base_name, [
 			"\Technote",
 			"register_uninstall_" . $this->app->define->plugin_base_name,

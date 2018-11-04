@@ -42,6 +42,12 @@ return [
 		],
 	],
 
+	'uninstall' => [
+		'${prefix}app_activated' => [
+			'register_uninstall' => [],
+		],
+	],
+
 	'loader->admin' => [
 		'admin_menu'    => [
 			'add_menu' => [],
