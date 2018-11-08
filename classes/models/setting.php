@@ -144,11 +144,13 @@ class Setting implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Ho
 	private function get_detail_setting( $setting, $data ) {
 		$data['key'] = $setting;
 		$type        = Utility::array_get( $data, 'type', '' );
-		$_default    = $this->get_expression( Utility::array_get( $data, 'default', '' ), $type );
+		$default     = Utility::array_get( $data, 'default', '' );
+		if ( is_callable( $default ) ) {
+			$default = $default( $this->app );
+		}
+		$default = $this->get_expression( $default, $type );
 		if ( ! empty( $data['translate'] ) ) {
-			$default = $this->app->translate( $_default );
-		} else {
-			$default = $_default;
+			$default = $this->app->translate( $default );
 		}
 		$data['info'] = [];
 		if ( '' !== $default ) {
