@@ -63,7 +63,7 @@ return [
 					'default' => true,
 				],
 				'check_referer_host'      => [
-					'label'   => 'Server host which used to check referer host.',
+					'label'   => 'Server host name which used to check referer host name.',
 					'default' => function ( $app ) {
 						/** @var \Technote $app */
 						return $app->input->server( 'HTTP_HOST', '' );
