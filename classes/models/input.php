@@ -148,4 +148,25 @@ class Input implements \Technote\Interfaces\Singleton {
 
 		return self::$php_input;
 	}
+
+	/**
+	 * @return string
+	 */
+	public function get_current_url() {
+		return $this->get_current_host() . $this->get_current_path();
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_current_host() {
+		return ( is_ssl() ? "https://" : "http://" ) . $this->app->input->server( 'HTTP_HOST' );
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_current_path() {
+		return $this->app->input->server( 'REQUEST_URI' );
+	}
 }
