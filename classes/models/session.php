@@ -145,6 +145,20 @@ class Session implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Ho
 
 	/**
 	 * @param string $key
+	 *
+	 * @return bool
+	 */
+	public function exists( $key ) {
+		if ( ! $this->is_valid_session() ) {
+			return false;
+		}
+		$key = $this->get_session_key( $key );
+
+		return array_key_exists( $key, $_SESSION );
+	}
+
+	/**
+	 * @param string $key
 	 */
 	public function delete( $key ) {
 		if ( ! $this->is_valid_session() ) {
