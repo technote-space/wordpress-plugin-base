@@ -210,6 +210,9 @@ class User implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 		if ( false === $capability ) {
 			return true;
 		}
+		if ( '' === $capability ) {
+			return false;
+		}
 
 		return $this->has_cap( $capability );
 	}
