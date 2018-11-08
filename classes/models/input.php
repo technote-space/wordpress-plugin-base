@@ -125,14 +125,17 @@ class Input implements \Technote\Interfaces\Singleton {
 	 * @return string
 	 */
 	public function method( $default = 'GET' ) {
-		return strtoupper( $this->server( 'REQUEST_METHOD', $default ) );
+		return strtoupper( $this->server( 'REQUEST_METHOD', $this->request( '_method', $default ) ) );
 	}
 
 	/**
 	 * @return bool
 	 */
 	public function is_post() {
-		return $this->method() === 'POST';
+		return ! in_array( $this->method(), [
+			'GET',
+			'HEAD',
+		] );
 	}
 
 	/**

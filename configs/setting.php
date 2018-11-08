@@ -36,26 +36,38 @@ return [
 	'999' => [
 		'Others' => [
 			'10' => [
-				'admin_menu_position' => [
+				'admin_menu_position'     => [
 					'label'   => 'Admin menu position',
 					'type'    => 'int',
 					'default' => 100,
 					'min'     => 0,
 				],
-				'check_update'        => [
+				'check_update'            => [
 					'label'   => 'Whether to check develop update.',
 					'type'    => 'bool',
 					'default' => true,
 				],
-				'assets_version'      => [
+				'assets_version'          => [
 					'label'   => 'Assets Version',
 					'type'    => 'string',
 					'default' => '',
 				],
-				'use_admin_ajax'      => [
+				'use_admin_ajax'          => [
 					'label'   => 'Use admin-ajax.php instead of wp-json.',
 					'type'    => 'bool',
 					'default' => false,
+				],
+				'get_nonce_check_referer' => [
+					'label'   => 'Whether to check referer when get nonce.',
+					'type'    => 'bool',
+					'default' => true,
+				],
+				'check_referer_host'      => [
+					'label'   => 'Server host which used to check referer host.',
+					'default' => function ( $app ) {
+						/** @var \Technote $app */
+						return $app->input->server( 'HTTP_HOST', '' );
+					},
 				],
 			],
 		],
