@@ -317,9 +317,10 @@ class Technote {
 	/**
 	 * @param string $key
 	 * @param mixed $value
+	 * @param int|null $duration
 	 */
-	public function set_session( $key, $value ) {
-		$this->session->set( $key, $value );
+	public function set_session( $key, $value, $duration = null ) {
+		$this->session->set( $key, $value, $duration );
 	}
 
 	/**
