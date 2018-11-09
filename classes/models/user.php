@@ -199,6 +199,74 @@ class User implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 	}
 
 	/**
+	 * @param string $key
+	 * @param string $value
+	 */
+	public function set_all( $key, $value ) {
+		global $wpdb;
+		$query = $wpdb->prepare( "UPDATE $wpdb->usermeta SET meta_value = %s WHERE meta_key LIKE %s", $value, $this->get_meta_key( $key ) );
+		$wpdb->query( $query );
+	}
+
+	/**
+	 * @param string $key
+	 */
+	public function delete_all( $key ) {
+		global $wpdb;
+		$query = $wpdb->prepare( "DELETE FROM $wpdb->usermeta WHERE meta_key LIKE %s", $this->get_meta_key( $key ) );
+		$wpdb->query( $query );
+	}
+
+	/**
+	 * @param $key
+	 * @param $value
+	 *
+	 * @return array
+	 */
+	public function find( $key, $value ) {
+		global $wpdb;
+		$query   = <<< SQL
+			SELECT * FROM {$wpdb->usermeta}
+			WHERE meta_key LIKE %s
+			AND   meta_value LIKE %s
+SQL;
+		$results = $wpdb->get_results( $wpdb->prepare( $query, $this->get_meta_key( $key ), $value ) );
+
+		return $this->apply_filters( 'find_user_meta', Utility::array_pluck( $results, 'user_id' ), $key, $value );
+	}
+
+	/**
+	 * @param $key
+	 * @param $value
+	 *
+	 * @return false|int
+	 */
+	public function first( $key, $value ) {
+		$user_ids = $this->find( $key, $value );
+		if ( empty( $user_ids ) ) {
+			return false;
+		}
+
+		return reset( $user_ids );
+	}
+
+	/**
+	 * @param string $key
+	 *
+	 * @return array
+	 */
+	public function get_meta_user_ids( $key ) {
+		global $wpdb;
+		$query   = <<< SQL
+		SELECT user_id FROM {$wpdb->usermeta}
+		WHERE meta_key LIKE %s
+SQL;
+		$results = $wpdb->get_results( $wpdb->prepare( $query, $this->get_meta_key( $key ) ) );
+
+		return $this->apply_filters( 'get_meta_user_ids', Utility::array_pluck( $results, 'user_id' ), $key );
+	}
+
+	/**
 	 * @param null|string|false $capability
 	 *
 	 * @return bool
