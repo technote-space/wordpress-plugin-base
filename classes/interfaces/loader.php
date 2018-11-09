@@ -27,4 +27,14 @@ interface Loader extends Singleton, Hook, Presenter {
 	 */
 	public function get_loader_name();
 
+	/**
+	 * @return array
+	 */
+	public function get_class_list();
+
+	/**
+	 * @return int
+	 */
+	public function get_loaded_count();
+
 }

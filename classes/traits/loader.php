@@ -70,7 +70,7 @@ trait Loader {
 	/**
 	 * @return array
 	 */
-	protected function get_class_list() {
+	public function get_class_list() {
 		if ( ! isset( $this->list ) ) {
 			$this->list = [];
 			/** @var \Technote\Traits\Singleton $class */
