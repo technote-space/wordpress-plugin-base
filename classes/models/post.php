@@ -187,7 +187,7 @@ SQL;
 SQL;
 		$results = $wpdb->get_results( $wpdb->prepare( $query, $this->get_meta_key( $key ) ) );
 
-		return $this->apply_filters( 'find_post_meta', Utility::array_pluck( $results, 'post_id' ), $key );
+		return $this->apply_filters( 'get_meta_post_ids', Utility::array_pluck( $results, 'post_id' ), $key );
 	}
 
 	/**
