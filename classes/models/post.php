@@ -213,7 +213,7 @@ SQL;
 	 * @return array|false
 	 */
 	private function get_tagnames() {
-		if ( ! is_page() ) {
+		if ( ! is_singular() ) {
 			return false;
 		}
 
