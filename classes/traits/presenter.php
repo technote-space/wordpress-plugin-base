@@ -222,6 +222,15 @@ trait Presenter {
 	}
 
 	/**
+	 * @param $value
+	 *
+	 * @return string
+	 */
+	public function translate( $value ) {
+		return $this->app->translate( $value );
+	}
+
+	/**
 	 * @param bool $echo
 	 *
 	 * @return string
