@@ -197,11 +197,13 @@ class Utility {
 					'y',
 					'M',
 					'm',
+					'n',
 					'D',
 					'd',
 					'H',
 					'h',
 					'i',
+					'j',
 					's',
 				] as $t
 			) {
@@ -210,6 +212,16 @@ class Utility {
 		}
 
 		return static::replace( $string, self::$time );
+	}
+
+	/**
+	 * @param string $data
+	 * @param string $key
+	 *
+	 * @return false|string
+	 */
+	public static function create_hash( $data, $key ) {
+		return hash_hmac( function_exists( 'hash' ) ? 'sha256' : 'sha1', $data, $key );
 	}
 
 	/**
