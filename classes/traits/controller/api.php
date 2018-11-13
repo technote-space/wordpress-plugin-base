@@ -250,6 +250,9 @@ trait Api {
 	 * @return bool|\WP_Error
 	 */
 	protected function validate_string_length( $var, $len ) {
+		if ( empty( $var ) ) {
+			return true;
+		}
 		if ( ! is_string( $var ) ) {
 			return new \WP_Error( 400, $this->app->translate( 'Invalid format.' ) );
 		}
