@@ -150,7 +150,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 
                 xhr.open(config.method, config.url, true);
                 xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                if (!this.is_admin_ajax) {
+                if (!this.is_admin_ajax && !nonce_check) {
                     xhr.setRequestHeader('X-WP-Nonce', this.nonce);
                 }
                 xhr.onreadystatechange = function () {
@@ -165,6 +165,9 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
                             if (undefined === json) {
                                 $defer.reject([xhr.status, e, xhr, json]);
                             } else {
+                                if (json.nonce_data) {
+                                    $this._update_nonce(json.nonce_data);
+                                }
                                 $defer.resolve(json);
                             }
                         } else if (403 === xhr.status && nonce_check === undefined) {
