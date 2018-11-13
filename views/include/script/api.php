@@ -2,7 +2,7 @@
 /**
  * Technote Views Include Script Api
  *
- * @version 1.1.41
+ * @version 1.1.48
  * @author technote-space
  * @since 1.0.0
  * @copyright technote All Rights Reserved
