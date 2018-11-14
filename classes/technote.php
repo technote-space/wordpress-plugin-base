@@ -486,4 +486,5 @@ class Technote {
 	}
 }
 
+require_once __DIR__ . DS . 'wp-rest-request.php';
 require_once __DIR__ . DS . 'wp-rest-response.php';

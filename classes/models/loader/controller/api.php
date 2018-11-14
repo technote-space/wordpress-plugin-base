@@ -238,6 +238,9 @@ class Api implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 		$args           = $api->get_args_setting();
 		$required       = [];
 		$invalid_params = [];
+		$request        = new \WP_REST_Request( $_SERVER['REQUEST_METHOD'] );
+		$request->set_query_params( wp_unslash( $_GET ) );
+		$request->set_body_params( wp_unslash( $_POST ) );
 		foreach ( $args as $name => $setting ) {
 			if ( array_key_exists( 'default', $setting ) && ! array_key_exists( $name, $params ) ) {
 				$params[ $name ] = $setting['default'];
@@ -249,7 +252,7 @@ class Api implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 				continue;
 			}
 			if ( ! empty( $setting['validate_callback'] ) ) {
-				$valid_check = call_user_func( $setting['validate_callback'], $params[ $name ], null, $name );
+				$valid_check = call_user_func( $setting['validate_callback'], $params[ $name ], $request, $name );
 				if ( false === $valid_check ) {
 					$invalid_params[ $name ] = __( 'Invalid parameter.' );
 					continue;
@@ -260,7 +263,7 @@ class Api implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 				}
 			}
 			if ( ! empty( $setting['sanitize_callback'] ) && is_callable( $setting['sanitize_callback'] ) ) {
-				$sanitized_value = call_user_func( $setting['sanitize_callback'], $params[ $name ], null, $name );
+				$sanitized_value = call_user_func( $setting['sanitize_callback'], $params[ $name ], $request, $name );
 				if ( is_wp_error( $sanitized_value ) ) {
 					$invalid_params[ $name ] = $sanitized_value->get_error_message();
 				} else {
