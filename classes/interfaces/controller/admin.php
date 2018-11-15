@@ -23,11 +23,6 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 interface Admin extends \Technote\Interfaces\Controller, \Technote\Interfaces\Nonce {
 
 	/**
-	 * @return int
-	 */
-	public function get_priority();
-
-	/**
 	 * @return string
 	 */
 	public function get_page_title();

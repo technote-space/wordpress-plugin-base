@@ -29,13 +29,6 @@ trait Admin {
 	private $relative_namespace;
 
 	/**
-	 * @return int
-	 */
-	public function get_priority() {
-		return 10;
-	}
-
-	/**
 	 * @return string
 	 */
 	abstract public function get_page_title();

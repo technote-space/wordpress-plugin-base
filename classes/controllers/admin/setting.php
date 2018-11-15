@@ -25,7 +25,7 @@ class Setting extends Base {
 	/**
 	 * @return int
 	 */
-	public function get_priority() {
+	public function get_load_priority() {
 		return $this->apply_filters( 'setting_page_priority', 0 );
 	}
 

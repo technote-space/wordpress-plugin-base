@@ -25,7 +25,7 @@ class Logs extends Base {
 	/**
 	 * @return int
 	 */
-	public function get_priority() {
+	public function get_load_priority() {
 		return $this->apply_filters( 'logs_page_priority', defined( 'WP_DEBUG' ) && WP_DEBUG ? 999 : - 1 );
 	}
 

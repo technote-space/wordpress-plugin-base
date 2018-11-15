@@ -105,17 +105,9 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 		foreach ( $this->get_class_list() as $page ) {
 			/** @var \Technote\Controllers\Admin\Base $page */
 			if ( $this->app->user_can( $this->apply_filters( 'admin_menu_capability', $page->get_capability(), $page ) ) ) {
-				$priority = $this->apply_filters( 'admin_menu_priority', $page->get_priority(), $page );
-				if ( $priority < 0 ) {
-					continue;
-				}
-				if ( $this->get_menu_slug() === $this->get_page_prefix() . $page->get_page_slug() ) {
-					$priority = - 1;
-				}
-				$pages[ $priority ][] = $page;
+				$pages[] = $page;
 			}
 		}
-		ksort( $pages );
 
 		$hook = add_menu_page(
 			$this->get_plugin_title(),
