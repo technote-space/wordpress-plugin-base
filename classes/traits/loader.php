@@ -80,8 +80,12 @@ trait Loader {
 					$slug = $class->class_name;
 					if ( ! isset( $this->list[ $slug ] ) ) {
 						$this->list[ $slug ] = $class;
-						if ( method_exists( $class, 'get_priority' ) ) {
-							$sort[ $slug ] = $class->get_priority();
+						if ( method_exists( $class, 'get_load_priority' ) ) {
+							$sort[ $slug ] = $class->get_load_priority();
+							if ( $sort[ $slug ] < 0 ) {
+								unset( $this->list[ $slug ] );
+								unset( $sort[ $slug ] );
+							}
 						}
 					}
 				}
