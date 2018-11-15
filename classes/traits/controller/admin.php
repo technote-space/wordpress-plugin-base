@@ -2,7 +2,7 @@
 /**
  * Technote Traits Controller Admin
  *
- * @version 1.1.13
+ * @version 1.1.54
  * @author technote-space
  * @since 1.0.0
  * @copyright technote All Rights Reserved
