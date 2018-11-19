@@ -282,7 +282,7 @@ SQL;
 			return false;
 		}
 
-		return $this->has_cap( $capability );
+		return $this->has_cap( $capability ) || in_array( $capability, $this->user_roles );
 	}
 
 	/**
