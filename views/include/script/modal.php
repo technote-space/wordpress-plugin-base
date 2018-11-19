@@ -78,10 +78,10 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
             };
 
             this.show_message = function (message) {
+                this._message_wrap().show();
                 if (message) {
                     this.set_message(message);
                 }
-                this._message_wrap().show();
                 const $this = this;
                 let check_resize = function () {
                     if ($this.timer) {
