@@ -2,7 +2,7 @@
 /**
  * Technote Traits Presenter
  *
- * @version 1.1.51
+ * @version 1.1.58
  * @author technote-space
  * @since 1.0.0
  * @copyright technote All Rights Reserved
