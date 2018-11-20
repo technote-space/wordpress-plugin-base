@@ -208,12 +208,16 @@ trait Presenter {
 	 * @param bool $translate
 	 * @param bool $echo
 	 * @param bool $escape
+	 * @param array $args
 	 *
 	 * @return string
 	 */
-	public function h( $value, $translate = false, $echo = true, $escape = true ) {
+	public function h( $value, $translate = false, $echo = true, $escape = true, ...$args ) {
 		if ( $translate ) {
 			$value = $this->app->translate( $value );
+		}
+		if ( ! empty( $args ) ) {
+			$value = sprintf( $value, ...$args );
 		}
 		if ( $escape ) {
 			$value = esc_html( $value );
