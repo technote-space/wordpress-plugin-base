@@ -150,10 +150,17 @@ class Input implements \Technote\Interfaces\Singleton {
 	}
 
 	/**
+	 * @param array $args
+	 *
 	 * @return string
 	 */
-	public function get_current_url() {
-		return $this->get_current_host() . $this->get_current_path();
+	public function get_current_url( $args = [] ) {
+		$url = $this->get_current_host() . $this->get_current_path();
+		if ( ! empty( $args ) ) {
+			$url = add_query_arg( $args, $url );
+		}
+
+		return $url;
 	}
 
 	/**
