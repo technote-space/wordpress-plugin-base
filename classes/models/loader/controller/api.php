@@ -126,7 +126,7 @@ class Api implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 		return $this->register_script_common( function () {
 			return [
 				'endpoint'      => rest_url(),
-				'nonce'         => wp_create_nonce( 'wp_rest' ),
+				'nonce'         => wp_create_nonce( $this->get_nonce_slug() ),
 				'is_admin_ajax' => false,
 			];
 		} );
@@ -151,7 +151,7 @@ class Api implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 	 */
 	public function get_nonce_data() {
 		return [
-			'nonce'         => wp_create_nonce( 'wp_rest' ),
+			'nonce'         => wp_create_nonce( $this->get_nonce_slug() ),
 			'nonce_key'     => $this->get_nonce_key(),
 			'nonce_value'   => $this->create_nonce(),
 			'is_admin_ajax' => $this->use_admin_ajax(),
