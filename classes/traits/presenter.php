@@ -231,6 +231,16 @@ trait Presenter {
 	}
 
 	/**
+	 * @param mixed $value
+	 * @param bool $echo
+	 *
+	 * @return string
+	 */
+	public function json( $value, $echo = true ) {
+		return $this->h( json_encode( $value ), false, $echo, false );
+	}
+
+	/**
 	 * @param $value
 	 *
 	 * @return string
