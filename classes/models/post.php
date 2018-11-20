@@ -142,8 +142,26 @@ class Post implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 	}
 
 	/**
-	 * @param $key
-	 * @param $value
+	 * @param string $key
+	 * @param string $value
+	 *
+	 * @return bool
+	 */
+	public function delete_matched( $key, $value ) {
+		$post_ids = $this->find( $key, $value );
+		if ( empty( $post_ids ) ) {
+			return true;
+		}
+		foreach ( $post_ids as $post_id ) {
+			$this->delete( $key, $post_id );
+		}
+
+		return true;
+	}
+
+	/**
+	 * @param string $key
+	 * @param string $value
 	 *
 	 * @return array
 	 */
