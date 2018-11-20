@@ -2,7 +2,7 @@
 /**
  * Technote Models Post
  *
- * @version 1.1.44
+ * @version 1.1.59
  * @author technote-space
  * @since 1.0.0
  * @copyright technote All Rights Reserved
@@ -178,8 +178,8 @@ SQL;
 	}
 
 	/**
-	 * @param $key
-	 * @param $value
+	 * @param string $key
+	 * @param string $value
 	 *
 	 * @return false|int
 	 */
