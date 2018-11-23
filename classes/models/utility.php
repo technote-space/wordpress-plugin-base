@@ -156,6 +156,16 @@ class Utility {
 	}
 
 	/**
+	 * @param array|object $array
+	 * @param string $key
+	 *
+	 * @return array
+	 */
+	public static function array_pluck_unique( $array, $key ) {
+		return array_unique( self::array_pluck( $array, $key, null, true ) );
+	}
+
+	/**
 	 * @param array $array
 	 * @param string $key
 	 * @param string $value
