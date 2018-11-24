@@ -317,7 +317,7 @@ SQL;
 	 */
 	public function uninstall() {
 		global $wpdb;
-		$query = $wpdb->prepare( "DELETE FROM $wpdb->usermeta WHERE meta_key LIKE %s%%", $this->get_user_prefix() );
+		$query = $wpdb->prepare( "DELETE FROM $wpdb->usermeta WHERE meta_key LIKE %s", $this->get_user_prefix() . '%' );
 		$wpdb->query( $query );
 	}
 }
