@@ -29,6 +29,7 @@ class TestCase extends \PHPUnit\Framework\TestCase {
 		static::$plugin_file      = __FILE__;
 		static::$app->plugin_name = static::$plugin_name;
 		static::$app->plugin_file = static::$plugin_file;
+		static::$app->slug_name   = static::$plugin_file;
 		static::$app->define      = \Technote\Models\Define::get_instance( static::$app );
 		static::$app->input       = \Technote\Models\Input::get_instance( static::$app );
 		static::$app->user        = \Technote\Models\User::get_instance( static::$app );

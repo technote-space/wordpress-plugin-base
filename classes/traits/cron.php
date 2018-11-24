@@ -93,7 +93,7 @@ trait Cron {
 	 * @return string
 	 */
 	protected function get_hook_prefix() {
-		return $this->app->define->plugin_name . '-';
+		return $this->app->slug_name . '-';
 	}
 
 	/**

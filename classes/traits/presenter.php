@@ -255,7 +255,7 @@ trait Presenter {
 	 * @return string
 	 */
 	public function id( $echo = true ) {
-		return $this->h( $this->app->plugin_name, false, $echo );
+		return $this->h( $this->app->slug_name, false, $echo );
 	}
 
 	/**
