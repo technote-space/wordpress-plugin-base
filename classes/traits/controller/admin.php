@@ -129,7 +129,14 @@ trait Admin {
 			return '';
 		}
 
-		return $this->get_view( 'admin/help/' . $slug, [], false, false );
+		return $this->get_view( 'admin/help/' . $slug, $this->get_help_content_params(), false, false );
+	}
+
+	/**
+	 * @return array
+	 */
+	protected function get_help_content_params() {
+		return [];
 	}
 
 	/**
@@ -142,7 +149,14 @@ trait Admin {
 			return '';
 		}
 
-		return $this->get_view( 'admin/sidebar/' . $slug, [], false, false );
+		return $this->get_view( 'admin/sidebar/' . $slug, $this->get_sidebar_content_params(), false, false );
+	}
+
+	/**
+	 * @return array
+	 */
+	protected function get_sidebar_content_params() {
+		return [];
 	}
 
 	/**
