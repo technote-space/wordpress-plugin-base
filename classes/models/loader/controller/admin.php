@@ -52,7 +52,7 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 		$plugin_title = $this->app->get_config( 'config', 'plugin_title' );
 		empty( $plugin_title ) and $plugin_title = $this->app->original_plugin_name;
 
-		return $this->apply_filters( 'get_plugin_title', $plugin_title );
+		return $this->apply_filters( 'get_plugin_title', $this->app->translate( $plugin_title ) );
 	}
 
 	/**
