@@ -2,7 +2,7 @@
 /**
  * Technote Models Loader Controller Admin
  *
- * @version 1.1.64
+ * @version 1.1.65
  * @author technote-space
  * @since 1.0.0
  * @copyright technote All Rights Reserved
