@@ -18,25 +18,18 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 
 <ol>
     <li>
-        <h4>プラグインのslugを確認</h4>
-        プラグインライブラリに指定した名前からslugが決まります。
-        <pre>
-Technote::get_instance( 'Sample_Plugin', __FILE__ );</pre>
-        の場合は「sample_plugin」になります。
-    </li>
-    <li>
         <h4>サイドバー設定</h4>
         view を指定します。
         functions.php に以下のようなコードを追加します。
         <pre>
-add_filter( 'sample_plugin-get_help_sidebar', function ( $sidebar, $slug ) {
+add_filter( '<?php $instance->h( $prefix ); ?>get_help_sidebar', function ( $sidebar, $slug ) {
 	if ( 'setting' === $slug ) {
 		return 'setting';
 	}
 
 	return $contents;
 }, 10, 2 );</pre>
-        「sample_plugin」や 設定値は適宜変更します。
+        設定値は適宜変更します。
     </li>
     <li>
         <h4>viewファイルの作成</h4>

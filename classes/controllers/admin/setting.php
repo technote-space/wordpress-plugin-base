@@ -85,6 +85,15 @@ class Setting extends Base {
 	}
 
 	/**
+	 * @return array
+	 */
+	protected function get_help_content_params() {
+		return [
+			'prefix' => $this->get_filter_prefix(),
+		];
+	}
+
+	/**
 	 * @return false|string
 	 */
 	protected function get_help_sidebar() {
