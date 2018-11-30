@@ -43,16 +43,6 @@ interface Admin extends \Technote\Interfaces\Controller, \Technote\Interfaces\No
 	public function get_page_slug();
 
 	/**
-	 * get
-	 */
-	public function get_action();
-
-	/**
-	 * post
-	 */
-	public function post_action();
-
-	/**
 	 * @return string
 	 */
 	public function presenter();

@@ -57,14 +57,21 @@ trait Admin {
 	/**
 	 * get
 	 */
-	public function get_action() {
+	protected function get_action() {
 
 	}
 
 	/**
 	 * post
 	 */
-	public function post_action() {
+	protected function post_action() {
+
+	}
+
+	/**
+	 * common
+	 */
+	protected function common_action() {
 
 	}
 
@@ -77,6 +84,7 @@ trait Admin {
 		} else {
 			$this->get_action();
 		}
+		$this->common_action();
 		$this->do_action( 'controller_action', $this->is_post() );
 	}
 

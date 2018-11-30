@@ -250,23 +250,28 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 }
 
 class Test extends \Technote\Controllers\Admin\Base {
-	
+
 	// タイトル
 	public function get_page_title() {
 		return 'Test';
 	}
-	
+
 	// GET の時に行う動作
-	public function get_action() {
+	protected function get_action() {
 
 	}
-	
+
 	// POST の時に行う動作
-	public function post_action() {
+	protected function post_action() {
 		$aaa = $this->app->input->post( 'aaa' );
 		// ... 
 	}
-	
+
+    // GET, POST 共通で行う動作
+	protected function common_action() {
+        // wp_enqueue_script('media-upload');
+	}
+
 	// view に渡す変数設定
 	public function get_view_args() {
 	    return array(

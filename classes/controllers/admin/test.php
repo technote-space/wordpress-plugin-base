@@ -39,7 +39,7 @@ class Test extends Base {
 	/**
 	 * post
 	 */
-	public function post_action() {
+	protected function post_action() {
 		$action = $this->app->input->post( 'action' );
 		if ( method_exists( $this, $action ) && is_callable( [ $this, $action ] ) ) {
 			$this->$action();
