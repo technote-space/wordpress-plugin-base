@@ -99,7 +99,12 @@ trait Admin {
 	 * @return string
 	 */
 	public function presenter() {
-		return $this->get_view( 'admin/' . $this->get_page_slug(), $this->get_view_args() );
+		$args = $this->get_view_args();
+		$slug = $this->get_page_slug();
+		$this->add_style_view( 'admin/style/' . $slug, $args );
+		$this->add_script_view( 'admin/script/' . $slug, $args );
+
+		return $this->get_view( 'admin/' . $this->get_page_slug(), $args );
 	}
 
 	/**

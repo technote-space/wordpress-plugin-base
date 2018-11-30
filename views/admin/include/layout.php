@@ -16,8 +16,6 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 /** @var \Technote\Traits\Presenter $instance */
 /** @var string $slug */
 /** @var \Technote\Controllers\Admin\Base $page */
-$instance->add_style_view( 'admin/style/' . $slug );
-$instance->add_script_view( 'admin/script/' . $slug );
 $instance->add_style_view( 'admin/style/button' );
 ?>
 <div class="wrap <?php $instance->id(); ?>-wrap">
