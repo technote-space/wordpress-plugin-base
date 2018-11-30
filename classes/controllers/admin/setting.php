@@ -2,7 +2,7 @@
 /**
  * Technote Controller Admin Setting
  *
- * @version 1.1.66
+ * @version 1.1.68
  * @author technote-space
  * @since 1.0.0
  * @copyright technote All Rights Reserved
