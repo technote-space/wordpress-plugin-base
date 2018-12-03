@@ -219,6 +219,7 @@ class Technote {
 			foreach ( $this->properties as $name => $class ) {
 				$this->$name;
 			}
+			$this->loader->uninstall->get_class_list();
 		}
 	}
 

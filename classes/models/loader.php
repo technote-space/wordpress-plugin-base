@@ -23,6 +23,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * @property \Technote\Models\Loader\Controller\Api $api
  * @property \Technote\Models\Loader\Test $test
  * @property \Technote\Models\Loader\Cron $cron
+ * @property \Technote\Models\Loader\Uninstall $uninstall
  */
 class Loader implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook {
 
@@ -36,6 +37,8 @@ class Loader implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	public $test;
 	/** @var \Technote\Models\Loader\Cron $cron */
 	public $cron;
+	/** @var \Technote\Models\Loader\Uninstall $uninstall */
+	public $uninstall;
 
 	/**
 	 * initialize
