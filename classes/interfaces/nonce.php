@@ -27,4 +27,11 @@ interface Nonce {
 	 */
 	public function get_nonce_slug();
 
+	/**
+	 * @param string $nonce
+	 *
+	 * @return false|int
+	 */
+	public function verify_nonce( $nonce );
+
 }
