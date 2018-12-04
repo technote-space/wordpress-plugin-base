@@ -13,7 +13,7 @@
 if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 	return;
 }
-/** @var \Technote\Controllers\Admin\Base $instance */
+/** @var \Technote\Interfaces\Presenter $instance */
 ?>
 
 <ol>
@@ -40,7 +40,7 @@ add_filter( '<?php $instance->h( $prefix ); ?>get_help_sidebar', function ( $sid
 if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 	return;
 }
-/** @var \Technote\Controllers\Admin\Base $instance */
+/** @var \Technote\Interfaces\Presenter $instance */
 ?>
 <<<?php ?>?>div>
     Hello World!
