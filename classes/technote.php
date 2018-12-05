@@ -266,7 +266,7 @@ class Technote {
 		if ( ! class_exists( '\WP_REST_Request' ) ) {
 			$this->setting->remove_setting( 'use_admin_ajax' );
 		}
-		if ( $this->loader->api->get_loaded_count() <= 1 ) {
+		if ( $this->loader->api->is_empty() ) {
 			$this->setting->remove_setting( 'use_admin_ajax' );
 			$this->setting->remove_setting( 'get_nonce_check_referer' );
 			$this->setting->remove_setting( 'check_referer_host' );
