@@ -31,6 +31,8 @@ define( 'TECHNOTE_VERSION', '1.1.73' );
 
 define( 'TECHNOTE_REQUIRED_PHP_VERSION', '5.6' );
 
+define( 'TECHNOTE_REQUIRED_WP_VERSION', '3.9.3' );
+
 if ( ! defined( 'DS' ) ) {
 	define( 'DS', DIRECTORY_SEPARATOR );
 }
@@ -41,7 +43,8 @@ if ( defined( 'WP_INSTALLING' ) && WP_INSTALLING ) {
 	return;
 }
 
-if ( version_compare( phpversion(), TECHNOTE_REQUIRED_PHP_VERSION, '<' ) ) {
+global $wp_version;
+if ( version_compare( phpversion(), TECHNOTE_REQUIRED_PHP_VERSION, '<' ) || version_compare( $wp_version, TECHNOTE_REQUIRED_WP_VERSION, '<' ) ) {
 	// unsupported version
 	require_once dirname( __FILE__ ) . DS . 'classes' . DS . 'technote_mock.php';
 
