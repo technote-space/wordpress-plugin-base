@@ -245,6 +245,13 @@ class Technote {
 	}
 
 	/**
+	 * @return mixed
+	 */
+	public function get_text_domain() {
+		return $this->get_config( 'config', 'text_domain' );
+	}
+
+	/**
 	 * setup textdomain
 	 */
 	private function setup_textdomain() {
@@ -253,7 +260,7 @@ class Technote {
 			load_plugin_textdomain( $this->define->lib_name, false, $this->define->lib_language_rel_path );
 		}
 
-		$text_domain = $this->get_config( 'config', 'text_domain' );
+		$text_domain = $this->get_text_domain();
 		if ( ! empty( $text_domain ) ) {
 			load_plugin_textdomain( $text_domain, false, $this->define->plugin_languages_rel_path );
 		}
@@ -279,7 +286,7 @@ class Technote {
 	 * @return string
 	 */
 	public function translate( $value ) {
-		$text_domain = $this->get_config( 'config', 'text_domain' );
+		$text_domain = $this->get_text_domain();
 		if ( ! empty( $text_domain ) ) {
 			$translated = __( $value, $text_domain );
 			if ( $value !== $translated ) {
