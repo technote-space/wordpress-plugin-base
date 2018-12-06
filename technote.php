@@ -27,10 +27,13 @@ define( 'TECHNOTE_PLUGIN', 'technote' );
 
 define( 'TECHNOTE_BOOTSTRAP', __FILE__ );
 
-define( 'TECHNOTE_VERSION', '1.1.73' );
+define( 'TECHNOTE_VERSION', '1.2.0' );
 
 define( 'TECHNOTE_REQUIRED_PHP_VERSION', '5.6' );
 
+/**
+ * @since 1.2.0
+ */
 define( 'TECHNOTE_REQUIRED_WP_VERSION', '3.9.3' );
 
 if ( ! defined( 'DS' ) ) {

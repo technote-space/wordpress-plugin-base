@@ -2,7 +2,7 @@
 /**
  * Technote
  *
- * @version 1.1.73
+ * @version 1.2.0
  * @author technote-space
  * @since 1.0.0
  * @copyright technote All Rights Reserved

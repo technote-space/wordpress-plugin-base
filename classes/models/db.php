@@ -2,7 +2,7 @@
 /**
  * Technote Models Db
  *
- * @version 1.1.50
+ * @version 1.2.0
  * @author technote-space
  * @since 1.0.0
  * @copyright technote All Rights Reserved
@@ -551,6 +551,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	}
 
 	/**
+	 * @since 1.2.0
 	 * @return bool
 	 */
 	private function doing_ajax() {

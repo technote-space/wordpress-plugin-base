@@ -2,7 +2,7 @@
 /**
  * Technote mock
  *
- * @version 1.1.13
+ * @version 1.2.0
  * @author technote-space
  * @since 1.0.0
  * @copyright technote All Rights Reserved
@@ -43,6 +43,7 @@ class Technote {
 	public $text_domain;
 
 	/**
+	 * @since 1.2.0
 	 * @return mixed
 	 */
 	private function is_not_enough_php_version() {
@@ -50,6 +51,7 @@ class Technote {
 	}
 
 	/**
+	 * @since 1.2.0
 	 * @return mixed
 	 */
 	private function is_not_enough_wp_version() {
@@ -122,6 +124,7 @@ class Technote {
 	}
 
 	/**
+	 * @since 1.2.0
 	 * @return string
 	 */
 	private function get_unsupported_php_version_message() {
@@ -134,6 +137,7 @@ class Technote {
 	}
 
 	/**
+	 * @since 1.2.0
 	 * @return string
 	 */
 	private function get_unsupported_wp_version_message() {
