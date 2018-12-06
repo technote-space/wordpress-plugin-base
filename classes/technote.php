@@ -2,7 +2,7 @@
 /**
  * Technote
  *
- * @version 1.1.72
+ * @version 1.1.73
  * @author technote-space
  * @since 1.0.0
  * @copyright technote All Rights Reserved
@@ -245,6 +245,7 @@ class Technote {
 	}
 
 	/**
+	 * @since 1.1.73
 	 * @return mixed
 	 */
 	public function get_text_domain() {

@@ -2,7 +2,7 @@
 /**
  * Technote Traits Presenter
  *
- * @version 1.1.69
+ * @version 1.1.73
  * @author technote-space
  * @since 1.0.0
  * @copyright technote All Rights Reserved
@@ -26,7 +26,10 @@ trait Presenter {
 	/** @var array $_prev_post */
 	private $_prev_post = null;
 
-	/** @var bool $_set_script_translations */
+	/**
+	 * @since 1.1.73
+	 * @var bool $_set_script_translations
+	 */
 	private $_set_script_translations = false;
 
 	/**
@@ -534,6 +537,8 @@ trait Presenter {
 	}
 
 	/**
+	 * @since 1.1.73
+	 *
 	 * @param string $handle
 	 * @param string $name
 	 * @param array $data
@@ -577,6 +582,8 @@ trait Presenter {
 	}
 
 	/**
+	 * @since 1.1.73
+	 *
 	 * @param string $handle
 	 */
 	public function set_script_translations( $handle ) {
