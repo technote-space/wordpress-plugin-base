@@ -2,7 +2,7 @@
 /**
  * Technote mock
  *
- * @version 1.2.0
+ * @version 1.2.1
  * @author technote-space
  * @since 1.0.0
  * @copyright technote All Rights Reserved
@@ -81,6 +81,7 @@ class Technote {
 	}
 
 	/**
+	 * @since 1.2.1
 	 * @return string
 	 */
 	private function get_text_domain() {
@@ -103,6 +104,8 @@ class Technote {
 	}
 
 	/**
+	 * @since 1.2.1
+	 *
 	 * @param $value
 	 *
 	 * @return string
