@@ -14,7 +14,9 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 	return;
 }
 
-if ( ! class_exists( 'WP_REST_Request' ) ) {
+define( 'TECHNOTE_MOCK_REST_REQUEST', ! class_exists( 'WP_REST_Request' ) );
+
+if ( TECHNOTE_MOCK_REST_REQUEST ) {
 	// < v4.4
 
 	/**

@@ -271,7 +271,7 @@ class Technote {
 	 * setup settings
 	 */
 	private function setup_settings() {
-		if ( ! class_exists( '\WP_REST_Request' ) ) {
+		if ( defined( 'TECHNOTE_MOCK_REST_REQUEST' ) && TECHNOTE_MOCK_REST_REQUEST ) {
 			$this->setting->remove_setting( 'use_admin_ajax' );
 		}
 		if ( $this->loader->api->is_empty() ) {
