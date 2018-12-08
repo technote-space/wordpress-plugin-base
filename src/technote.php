@@ -539,6 +539,8 @@ class Technote {
 		if ( ! isset( $app ) ) {
 			return;
 		}
+
+		$app->plugins_loaded();
 		$app->initialize( true );
 		$app->uninstall->uninstall();
 	}
@@ -549,7 +551,6 @@ class Technote {
 	 * @return \Technote|null
 	 */
 	private static function find_plugin( $plugin_base_name ) {
-
 		/** @var \Technote $instance */
 		foreach ( self::$instances as $plugin_name => $instance ) {
 			if ( $instance->define->plugin_base_name === $plugin_base_name ) {

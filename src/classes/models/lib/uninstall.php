@@ -43,10 +43,14 @@ class Uninstall implements \Technote\Interfaces\Singleton {
 	 * uninstall
 	 */
 	public function uninstall() {
+		$uninstall = $this->uninstall;
+		ksort( $uninstall );
 		if ( ! is_multisite() ) {
-			foreach ( $this->uninstall as $item ) {
-				if ( is_callable( $item ) ) {
-					call_user_func( $item );
+			foreach ( $uninstall as $priority => $items ) {
+				foreach ( $items as $item ) {
+					if ( is_callable( $item ) ) {
+						call_user_func( $item );
+					}
 				}
 			}
 		} else {
@@ -57,9 +61,11 @@ class Uninstall implements \Technote\Interfaces\Singleton {
 			foreach ( $blog_ids as $blog_id ) {
 				switch_to_blog( $blog_id );
 
-				foreach ( $this->uninstall as $item ) {
-					if ( is_callable( $item ) ) {
-						call_user_func( $item );
+				foreach ( $uninstall as $priority => $items ) {
+					foreach ( $items as $item ) {
+						if ( is_callable( $item ) ) {
+							call_user_func( $item );
+						}
 					}
 				}
 			}
@@ -70,10 +76,11 @@ class Uninstall implements \Technote\Interfaces\Singleton {
 	}
 
 	/**
-	 * @param $callback
+	 * @param callable $callback
+	 * @param int $priority
 	 */
-	public function add_uninstall( $callback ) {
-		$this->uninstall[] = $callback;
+	public function add_uninstall( $callback, $priority = 10 ) {
+		$this->uninstall[ $priority ][] = $callback;
 	}
 
 }

@@ -28,4 +28,9 @@ interface Uninstall {
 	 */
 	public function uninstall();
 
+	/**
+	 * @return int
+	 */
+	public function get_uninstall_priority();
+
 }

@@ -28,4 +28,10 @@ trait Uninstall {
 	 */
 	public abstract function uninstall();
 
+	/**
+	 * @return int
+	 */
+	public function get_uninstall_priority() {
+		return 10;
+	}
 }

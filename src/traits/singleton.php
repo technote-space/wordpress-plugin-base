@@ -99,7 +99,7 @@ trait Singleton {
 				$reflection = new \ReflectionClass( $class );
 				$instance   = new static( $app, $reflection );
 				if ( $instance instanceof \Technote\Interfaces\Uninstall && $app->uninstall ) {
-					$app->uninstall->add_uninstall( [ $instance, 'uninstall' ] );
+					$app->uninstall->add_uninstall( [ $instance, 'uninstall' ], $instance->get_uninstall_priority() );
 				}
 				self::$instances[ $app->plugin_name ][ $class ] = $instance;
 				$instance->initialize();

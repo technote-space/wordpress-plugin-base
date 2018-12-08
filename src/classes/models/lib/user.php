@@ -331,4 +331,11 @@ SQL;
 		$query = $wpdb->prepare( "DELETE FROM $wpdb->usermeta WHERE meta_key LIKE %s", $this->get_user_prefix() . '%' );
 		$wpdb->query( $query );
 	}
+
+	/**
+	 * @return int
+	 */
+	public function get_uninstall_priority() {
+		return 100;
+	}
 }

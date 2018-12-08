@@ -261,4 +261,11 @@ SQL;
 		$query = $wpdb->prepare( "DELETE FROM $wpdb->postmeta WHERE meta_key LIKE %s", $this->get_post_prefix() . '%' );
 		$wpdb->query( $query );
 	}
+
+	/**
+	 * @return int
+	 */
+	public function get_uninstall_priority() {
+		return 100;
+	}
 }

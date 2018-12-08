@@ -1345,4 +1345,10 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 		}
 	}
 
+	/**
+	 * @return int
+	 */
+	public function get_uninstall_priority() {
+		return 500;
+	}
 }

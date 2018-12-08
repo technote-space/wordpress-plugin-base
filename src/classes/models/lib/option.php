@@ -189,4 +189,11 @@ class Option implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	public function uninstall() {
 		delete_option( $this->get_option_name() );
 	}
+
+	/**
+	 * @return int
+	 */
+	public function get_uninstall_priority() {
+		return 200;
+	}
 }
