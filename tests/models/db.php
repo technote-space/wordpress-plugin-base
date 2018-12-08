@@ -10,7 +10,7 @@
  * @link https://technote.space
  */
 
-namespace Technote\Tests\Models;
+namespace Technote\Classes\Tests\Models;
 
 if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 	exit;
@@ -18,9 +18,9 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 
 /**
  * Class Db
- * @package Technote\Tests\Models
+ * @package Technote\Classes\Tests\Models
  */
-class Db extends \Technote\Models\Db {
+class Db extends \Technote\Classes\Models\Lib\Db {
 
 	/**
 	 * initialize

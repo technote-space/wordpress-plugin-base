@@ -249,7 +249,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 	exit;
 }
 
-class Test extends \Technote\Controllers\Admin\Base {
+class Test extends \Technote\Classes\Controllers\Admin\Base {
 
 	// タイトル
 	public function get_page_title() {
@@ -369,7 +369,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * Class Sample
  * @package Example\Tests
  */
-class Sample extends \Technote\Tests\Base {
+class Sample extends \Technote\Classes\Tests\Base {
 
 	public function test_sample1() {
 		$this->assertEquals( 2, 1 + 1 );

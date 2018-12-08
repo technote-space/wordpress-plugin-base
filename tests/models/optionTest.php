@@ -10,22 +10,22 @@
  * @link https://technote.space
  */
 
-namespace Technote\Tests\Models;
+namespace Technote\Classes\Tests\Models;
 
 /**
  * Class OptionTest
- * @package Technote\Tests\Models
+ * @package Technote\Classes\Tests\Models
  * @group technote
  * @group models
  */
-class OptionTest extends \Technote\Tests\TestCase {
+class OptionTest extends \Technote\Classes\Tests\TestCase {
 
-	/** @var \Technote\Models\Option */
+	/** @var \Technote\Classes\Models\Lib\Option */
 	private static $option;
 
 	public static function setUpBeforeClass() {
 		parent::setUpBeforeClass();
-		static::$option = \Technote\Models\Option::get_instance( static::$app );
+		static::$option = \Technote\Classes\Models\Lib\Option::get_instance( static::$app );
 		foreach ( static::get_test_value() as $value ) {
 			static::$option->delete( $value[0] );
 		}

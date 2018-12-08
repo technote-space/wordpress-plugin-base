@@ -10,22 +10,22 @@
  * @link https://technote.space
  */
 
-namespace Technote\Tests\Models;
+namespace Technote\Classes\Tests\Models;
 
 /**
  * Class UserTest
- * @package Technote\Tests\Models
+ * @package Technote\Classes\Tests\Models
  * @group technote
  * @group models
  */
-class UserTest extends \Technote\Tests\TestCase {
+class UserTest extends \Technote\Classes\Tests\TestCase {
 
-	/** @var \Technote\Models\User */
+	/** @var \Technote\Classes\Models\Lib\User */
 	private static $user;
 
 	public static function setUpBeforeClass() {
 		parent::setUpBeforeClass();
-		static::$user = \Technote\Models\User::get_instance( static::$app );
+		static::$user = \Technote\Classes\Models\Lib\User::get_instance( static::$app );
 		foreach ( static::get_test_value() as $value ) {
 			static::$user->delete( $value[0], 1 );
 		}

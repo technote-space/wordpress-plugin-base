@@ -10,7 +10,7 @@
  * @link https://technote.space
  */
 
-namespace Technote\Tests;
+namespace Technote\Classes\Tests;
 
 class TestCase extends \PHPUnit\Framework\TestCase {
 
@@ -30,9 +30,9 @@ class TestCase extends \PHPUnit\Framework\TestCase {
 		static::$app->plugin_name = static::$plugin_name;
 		static::$app->plugin_file = static::$plugin_file;
 		static::$app->slug_name   = static::$plugin_file;
-		static::$app->define      = \Technote\Models\Define::get_instance( static::$app );
-		static::$app->input       = \Technote\Models\Input::get_instance( static::$app );
-		static::$app->user        = \Technote\Models\User::get_instance( static::$app );
+		static::$app->define      = \Technote\Classes\Models\Lib\Define::get_instance( static::$app );
+		static::$app->input       = \Technote\Classes\Models\Lib\Input::get_instance( static::$app );
+		static::$app->user        = \Technote\Classes\Models\Lib\User::get_instance( static::$app );
 	}
 
 }

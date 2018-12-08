@@ -10,22 +10,22 @@
  * @link https://technote.space
  */
 
-namespace Technote\Tests\Models;
+namespace Technote\Classes\Tests\Models;
 
 /**
  * Class DeviceTest
- * @package Technote\Tests\Models
+ * @package Technote\Classes\Tests\Models
  * @group technote
  * @group models
  */
-class DeviceTest extends \Technote\Tests\TestCase {
+class DeviceTest extends \Technote\Classes\Tests\TestCase {
 
-	/** @var \Technote\Models\Device */
+	/** @var \Technote\Classes\Models\Lib\Device */
 	private static $device;
 
 	public static function setUpBeforeClass() {
 		parent::setUpBeforeClass();
-		static::$device = \Technote\Models\Device::get_instance( static::$app );
+		static::$device = \Technote\Classes\Models\Lib\Device::get_instance( static::$app );
 	}
 
 	/**

@@ -10,17 +10,17 @@
  * @link https://technote.space
  */
 
-namespace Technote\Tests\Models;
+namespace Technote\Classes\Tests\Models;
 
 /**
  * Class DefineTest
- * @package Technote\Tests\Models
+ * @package Technote\Classes\Tests\Models
  * @group technote
  * @group models
  */
-class DefineTest extends \Technote\Tests\TestCase {
+class DefineTest extends \Technote\Classes\Tests\TestCase {
 
-	/** @var \Technote\Models\Define */
+	/** @var \Technote\Classes\Models\Lib\Define */
 	private static $define;
 
 	public static function setUpBeforeClass() {
@@ -33,7 +33,7 @@ class DefineTest extends \Technote\Tests\TestCase {
 		$this->assertEquals( ucfirst( TECHNOTE_PLUGIN ), static::$define->lib_namespace );
 		$this->assertNotEmpty( static::$define->lib_dir );
 		$this->assertNotEmpty( static::$define->lib_assets_dir );
-		$this->assertNotEmpty( static::$define->lib_classes_dir );
+		$this->assertNotEmpty( static::$define->lib_src_dir );
 		$this->assertNotEmpty( static::$define->lib_configs_dir );
 		$this->assertNotEmpty( static::$define->lib_views_dir );
 		$this->assertNotEmpty( static::$define->lib_language_dir );
@@ -49,7 +49,7 @@ class DefineTest extends \Technote\Tests\TestCase {
 		$this->assertNotEmpty( static::$define->plugin_dir_name );
 		$this->assertNotEmpty( static::$define->plugin_base_name );
 		$this->assertNotEmpty( static::$define->plugin_assets_dir );
-		$this->assertNotEmpty( static::$define->plugin_classes_dir );
+		$this->assertNotEmpty( static::$define->plugin_src_dir );
 		$this->assertNotEmpty( static::$define->plugin_configs_dir );
 		$this->assertNotEmpty( static::$define->plugin_views_dir );
 		$this->assertNotEmpty( static::$define->plugin_languages_dir );

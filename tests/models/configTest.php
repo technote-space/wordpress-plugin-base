@@ -10,17 +10,17 @@
  * @link https://technote.space
  */
 
-namespace Technote\Tests\Models;
+namespace Technote\Classes\Tests\Models;
 
 /**
  * Class ConfigTest
- * @package Technote\Tests\Models
+ * @package Technote\Classes\Tests\Models
  * @group technote
  * @group models
  */
-class ConfigTest extends \Technote\Tests\TestCase {
+class ConfigTest extends \Technote\Classes\Tests\TestCase {
 
-	/** @var \Technote\Models\Config */
+	/** @var \Technote\Classes\Models\Lib\Config */
 	private static $config;
 
 	/** @var string */
@@ -28,7 +28,7 @@ class ConfigTest extends \Technote\Tests\TestCase {
 
 	public static function setUpBeforeClass() {
 		parent::setUpBeforeClass();
-		static::$config = \Technote\Models\Config::get_instance( static::$app );
+		static::$config = \Technote\Classes\Models\Lib\Config::get_instance( static::$app );
 
 		static::$config_file = 'technote_test_config';
 		touch( static::$app->define->lib_configs_dir . DS . static::$config_file . '.php' );

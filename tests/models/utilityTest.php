@@ -10,15 +10,15 @@
  * @link https://technote.space
  */
 
-namespace Technote\Tests\Models;
+namespace Technote\Classes\Tests\Models;
 
 /**
  * Class UtilityTest
- * @package Technote\Tests\Models
+ * @package Technote\Classes\Tests\Models
  * @group technote
  * @group models
  */
-class UtilityTest extends \Technote\Tests\TestCase {
+class UtilityTest extends \Technote\Classes\Tests\TestCase {
 
 	/**
 	 * @dataProvider _test_flatten_provider
@@ -28,7 +28,7 @@ class UtilityTest extends \Technote\Tests\TestCase {
 	 * @param array $expected
 	 */
 	public function test_flatten( $array, $preserve_keys, $expected ) {
-		$this->assertEquals( $expected, \Technote\Models\Utility::flatten( $array, $preserve_keys ) );
+		$this->assertEquals( $expected, $this->app->utility->flatten( $array, $preserve_keys ) );
 	}
 
 	/**
@@ -85,7 +85,7 @@ class UtilityTest extends \Technote\Tests\TestCase {
 	 * @param mixed $expected
 	 */
 	public function test_array_get( $array, $key, $default, $expected ) {
-		$this->assertEquals( $expected, \Technote\Models\Utility::array_get( $array, $key, $default ) );
+		$this->assertEquals( $expected, $this->app->utility->array_get( $array, $key, $default ) );
 	}
 
 	/**
@@ -129,8 +129,8 @@ class UtilityTest extends \Technote\Tests\TestCase {
 	 * @param mixed $value
 	 */
 	public function test_array_set( $array, $key, $value ) {
-		\Technote\Models\Utility::array_set( $array, $key, $value );
-		$this->assertEquals( $value, \Technote\Models\Utility::array_get( $array, $key ) );
+		$this->app->utility->array_set( $array, $key, $value );
+		$this->assertEquals( $value, $this->app->utility->array_get( $array, $key ) );
 	}
 
 	/**
@@ -177,7 +177,7 @@ class UtilityTest extends \Technote\Tests\TestCase {
 	 * @param string $expected
 	 */
 	public function test_replace( $string, $data, $expected ) {
-		$this->assertEquals( $expected, \Technote\Models\Utility::replace( $string, $data ) );
+		$this->assertEquals( $expected, $this->app->utility->replace( $string, $data ) );
 	}
 
 	/**
