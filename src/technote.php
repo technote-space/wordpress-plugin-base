@@ -2,10 +2,11 @@
 /**
  * Technote
  *
- * @version 2.0.0
+ * @version 2.0.2
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0 Added: Feature to load library of latest version
+ * @since 2.0.2 Fixed: Uninstall behavior
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -532,6 +533,8 @@ class Technote {
 	}
 
 	/**
+	 * @since 2.0.2 Fixed: Uninstall behavior
+	 *
 	 * @param string $plugin_base_name
 	 */
 	private static function uninstall( $plugin_base_name ) {
