@@ -10,15 +10,29 @@
  * @link https://technote.space
  */
 
-namespace Technote\Classes\Tests\Models;
+namespace Technote\Tests\Models;
 
 /**
  * Class UtilityTest
- * @package Technote\Classes\Tests\Models
+ * @package Technote\Tests\Models
  * @group technote
  * @group models
  */
-class UtilityTest extends \Technote\Classes\Tests\TestCase {
+class UtilityTest extends \Technote\Tests\TestCase {
+
+	/**
+	 * @since 2.0.0
+	 * @var \Technote\Classes\Models\Lib\Utility $utility
+	 */
+	private static $utility;
+
+	/**
+	 * @since 2.0.0
+	 */
+	public static function setUpBeforeClass() {
+		parent::setUpBeforeClass();
+		static::$utility = \Technote\Classes\Models\Lib\Utility::get_instance( static::$app );
+	}
 
 	/**
 	 * @dataProvider _test_flatten_provider
@@ -28,7 +42,7 @@ class UtilityTest extends \Technote\Classes\Tests\TestCase {
 	 * @param array $expected
 	 */
 	public function test_flatten( $array, $preserve_keys, $expected ) {
-		$this->assertEquals( $expected, $this->app->utility->flatten( $array, $preserve_keys ) );
+		$this->assertEquals( $expected, static::$utility->flatten( $array, $preserve_keys ) );
 	}
 
 	/**
@@ -85,7 +99,7 @@ class UtilityTest extends \Technote\Classes\Tests\TestCase {
 	 * @param mixed $expected
 	 */
 	public function test_array_get( $array, $key, $default, $expected ) {
-		$this->assertEquals( $expected, $this->app->utility->array_get( $array, $key, $default ) );
+		$this->assertEquals( $expected, static::$utility->array_get( $array, $key, $default ) );
 	}
 
 	/**
@@ -129,8 +143,8 @@ class UtilityTest extends \Technote\Classes\Tests\TestCase {
 	 * @param mixed $value
 	 */
 	public function test_array_set( $array, $key, $value ) {
-		$this->app->utility->array_set( $array, $key, $value );
-		$this->assertEquals( $value, $this->app->utility->array_get( $array, $key ) );
+		static::$utility->array_set( $array, $key, $value );
+		$this->assertEquals( $value, static::$utility->array_get( $array, $key ) );
 	}
 
 	/**
@@ -177,7 +191,7 @@ class UtilityTest extends \Technote\Classes\Tests\TestCase {
 	 * @param string $expected
 	 */
 	public function test_replace( $string, $data, $expected ) {
-		$this->assertEquals( $expected, $this->app->utility->replace( $string, $data ) );
+		$this->assertEquals( $expected, static::$utility->replace( $string, $data ) );
 	}
 
 	/**

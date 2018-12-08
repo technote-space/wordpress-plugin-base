@@ -584,5 +584,7 @@ class Technote {
 	}
 }
 
-require_once __DIR__ . DS . 'classes' . DS . 'wp-rest-request.php';
-require_once __DIR__ . DS . 'classes' . DS . 'wp-rest-response.php';
+if ( ! defined( 'PHPUNIT_COMPOSER_INSTALL' ) ) {
+	require_once __DIR__ . DS . 'classes' . DS . 'wp-rest-request.php';
+	require_once __DIR__ . DS . 'classes' . DS . 'wp-rest-response.php';
+}

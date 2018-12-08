@@ -10,17 +10,17 @@
  * @link https://technote.space
  */
 
-namespace Technote\Classes\Tests\Models;
+namespace Technote\Tests\Models;
 
 /**
  * Class OptionTest
- * @package Technote\Classes\Tests\Models
+ * @package Technote\Tests\Models
  * @group technote
  * @group models
  */
-class OptionTest extends \Technote\Classes\Tests\TestCase {
+class OptionTest extends \Technote\Tests\TestCase {
 
-	/** @var \Technote\Classes\Models\Lib\Option */
+	/** @var \Technote\Classes\Models\Lib\Option $option */
 	private static $option;
 
 	public static function setUpBeforeClass() {

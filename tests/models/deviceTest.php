@@ -10,17 +10,17 @@
  * @link https://technote.space
  */
 
-namespace Technote\Classes\Tests\Models;
+namespace Technote\Tests\Models;
 
 /**
  * Class DeviceTest
- * @package Technote\Classes\Tests\Models
+ * @package Technote\Tests\Models
  * @group technote
  * @group models
  */
-class DeviceTest extends \Technote\Classes\Tests\TestCase {
+class DeviceTest extends \Technote\Tests\TestCase {
 
-	/** @var \Technote\Classes\Models\Lib\Device */
+	/** @var \Technote\Classes\Models\Lib\Device $device */
 	private static $device;
 
 	public static function setUpBeforeClass() {

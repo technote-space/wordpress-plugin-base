@@ -10,17 +10,17 @@
  * @link https://technote.space
  */
 
-namespace Technote\Classes\Tests\Models;
+namespace Technote\Tests\Models;
 
 require_once __DIR__ . DS . 'db.php';
 
 /**
  * Class DbTest
- * @package Technote\Classes\Tests\Models
+ * @package Technote\Tests\Models
  * @group technote
  * @group models
  */
-class DbTest extends \Technote\Classes\Tests\TestCase {
+class DbTest extends \Technote\Tests\TestCase {
 
 	/** @var Db */
 	private static $db;

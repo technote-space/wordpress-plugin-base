@@ -135,7 +135,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 		$changed       = false;
 		$cache         = $this->app->get_option( 'wp_table_defines_cache', [] );
 		$cache_version = $this->app->get_option( 'wp_table_defines_cache_version' );
-		if ( $cache_version != $wp_version ) {
+		if ( ! empty( $wp_version ) && $cache_version != $wp_version ) {
 			$this->app->option->set( 'wp_table_defines_cache_version', $wp_version );
 			$cache   = [];
 			$changed = true;

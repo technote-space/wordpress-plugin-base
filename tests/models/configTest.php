@@ -10,15 +10,15 @@
  * @link https://technote.space
  */
 
-namespace Technote\Classes\Tests\Models;
+namespace Technote\Tests\Models;
 
 /**
  * Class ConfigTest
- * @package Technote\Classes\Tests\Models
+ * @package Technote\Tests\Models
  * @group technote
  * @group models
  */
-class ConfigTest extends \Technote\Classes\Tests\TestCase {
+class ConfigTest extends \Technote\Tests\TestCase {
 
 	/** @var \Technote\Classes\Models\Lib\Config */
 	private static $config;

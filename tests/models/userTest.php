@@ -10,17 +10,17 @@
  * @link https://technote.space
  */
 
-namespace Technote\Classes\Tests\Models;
+namespace Technote\Tests\Models;
 
 /**
  * Class UserTest
- * @package Technote\Classes\Tests\Models
+ * @package Technote\Tests\Models
  * @group technote
  * @group models
  */
-class UserTest extends \Technote\Classes\Tests\TestCase {
+class UserTest extends \Technote\Tests\TestCase {
 
-	/** @var \Technote\Classes\Models\Lib\User */
+	/** @var \Technote\Classes\Models\Lib\User $user */
 	private static $user;
 
 	public static function setUpBeforeClass() {

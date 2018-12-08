@@ -10,17 +10,17 @@
  * @link https://technote.space
  */
 
-namespace Technote\Classes\Tests\Models;
+namespace Technote\Tests\Models;
 
 /**
  * Class DefineTest
- * @package Technote\Classes\Tests\Models
+ * @package Technote\Tests\Models
  * @group technote
  * @group models
  */
-class DefineTest extends \Technote\Classes\Tests\TestCase {
+class DefineTest extends \Technote\Tests\TestCase {
 
-	/** @var \Technote\Classes\Models\Lib\Define */
+	/** @var \Technote\Classes\Models\Lib\Define $define */
 	private static $define;
 
 	public static function setUpBeforeClass() {

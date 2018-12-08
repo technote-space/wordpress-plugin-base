@@ -38,7 +38,7 @@ class Input implements \Technote\Interfaces\Singleton {
 			self::$input = array_merge( $_GET, $_POST );
 		}
 
-		return static::$input;
+		return self::$input;
 	}
 
 	/**
