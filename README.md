@@ -54,14 +54,18 @@ Technote::get_instance( 'Example', __FILE__ );
 ```
 example - example.php
     |
-    - classes
-    |    |
-    |    - controllers
-    |           |
-    |           - admin
-    |           - api
-    |
-    - tests
+    - src
+    |  |
+        - classes
+    |        |
+    |        - controllers
+    |        |      |
+    |        |      - admin
+    |        |      - api 
+    |        |
+    |        - models
+    |        |
+    |        - tests
     |
     - views
     |   |
@@ -239,11 +243,11 @@ if ( $this->apply_filters( 'minify_js' ) ) {
 
 ## 画面の追加
 
-- classes/controllers/admin に PHP ファイル (例：test.php) を追加
+- src/classes/controllers/admin に PHP ファイル (例：test.php) を追加
 ```
 <?php
 
-namespace Example\Controllers\Admin;
+namespace Example\Classes\Controllers\Admin;
 
 if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 	exit;
@@ -355,11 +359,11 @@ test
 - PHPUnitの追加  
 ```composer require --dev phpunit/phpunit```
 
-- classes/tests に PHP ファイルを追加
+- src/classes/tests に PHP ファイル (例：sample.php) を追加
 ```
 <?php
 
-namespace Example\Tests;
+namespace Example\Classes\Tests;
 
 if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 	exit;
@@ -367,7 +371,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 
 /**
  * Class Sample
- * @package Example\Tests
+ * @package Example\Classes\Tests
  */
 class Sample extends \Technote\Classes\Tests\Base {
 
