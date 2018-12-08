@@ -2,9 +2,10 @@
 /**
  * Technote Classes Models Lib Define
  *
- * @version 1.1.37
+ * @version 2.0.0
  * @author technote-space
  * @since 1.0.0
+ * @since 2.0.0 Changed: directory structure
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -80,7 +81,10 @@ class Define implements \Technote\Interfaces\Singleton {
 	/** @var string $lib_assets_dir */
 	public $lib_assets_dir;
 
-	/** @var string $lib_src_dir */
+	/**
+	 * @since 2.0.0
+	 * @var string $lib_src_dir
+	 */
 	public $lib_src_dir;
 
 	/** @var string $lib_configs_dir */
@@ -104,7 +108,10 @@ class Define implements \Technote\Interfaces\Singleton {
 	/** @var string $plugin_assets_dir */
 	public $plugin_assets_dir;
 
-	/** @var string $plugin_src_dir */
+	/**
+	 * @since 2.0.0
+	 * @var string $plugin_src_dir
+	 */
 	public $plugin_src_dir;
 
 	/** @var string $plugin_configs_dir */

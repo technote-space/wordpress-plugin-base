@@ -2,9 +2,14 @@
 /**
  * Technote Classes Models Lib Db
  *
- * @version 1.2.0
+ * @version 2.0.0
  * @author technote-space
  * @since 1.0.0
+ * @since 2.0.0 Added: Feature to cache result of conversion type format
+ * @since 2.0.0 Changed: set_update_params function
+ * @since 2.0.0 Changed: Arguments of select functions
+ * @since 2.0.0 Fixed: setup_wp_table_defines function
+ * @since 2.0.0 Changed: default db version
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -27,7 +32,10 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	/** @var array */
 	protected $table_defines = null;
 
-	/** @var array $_type2format */
+	/**
+	 * @since 2.0.0
+	 * @var array $_type2format
+	 */
 	private $_type2format = [];
 
 	/**
@@ -40,6 +48,8 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	}
 
 	/**
+	 * @since 2.0.0 Added: Feature to cache result of conversion type format
+	 *
 	 * @param string $type
 	 *
 	 * @return string
@@ -118,6 +128,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	}
 
 	/**
+	 * @since 2.0.0 Fixed: consider multisite
 	 * for wp table
 	 */
 	private function setup_wp_table_defines() {
@@ -536,6 +547,8 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	}
 
 	/**
+	 * @since 2.0.0 Changed: return $data
+	 *
 	 * @param array $data
 	 * @param bool $create
 	 * @param bool $update
@@ -930,6 +943,8 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	}
 
 	/**
+	 * @since 2.0.0 Changed: default value of $output
+	 *
 	 * @param array|string $tables
 	 * @param array $where
 	 * @param null|array|string $fields
@@ -956,6 +971,8 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	}
 
 	/**
+	 * @since 2.0.0 Changed: default value of $output
+	 *
 	 * @param array|string $tables
 	 * @param array $where
 	 * @param null|array|string $fields
@@ -981,6 +998,8 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	}
 
 	/**
+	 * @since 2.0.0 Changed: default values of $offset, $order_by, $group_by
+	 *
 	 * @param $table
 	 * @param string $field
 	 * @param array $where

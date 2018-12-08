@@ -2,9 +2,10 @@
 /**
  * Technote
  *
- * @version 1.2.0
+ * @version 2.0.0
  * @author technote-space
  * @since 1.0.0
+ * @since 2.0.0 Added: Feature to load library of latest version
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -50,22 +51,37 @@ class Technote {
 	/** @var array $shared_object */
 	private static $shared_object = [];
 
-	/** @var string $latest_library_version */
+	/**
+	 * @since 2.0.0
+	 * @var string $latest_library_version
+	 */
 	private static $latest_library_version = null;
 
-	/** @var string $latest_library_directory */
+	/**
+	 * @since 2.0.0
+	 * @var string $latest_library_directory
+	 */
 	private static $latest_library_directory = null;
 
-	/** @var bool $plugins_loaded */
+	/**
+	 * @since 2.0.0
+	 * @var bool $plugins_loaded
+	 */
 	private $plugins_loaded = false;
 
 	/** @var bool $initialized */
 	private $initialized = false;
 
-	/** @var string $library_version */
+	/**
+	 * @since 2.0.0
+	 * @var string $library_version
+	 */
 	private $library_version;
 
-	/** @var string $library_directory */
+	/**
+	 * @since 2.0.0
+	 * @var string $library_directory
+	 */
 	private $library_directory;
 
 	/** @var string $original_plugin_name */
@@ -172,6 +188,7 @@ class Technote {
 	}
 
 	/**
+	 * @since 2.0.0
 	 * setup library version
 	 */
 	private function setup_library_version() {
@@ -195,6 +212,7 @@ class Technote {
 	}
 
 	/**
+	 * @since 2.0.0
 	 * setup actions
 	 */
 	private function setup_actions() {
@@ -274,6 +292,7 @@ class Technote {
 	}
 
 	/**
+	 * @since 2.0.0
 	 * @return string
 	 */
 	public function get_library_directory() {
@@ -281,6 +300,7 @@ class Technote {
 	}
 
 	/**
+	 * @since 2.0.0
 	 * @return string
 	 */
 	public function get_library_version() {

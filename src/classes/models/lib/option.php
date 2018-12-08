@@ -2,9 +2,10 @@
 /**
  * Technote Classes Models Lib Option
  *
- * @version 1.1.30
+ * @version 2.0.0
  * @author technote-space
  * @since 1.0.0
+ * @since 2.0.0 Changed: not to flush cache when initialize
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -30,7 +31,10 @@ class Option implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	/** @var bool $_suspend_reload */
 	private $_suspend_reload = false;
 
-	/** @var bool $_initialized */
+	/**
+	 * @since 2.0.0
+	 * @var bool $_initialized
+	 */
 	private $_initialized = false;
 
 	/**
@@ -55,6 +59,7 @@ class Option implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	}
 
 	/**
+	 * @since 2.0.0 Changed: not to flush cache when initialize
 	 * @return array
 	 */
 	private function get_option() {
