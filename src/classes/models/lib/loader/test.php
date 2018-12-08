@@ -46,14 +46,13 @@ class Test implements \Technote\Interfaces\Loader {
 		}
 
 		$this->is_valid = true;
-		\Technote\Classes\Tests\Base::set_app( $this->app );
 	}
 
 	/**
 	 * @return bool
 	 */
 	public function is_valid() {
-		return $this->is_valid;
+		return $this->is_valid && count( $this->get_tests() ) > 0;
 	}
 
 	/**
@@ -99,6 +98,7 @@ class Test implements \Technote\Interfaces\Loader {
 			return [];
 		}
 
+		\Technote\Classes\Tests\Base::set_app( $this->app );
 		$results = [];
 		foreach ( $this->get_tests() as $slug => $class ) {
 			$results[] = $this->do_test( $class );
