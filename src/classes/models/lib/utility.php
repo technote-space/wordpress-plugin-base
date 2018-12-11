@@ -261,4 +261,38 @@ class Utility implements \Technote\Interfaces\Singleton {
 			pclose( $fp );
 		}
 	}
+
+	/**
+	 * @param string $haystack
+	 * @param string $needle
+	 *
+	 * @return bool
+	 */
+	public function starts_with( $haystack, $needle ) {
+		if ( '' === $haystack || '' === $needle ) {
+			return false;
+		}
+		if ( $haystack === $needle ) {
+			return true;
+		}
+
+		return strncmp( $haystack, $needle, strlen( $needle ) ) === 0;
+	}
+
+	/**
+	 * @param string $haystack
+	 * @param string $needle
+	 *
+	 * @return bool
+	 */
+	public function ends_with( $haystack, $needle ) {
+		if ( '' === $haystack || '' === $needle ) {
+			return false;
+		}
+		if ( $haystack === $needle ) {
+			return true;
+		}
+
+		return substr_compare( $haystack, $needle, - strlen( $needle ) ) === 0;
+	}
 }

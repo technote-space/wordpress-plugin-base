@@ -217,4 +217,132 @@ class UtilityTest extends \Technote\Tests\TestCase {
 			],
 		];
 	}
+
+	/**
+	 * @dataProvider _test_starts_with_provider
+	 *
+	 * @param $haystack
+	 * @param $needle
+	 * @param $expected
+	 */
+	public function test_starts_with( $haystack, $needle, $expected ) {
+		$this->assertEquals( $expected, static::$utility->starts_with( $haystack, $needle ) );
+	}
+
+	/**
+	 * @return array
+	 */
+	public function _test_starts_with_provider() {
+		return [
+			[
+				'abc',
+				'a',
+				true,
+			],
+			[
+				'abc',
+				'ab',
+				true,
+			],
+			[
+				'abc',
+				'abc',
+				true,
+			],
+			[
+				'abc',
+				'abcd',
+				false,
+			],
+			[
+				'abc',
+				'b',
+				false,
+			],
+			[
+				'abc',
+				'bcd',
+				false,
+			],
+			[
+				'',
+				'',
+				false,
+			],
+			[
+				'',
+				'a',
+				false,
+			],
+			[
+				'a',
+				'',
+				false,
+			],
+		];
+	}
+
+	/**
+	 * @dataProvider _test_ends_with_provider
+	 *
+	 * @param $haystack
+	 * @param $needle
+	 * @param $expected
+	 */
+	public function test_ends_with( $haystack, $needle, $expected ) {
+		$this->assertEquals( $expected, static::$utility->ends_with( $haystack, $needle ) );
+	}
+
+	/**
+	 * @return array
+	 */
+	public function _test_ends_with_provider() {
+		return [
+			[
+				'abc',
+				'c',
+				true,
+			],
+			[
+				'abc',
+				'bc',
+				true,
+			],
+			[
+				'abc',
+				'abc',
+				true,
+			],
+			[
+				'abc',
+				'0abc',
+				false,
+			],
+			[
+				'abc',
+				'b',
+				false,
+			],
+			[
+				'abc',
+				'0ba',
+				false,
+			],
+			[
+				'',
+				'',
+				false,
+			],
+			[
+				'',
+				'a',
+				false,
+			],
+			[
+				'a',
+				'',
+				false,
+			],
+		];
+	}
 }
