@@ -333,15 +333,17 @@ class Technote {
 	private function setup_update() {
 		$update_info_file_url = $this->get_config( 'config', 'update_info_file_url' );
 		if ( ! empty( $update_info_file_url ) ) {
-			$key   = $this->plugin_name . '-setup_update';
-			$check = get_transient( $key );
-			if ( ! $check ) {
-				\Puc_v4_Factory::buildUpdateChecker(
-					$update_info_file_url,
-					$this->plugin_file,
-					$this->plugin_name
-				);
-				set_transient( $key, true, 15 * 60 );
+			if ( $this->filter->apply_filters( 'check_update' ) ) {
+				$key   = $this->plugin_name . '-setup_update';
+				$check = get_transient( $key );
+				if ( ! $check ) {
+					\Puc_v4_Factory::buildUpdateChecker(
+						$update_info_file_url,
+						$this->plugin_file,
+						$this->plugin_name
+					);
+					set_transient( $key, true, 15 * 60 );
+				}
 			}
 		} else {
 			$this->setting->remove_setting( 'check_update' );
