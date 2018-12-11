@@ -37,7 +37,7 @@ class DefineTest extends \Technote\Tests\TestCase {
 		$this->assertNotEmpty( static::$define->lib_src_dir );
 		$this->assertNotEmpty( static::$define->lib_configs_dir );
 		$this->assertNotEmpty( static::$define->lib_views_dir );
-		$this->assertNotEmpty( static::$define->lib_language_dir );
+		$this->assertNotEmpty( static::$define->lib_languages_dir );
 		$this->assertNotEmpty( static::$define->lib_vendor_dir );
 		$this->assertNotEmpty( static::$define->lib_assets_url );
 	}

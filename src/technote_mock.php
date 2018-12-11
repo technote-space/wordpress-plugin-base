@@ -23,7 +23,8 @@ define( 'TECHNOTE_IS_MOCK', true );
  * @property string $plugin_file
  * @property string $plugin_dir
  * @property string $plugin_configs_dir
- * @property string $text_domain
+ * @property string $textdomain
+ * @property array $plugin_data
  */
 class Technote {
 
@@ -45,8 +46,11 @@ class Technote {
 	/** @var string $plugin_configs_dir */
 	public $plugin_configs_dir;
 
-	/** @var string $text_domain */
-	public $text_domain;
+	/** @var string $textdomain */
+	public $textdomain;
+
+	/** @var array $plugin_data */
+	public $plugin_data;
 
 	/**
 	 * @since 1.2.0
@@ -90,23 +94,25 @@ class Technote {
 	 * @since 1.2.1
 	 * @return string
 	 */
-	private function get_text_domain() {
-		if ( ! isset( $this->text_domain ) ) {
-			$config            = $this->load_config_file();
-			$this->text_domain = '';
-			if ( ! empty( $config['text_domain'] ) ) {
-				$this->text_domain = $config['text_domain'];
+	private function get_textdomain() {
+		if ( ! isset( $this->textdomain ) ) {
+			$domain_path = trim( $this->plugin_data['DomainPath'], '/' . DS );
+			if ( empty( $domain_path ) ) {
+				$this->textdomain          = false;
+				$plugin_languages_rel_path = false;
+			} else {
+				$this->textdomain          = $this->plugin_data['TextDomain'];
+				$plugin_languages_rel_path = ltrim( str_replace( WP_PLUGIN_DIR, '', $this->plugin_dir . DS . $domain_path ), DS );
 			}
 
-			$lib_language_rel_path     = ltrim( str_replace( WP_PLUGIN_DIR, '', dirname( TECHNOTE_BOOTSTRAP ) . DS . 'languages' ), DS );
-			$plugin_languages_rel_path = ltrim( str_replace( WP_PLUGIN_DIR, '', $this->plugin_dir . DS . 'languages' ), DS );
-			load_plugin_textdomain( TECHNOTE_PLUGIN, false, $lib_language_rel_path );
-			if ( ! empty( $this->text_domain ) ) {
-				load_plugin_textdomain( $this->text_domain, false, $plugin_languages_rel_path );
+			$lib_languages_rel_path = ltrim( str_replace( WP_PLUGIN_DIR, '', dirname( TECHNOTE_BOOTSTRAP ) . DS . 'languages' ), DS );
+			load_plugin_textdomain( TECHNOTE_PLUGIN, false, $lib_languages_rel_path );
+			if ( ! empty( $this->textdomain ) ) {
+				load_plugin_textdomain( $this->textdomain, false, $plugin_languages_rel_path );
 			}
 		}
 
-		return $this->text_domain;
+		return $this->textdomain;
 	}
 
 	/**
@@ -117,9 +123,9 @@ class Technote {
 	 * @return string
 	 */
 	private function translate( $value ) {
-		$text_domain = $this->get_text_domain();
-		if ( ! empty( $text_domain ) ) {
-			$translated = __( $value, $text_domain );
+		$textdomain = $this->get_textdomain();
+		if ( ! empty( $textdomain ) ) {
+			$translated = __( $value, $textdomain );
 			if ( $value !== $translated ) {
 				return $translated;
 			}
@@ -143,27 +149,21 @@ class Technote {
 	}
 
 	/**
-	 * @return array|mixed
-	 */
-	private function load_config_file() {
-		$path = $this->plugin_configs_dir . DS . 'config.php';
-		if ( ! file_exists( $path ) ) {
-			return array();
-		}
-		/** @noinspection PhpIncludeInspection */
-		$config = include $path;
-		if ( ! is_array( $config ) ) {
-			$config = array();
-		}
-
-		return $config;
-	}
-
-	/**
 	 * set unsupported
 	 */
 	private function set_unsupported() {
+		add_action( 'init', array( $this, 'init' ) );
 		add_action( 'admin_notices', array( $this, 'admin_notices' ) );
+	}
+
+	/**
+	 * init
+	 */
+	public function init() {
+		if ( ! function_exists( 'get_plugin_data' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		$this->plugin_data = get_plugin_data( $this->plugin_file, false, false );
 	}
 
 	/**

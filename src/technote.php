@@ -255,6 +255,11 @@ class Technote {
 		}
 		$this->plugins_loaded = true;
 
+		if ( ! function_exists( 'get_plugin_data' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		$this->plugin_data = get_plugin_data( $this->plugin_file, false, false );
+
 		spl_autoload_register( [ $this, 'load_class' ] );
 		$this->load_functions();
 	}
@@ -314,11 +319,6 @@ class Technote {
 	 * @param bool $uninstall
 	 */
 	private function setup_property( $uninstall ) {
-		if ( ! function_exists( 'get_plugin_data' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/plugin.php';
-		}
-		$this->plugin_data = get_plugin_data( $this->plugin_file, false, false );
-
 		if ( $uninstall ) {
 			foreach ( $this->properties as $name => $class ) {
 				$this->$name;
@@ -353,7 +353,7 @@ class Technote {
 	 * @return mixed
 	 */
 	public function get_text_domain() {
-		return $this->get_config( 'config', 'text_domain' );
+		return $this->define->plugin_textdomain;
 	}
 
 	/**
@@ -362,7 +362,7 @@ class Technote {
 	private function setup_textdomain() {
 		if ( ! static::$lib_language_loaded ) {
 			static::$lib_language_loaded = true;
-			load_plugin_textdomain( $this->define->lib_name, false, $this->define->lib_language_rel_path );
+			load_plugin_textdomain( $this->define->lib_textdomain, false, $this->define->lib_languages_rel_path );
 		}
 
 		$text_domain = $this->get_text_domain();
@@ -399,7 +399,7 @@ class Technote {
 			}
 		}
 
-		return __( $value, $this->define->lib_name );
+		return __( $value, $this->define->lib_textdomain );
 	}
 
 	/**

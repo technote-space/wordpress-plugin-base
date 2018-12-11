@@ -36,9 +36,6 @@ return [
 	// update
 	'update_info_file_url'      => '',
 
-	// text domain
-	'text_domain'               => '',
-
 	// menu image url
 	'menu_image'                => '',
 
