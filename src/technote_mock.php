@@ -2,10 +2,11 @@
 /**
  * Technote mock
  *
- * @version 2.0.0
+ * @version 2.1.0
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0
+ * @since 2.1.0 Changed: load textdomain from plugin data
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -46,10 +47,16 @@ class Technote {
 	/** @var string $plugin_configs_dir */
 	public $plugin_configs_dir;
 
-	/** @var string $textdomain */
+	/** 
+     * @since 2.1.0 Changed: text_domain -> textdomain
+     * @var string $textdomain 
+     */
 	public $textdomain;
 
-	/** @var array $plugin_data */
+	/** 
+     * @since 2.1.0
+     * @var array $plugin_data 
+     */
 	public $plugin_data;
 
 	/**
@@ -92,6 +99,7 @@ class Technote {
 
 	/**
 	 * @since 1.2.1
+     * @since 2.1.0 Changed: load textdomain from plugin data
 	 * @return string
 	 */
 	private function get_textdomain() {
@@ -158,6 +166,7 @@ class Technote {
 
 	/**
 	 * init
+     * @since 2.1.0
 	 */
 	public function init() {
 		if ( ! function_exists( 'get_plugin_data' ) ) {

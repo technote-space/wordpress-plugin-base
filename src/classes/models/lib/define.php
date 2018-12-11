@@ -2,10 +2,11 @@
 /**
  * Technote Classes Models Lib Define
  *
- * @version 2.0.0
+ * @version 2.1.0
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0 Changed: directory structure
+ * @since 2.1.0 Changed: load textdomain from plugin data
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -95,13 +96,22 @@ class Define implements \Technote\Interfaces\Singleton {
 	/** @var string $lib_views_dir */
 	public $lib_views_dir;
 
-	/** @var string $lib_textdomain */
+	/**
+	 * @since 2.1.0
+	 * @var string $lib_textdomain
+	 */
 	public $lib_textdomain;
 
-	/** @var string $lib_languages_dir */
+	/**
+	 * @since 2.1.0 Changed: language -> languages
+	 * @var string $lib_languages_dir
+	 */
 	public $lib_languages_dir;
 
-	/** @var string $lib_languages_rel_path */
+	/**
+	 * @since 2.1.0 Changed: language -> languages
+	 * @var string $lib_languages_rel_path
+	 */
 	public $lib_languages_rel_path;
 
 	/** @var string $lib_vendor_dir */
@@ -125,13 +135,22 @@ class Define implements \Technote\Interfaces\Singleton {
 	/** @var string $plugin_views_dir */
 	public $plugin_views_dir;
 
-	/** @var string|false $plugin_textdomain */
+	/** 
+	 * @since 2.1.0
+	 * @var string|false $plugin_textdomain 
+	 */
 	public $plugin_textdomain;
 
-	/** @var string|false $plugin_languages_dir */
+	/** 
+	 * @since 2.1.0 Changed: type string -> string|false
+	 * @var string|false $plugin_languages_dir 
+	 */
 	public $plugin_languages_dir;
 
-	/** @var string|false $plugin_languages_rel_path */
+	/** 
+	 * @since 2.1.0 Changed: type string -> string|false
+	 * @var string|false $plugin_languages_rel_path 
+	 */
 	public $plugin_languages_rel_path;
 
 	/** @var string $plugin_logs_dir */
@@ -145,6 +164,7 @@ class Define implements \Technote\Interfaces\Singleton {
 
 	/**
 	 * initialize
+	 * @since 2.1.0 Changed: load textdomain from plugin data
 	 */
 	protected function initialize() {
 		$this->plugin_name = $this->app->plugin_name;

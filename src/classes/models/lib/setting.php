@@ -2,10 +2,11 @@
 /**
  * Technote Classes Models Lib Setting
  *
- * @version 2.0.0
+ * @version 2.1.0
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0
+ * @since 2.1.0 Added: edit_setting function
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -137,6 +138,8 @@ class Setting implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Ho
 	}
 
 	/**
+	 * @since 2.1.0
+	 *
 	 * @param string $setting
 	 * @param string $key
 	 * @param mixed $value
