@@ -2,9 +2,10 @@
 /**
  * Technote Configs Setting
  *
- * @version 1.1.41
+ * @version 2.0.3
  * @author technote-space
  * @since 1.0.0
+ * @since 2.0.3 Changed: default assets_version
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
