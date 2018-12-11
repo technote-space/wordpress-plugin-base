@@ -50,7 +50,10 @@ return [
 				'assets_version'          => [
 					'label'   => 'Assets Version',
 					'type'    => 'string',
-					'default' => '',
+					'default' => function ( $app ) {
+						/** @var \Technote $app */
+						return $app->utility->array_get( $app->plugin_data, 'Version' );
+					},
 				],
 				'use_admin_ajax'          => [
 					'label'   => 'Use admin-ajax.php instead of wp-json.',
