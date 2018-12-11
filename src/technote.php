@@ -235,13 +235,13 @@ class Technote {
 						$this->initialize();
 					}
 				}
-				$this->filter->do_action( 'app_activated' );
+				$this->filter->do_action( 'app_activated', $this );
 			}
 		} );
 
 		add_action( 'deactivated_plugin', function ( $plugin ) {
 			if ( $this->define->plugin_base_name === $plugin ) {
-				$this->filter->do_action( 'app_deactivated' );
+				$this->filter->do_action( 'app_deactivated', $this );
 			}
 		} );
 	}
@@ -278,11 +278,13 @@ class Technote {
 			return;
 		}
 		$this->initialized = true;
+
+		$this->filter->do_action( 'app_initialize', $this );
 		$this->setup_property( $uninstall );
-		$this->setup_update();
 		$this->setup_textdomain();
 		$this->setup_settings();
-		$this->filter->do_action( 'app_initialized' );
+		$this->setup_update();
+		$this->filter->do_action( 'app_initialized', $this );
 	}
 
 	/**
