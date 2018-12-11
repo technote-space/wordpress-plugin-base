@@ -385,6 +385,9 @@ class Technote {
 			$this->setting->remove_setting( 'get_nonce_check_referer' );
 			$this->setting->remove_setting( 'check_referer_host' );
 		}
+		if ( ! empty( $this->plugin_data['PluginURI'] ) && $this->utility->starts_with( $this->plugin_data['PluginURI'], 'https://wordpress.org' ) ) {
+			$this->setting->edit_setting( 'check_update', 'default', false );
+		}
 	}
 
 	/**
