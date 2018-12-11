@@ -138,6 +138,23 @@ class Setting implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Ho
 
 	/**
 	 * @param string $setting
+	 * @param string $key
+	 * @param mixed $value
+	 *
+	 * @return bool
+	 */
+	public function edit_setting( $setting, $key, $value ) {
+		if ( ! $this->is_setting( $setting ) ) {
+			return true;
+		}
+		$priority                                        = $this->setting_priority[ $setting ];
+		$this->settings[ $priority ][ $setting ][ $key ] = $value;
+
+		return true;
+	}
+
+	/**
+	 * @param string $setting
 	 * @param array $data
 	 *
 	 * @return array
