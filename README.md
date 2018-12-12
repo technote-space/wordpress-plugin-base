@@ -38,7 +38,7 @@ Plugin Name: example
 Plugin URI:
 Description: Plugin Description
 Author: example
-Version: 0.0.0.0
+Version: 0.0.0
 Author URI: http://example.com/
 */
 
@@ -52,7 +52,11 @@ Technote::get_instance( 'Example', __FILE__ );
 ```
 
 ```
-example - example.php
+example
+    |
+    - example.php
+    |
+    - functions.php
     |
     - src
     |  |
@@ -80,10 +84,13 @@ example - example.php
 
 |設定値|説明|
 |---|---|
+|plugin_title|管理画面のメニュー名になります|
 |db_version|DBの設定を変更したら更新します|
-|twitter|ツイッターのアカウントを指定します（空で未使用）|
-|github|Githubのアカウントを指定します（空で未使用）|
-|contact_url|プラグインのお問い合わせ用のページのURLを指定します|
+|twitter|ツイッターのアカウントを指定します（ダッシュボードでヘルプに表示されます。空で未使用）|
+|github|Githubのアカウントを指定します（ダッシュボードでヘルプに表示されます。空で未使用）|
+|contact_url|プラグインのお問い合わせ用のページのURLを指定します（ダッシュボードでヘルプに表示されます）|
+|menu_image|管理画面のメニューアイコンを指定します|
+|update_info_file_url|開発バージョンチェック情報用のURLを指定します|
 
 - configs/db.php
 
@@ -393,7 +400,7 @@ class Sample extends \Technote\Classes\Tests\Base {
 
 ## サンプルプラグイン
 [関連記事提供用プラグイン](https://github.com/technote-space/wp-related-post-jp)  
-[Contact Form 7 拡張用プラグイン](https://github.com/technote-space/contact-form-7-huge-file-upload) 
+[Contact Form 7 拡張用プラグイン](https://github.com/technote-space/contact-form-7-huge-file-upload)  
 [Marker Animation プラグイン](https://github.com/technote-space/marker-animation) 
 
 # Author
