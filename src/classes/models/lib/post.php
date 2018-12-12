@@ -2,11 +2,13 @@
 /**
  * Technote Classes Models Lib Post
  *
- * @version 2.0.2
+ * @version 2.2.0
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0
  * @since 2.0.2 Added: Uninstall priority
+ * @since 2.2.0 Added: is_valid_tinymce_color_picker method
+ * @since 2.2.0 Added: is_block_editor method
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
