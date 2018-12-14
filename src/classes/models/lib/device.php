@@ -119,5 +119,4 @@ class Device implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	public function get_mobile_detect() {
 		return $this->mobile_detect;
 	}
-
 }

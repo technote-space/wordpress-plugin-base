@@ -54,5 +54,4 @@ abstract class Base extends \PHPUnit\Framework\TestCase implements \Technote\Int
 	public function _setup() {
 
 	}
-
 }

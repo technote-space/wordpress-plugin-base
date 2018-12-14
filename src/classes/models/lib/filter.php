@@ -91,5 +91,4 @@ class Filter implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 
 		call_user_func( $var, $tag, $method, $priority, $accepted_args );
 	}
-
 }
