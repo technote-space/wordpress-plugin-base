@@ -131,7 +131,7 @@ class Technote {
 	 * @param string $name
 	 *
 	 * @return \Technote\Interfaces\Singleton
-	 * @throws \Exception
+	 * @throws \OutOfRangeException
 	 */
 	public function __get( $name ) {
 		if ( isset( $this->properties[ $name ] ) ) {
@@ -143,7 +143,7 @@ class Technote {
 
 			return $this->property_instances[ $name ];
 		}
-		throw new \Exception( $name . ' is undefined.' );
+		throw new \OutOfRangeException( $name . ' is undefined.' );
 	}
 
 	/**
