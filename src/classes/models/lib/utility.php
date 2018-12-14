@@ -158,6 +158,20 @@ class Utility implements \Technote\Interfaces\Singleton {
 
 	/**
 	 * @param array|object $array
+	 * @param string|callable $callback
+	 *
+	 * @return array
+	 */
+	public function array_map( $array, $callback ) {
+		$array = $this->get_array_value( $array );
+
+		return array_map( function ( $d ) use ( $callback ) {
+			return is_callable( $callback ) ? $callback( $d ) : ( is_string( $callback ) && method_exists( $d, $callback ) ? $d->$callback() : null );
+		}, $array );
+	}
+
+	/**
+	 * @param array|object $array
 	 * @param string $key
 	 *
 	 * @return array
