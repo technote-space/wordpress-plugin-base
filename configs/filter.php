@@ -2,9 +2,10 @@
 /**
  * Technote Configs Filter
  *
- * @version 1.1.39
+ * @version 2.4.0
  * @author technote-space
  * @since 1.0.0
+ * @since 2.4.0 Added: filter for upgrade
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -48,6 +49,9 @@ return [
 		],
 	],
 
+	/**
+	 * @since 2.4.0
+	 */
 	'upgrade' => [
 		'${prefix}app_activated'    => [
 			'upgrade' => [],
