@@ -31,6 +31,9 @@ class Device implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	/** @var \Mobile_Detect */
 	private $mobile_detect;
 
+	/**
+	 * initialize
+	 */
 	protected function initialize() {
 		$this->mobile_detect = new \Mobile_Detect();
 	}
