@@ -2,11 +2,12 @@
 /**
  * Technote Classes Models Lib Utility
  *
- * @version 2.1.0
+ * @version 2.3.0
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0 Changed: static methods to non static methods
  * @since 2.1.0 Added: starts_with, ends_with methods
+ * @since 2.1.0 Added: array_map method
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space

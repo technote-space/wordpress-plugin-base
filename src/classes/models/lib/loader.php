@@ -2,10 +2,11 @@
 /**
  * Technote Classes Models Lib Loader
  *
- * @version 2.0.0
+ * @version 2.3.0
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0
+ * @since 2.3.0 Changed: public properties to readonly properties
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -31,6 +32,7 @@ class Loader implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	use \Technote\Traits\Singleton, \Technote\Traits\Hook;
 
 	/**
+	 * @since 2.3.0
 	 * @var array $readonly_properties
 	 */
 	protected $readonly_properties = [

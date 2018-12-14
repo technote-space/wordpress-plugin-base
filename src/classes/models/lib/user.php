@@ -2,11 +2,12 @@
 /**
  * Technote Classes Models Lib User
  *
- * @version 2.0.2
+ * @version 2.3.0
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0
  * @since 2.0.2 Added: Uninstall priority
+ * @since 2.3.0 Changed: public properties to readonly properties
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -38,6 +39,7 @@ class User implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 	use \Technote\Traits\Singleton, \Technote\Traits\Hook, \Technote\Traits\Uninstall;
 
 	/**
+	 * @since 2.3.0
 	 * @var array $readonly_properties
 	 */
 	protected $readonly_properties = [
