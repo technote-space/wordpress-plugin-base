@@ -27,7 +27,7 @@ class Test extends Base {
 	 * @return int
 	 */
 	public function get_load_priority() {
-		return $this->app->loader->test->is_valid() ? $this->apply_filters( 'test_page_priority', defined( 'WP_DEBUG' ) && WP_DEBUG ? 900 : - 1 ) : - 1;
+		return $this->app->test->is_valid() ? $this->apply_filters( 'test_page_priority', defined( 'WP_DEBUG' ) && WP_DEBUG ? 900 : - 1 ) : - 1;
 	}
 
 	/**
@@ -52,7 +52,7 @@ class Test extends Base {
 	 */
 	public function get_view_args() {
 		return [
-			'tests' => $this->app->loader->test->get_test_class_names(),
+			'tests' => $this->app->test->get_test_class_names(),
 		];
 	}
 
@@ -61,9 +61,8 @@ class Test extends Base {
 	 */
 	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function do_test() {
-		foreach ( $this->app->loader->test->do_tests() as list( $success, $result ) ) {
+		foreach ( $this->app->test->do_tests() as list( $success, $result ) ) {
 			$this->app->add_message( $result, 'test', ! $success, false );
 		}
 	}
-
 }

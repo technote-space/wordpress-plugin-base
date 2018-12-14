@@ -22,9 +22,9 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * Class Uninstall
  * @package Technote\Classes\Models\Lib
  */
-class Uninstall implements \Technote\Interfaces\Singleton {
+class Uninstall implements \Technote\Interfaces\Loader {
 
-	use \Technote\Traits\Singleton;
+	use \Technote\Traits\Loader;
 
 	/** @var array $uninstall */
 	private $uninstall = [];
@@ -38,6 +38,22 @@ class Uninstall implements \Technote\Interfaces\Singleton {
 			"\Technote",
 			"register_uninstall_" . $this->app->define->plugin_base_name,
 		] );
+	}
+
+	/**
+	 * @return array
+	 */
+	protected function get_namespaces() {
+		return [
+			$this->app->define->plugin_namespace,
+		];
+	}
+
+	/**
+	 * @return string
+	 */
+	protected function get_instanceof() {
+		return '\Technote\Interfaces\Uninstall';
 	}
 
 	/**
@@ -85,5 +101,4 @@ class Uninstall implements \Technote\Interfaces\Singleton {
 	public function add_uninstall( $callback, $priority = 10 ) {
 		$this->uninstall[ $priority ][] = $callback;
 	}
-
 }

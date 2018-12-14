@@ -49,6 +49,7 @@ define( 'TECHNOTE_IS_MOCK', false );
  * @property \Technote\Classes\Models\Lib\Uninstall $uninstall
  * @property \Technote\Classes\Models\Lib\Session $session
  * @property \Technote\Classes\Models\Lib\Utility $utility
+ * @property \Technote\Classes\Models\Lib\Test $test
  */
 class Technote {
 
@@ -124,6 +125,7 @@ class Technote {
 		'uninstall' => '\Technote\Classes\Models\Lib\Uninstall',
 		'session'   => '\Technote\Classes\Models\Lib\Session',
 		'utility'   => '\Technote\Classes\Models\Lib\Utility',
+		'test'      => '\Technote\Classes\Models\Lib\Test',
 	];
 
 	/** @var array $property_instances */
@@ -340,7 +342,7 @@ class Technote {
 			foreach ( $this->properties as $name => $class ) {
 				$this->$name;
 			}
-			$this->loader->uninstall->get_class_list();
+			$this->uninstall->get_class_list();
 		}
 	}
 

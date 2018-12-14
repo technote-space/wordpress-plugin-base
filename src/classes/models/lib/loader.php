@@ -23,9 +23,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * @package Technote\Classes\Models\Lib
  * @property-read \Technote\Classes\Models\Lib\Loader\Controller\Admin $admin
  * @property-read \Technote\Classes\Models\Lib\Loader\Controller\Api $api
- * @property-read \Technote\Classes\Models\Lib\Loader\Test $test
  * @property-read \Technote\Classes\Models\Lib\Loader\Cron $cron
- * @property-read \Technote\Classes\Models\Lib\Loader\Uninstall $uninstall
  */
 class Loader implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook {
 
@@ -38,9 +36,7 @@ class Loader implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	protected $readonly_properties = [
 		'admin',
 		'api',
-		'test',
 		'cron',
-		'uninstall',
 	];
 
 	/**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Technote Classes Models Lib Loader Test
+ * Technote Classes Models Lib Test
  *
  * @version 2.3.0
  * @author technote-space
@@ -14,7 +14,7 @@
  * @link https://technote.space
  */
 
-namespace Technote\Classes\Models\Lib\Loader;
+namespace Technote\Classes\Models\Lib;
 
 if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 	exit;
@@ -22,7 +22,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 
 /**
  * Class Test
- * @package Technote\Classes\Models\Lib\Loader
+ * @package Technote\Classes\Models\Lib
  */
 class Test implements \Technote\Interfaces\Loader {
 
@@ -82,7 +82,6 @@ class Test implements \Technote\Interfaces\Loader {
 	protected function get_namespaces() {
 		return [
 			$this->app->define->plugin_namespace . '\\Classes\\Tests',
-			$this->app->define->lib_namespace . '\\Classes\\Tests',
 		];
 	}
 
