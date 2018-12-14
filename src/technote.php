@@ -323,6 +323,14 @@ class Technote {
 	}
 
 	/**
+	 * @since
+	 * @return string
+	 */
+	public function get_plugin_version() {
+		return $this->plugin_data['Version'];
+	}
+
+	/**
 	 * @param bool $uninstall
 	 */
 	private function setup_property( $uninstall ) {
