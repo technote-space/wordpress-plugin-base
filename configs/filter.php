@@ -48,6 +48,15 @@ return [
 		],
 	],
 
+	'upgrade' => [
+		'${prefix}app_activated'    => [
+			'upgrade' => [],
+		],
+		'upgrader_process_complete' => [
+			'upgrade' => [],
+		],
+	],
+
 	'loader->admin' => [
 		'admin_menu'    => [
 			'add_menu' => [],

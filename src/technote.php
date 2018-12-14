@@ -51,6 +51,7 @@ define( 'TECHNOTE_IS_MOCK', false );
  * @property \Technote\Classes\Models\Lib\Session $session
  * @property \Technote\Classes\Models\Lib\Utility $utility
  * @property \Technote\Classes\Models\Lib\Test $test
+ * @property \Technote\Classes\Models\Lib\Upgrade $upgrade
  */
 class Technote {
 
@@ -127,6 +128,7 @@ class Technote {
 		'session'   => '\Technote\Classes\Models\Lib\Session',
 		'utility'   => '\Technote\Classes\Models\Lib\Utility',
 		'test'      => '\Technote\Classes\Models\Lib\Test',
+		'upgrade'   => '\Technote\Classes\Models\Lib\Upgrade',
 	];
 
 	/** @var array $property_instances */
