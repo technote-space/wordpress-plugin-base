@@ -21,7 +21,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * Class Base
  * @package Technote\Classes\Tests
  */
-abstract class Base extends \PHPUnit\Framework\TestCase implements \Technote\Interfaces\Test {
+abstract class Base extends \Technote\Classes\Models\Lib\Test\Base implements \Technote\Interfaces\Test {
 
 	use \Technote\Traits\Test;
 

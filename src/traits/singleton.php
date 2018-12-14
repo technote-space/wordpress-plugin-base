@@ -101,14 +101,18 @@ trait Singleton {
 		try {
 			if ( ! isset( self::$instances[ $app->plugin_name ][ $class ] ) ) {
 				$reflection = new \ReflectionClass( $class );
-				$instance   = new static( $app, $reflection );
-				if ( $instance instanceof \Technote\Interfaces\Uninstall && $app->uninstall ) {
-					$app->uninstall->add_uninstall( [ $instance, 'uninstall' ], $instance->get_uninstall_priority() );
+				if ( $reflection->isAbstract() ) {
+					self::$instances[ $app->plugin_name ][ $class ] = null;
+				} else {
+					$instance = new static( $app, $reflection );
+					if ( $instance instanceof \Technote\Interfaces\Uninstall && $app->uninstall ) {
+						$app->uninstall->add_uninstall( [ $instance, 'uninstall' ], $instance->get_uninstall_priority() );
+					}
+					self::$instances[ $app->plugin_name ][ $class ] = $instance;
+					$instance->set_allowed_access( true );
+					$instance->initialize();
+					$instance->set_allowed_access( false );
 				}
-				self::$instances[ $app->plugin_name ][ $class ] = $instance;
-				$instance->set_allowed_access( true );
-				$instance->initialize();
-				$instance->set_allowed_access( false );
 			}
 
 			return self::$instances[ $app->plugin_name ][ $class ];
