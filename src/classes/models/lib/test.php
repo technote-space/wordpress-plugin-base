@@ -2,13 +2,14 @@
 /**
  * Technote Classes Models Lib Test
  *
- * @version 2.3.0
+ * @version 2.3.1
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0
  * @since 2.0.1 Fixed: change timing to set $app instance
  * @since 2.0.1 Changed: hide menu if there is no tests
  * @since 2.3.0 Changed: property access to getter access
+ * @since 2.3.1 Changed: not load test if not required
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space

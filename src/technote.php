@@ -2,7 +2,7 @@
 /**
  * Technote
  *
- * @version 2.3.0
+ * @version 2.3.1
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0 Added: Feature to load library of latest version
@@ -16,6 +16,7 @@
  * @since 2.1.1 Fixed: check develop version
  * @since 2.3.0 Changed: property access exception type
  * @since 2.3.0 Added: get_plugin_version method
+ * @since 2.3.1 Changed: not load test and uninstall if not required
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space

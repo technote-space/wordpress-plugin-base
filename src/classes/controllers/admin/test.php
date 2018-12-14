@@ -2,10 +2,11 @@
 /**
  * Technote Classes Controller Test
  *
- * @version 2.0.0
+ * @version 2.3.1
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0
+ * @since 2.3.1 Changed: not load test if not required
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
