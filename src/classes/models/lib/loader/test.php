@@ -72,7 +72,7 @@ class Test implements \Technote\Interfaces\Loader {
 	 * @return array
 	 */
 	public function get_test_class_names() {
-		return $this->app->utility->array_pluck( $this->get_tests(), 'class_name' );
+		return $this->app->utility->array_map( $this->get_tests(), 'get_class_name' );
 	}
 
 	/**
@@ -115,7 +115,7 @@ class Test implements \Technote\Interfaces\Loader {
 	 * @return array
 	 */
 	private function do_test( $class ) {
-		$suite = new \PHPUnit_Framework_TestSuite( $class->class_name );
+		$suite = new \PHPUnit_Framework_TestSuite( $class->get_class_name() );
 		$suite->setBackupGlobals( false );
 		$result = $suite->run();
 

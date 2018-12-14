@@ -20,30 +20,26 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 /**
  * Class Loader
  * @package Technote\Classes\Models\Lib
- * @property \Technote\Classes\Models\Lib\Loader\Controller\Admin $admin
- * @property \Technote\Classes\Models\Lib\Loader\Controller\Api $api
- * @property \Technote\Classes\Models\Lib\Loader\Test $test
- * @property \Technote\Classes\Models\Lib\Loader\Cron $cron
- * @property \Technote\Classes\Models\Lib\Loader\Uninstall $uninstall
+ * @property-read \Technote\Classes\Models\Lib\Loader\Controller\Admin $admin
+ * @property-read \Technote\Classes\Models\Lib\Loader\Controller\Api $api
+ * @property-read \Technote\Classes\Models\Lib\Loader\Test $test
+ * @property-read \Technote\Classes\Models\Lib\Loader\Cron $cron
+ * @property-read \Technote\Classes\Models\Lib\Loader\Uninstall $uninstall
  */
 class Loader implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook {
 
 	use \Technote\Traits\Singleton, \Technote\Traits\Hook;
 
-	/** @var \Technote\Classes\Models\Lib\Loader\Controller\Admin $admin */
-	public $admin;
-
-	/** @var \Technote\Classes\Models\Lib\Loader\Controller\Api $api */
-	public $api;
-
-	/** @var \Technote\Classes\Models\Lib\Loader\Test $test */
-	public $test;
-
-	/** @var \Technote\Classes\Models\Lib\Loader\Cron $cron */
-	public $cron;
-
-	/** @var \Technote\Classes\Models\Lib\Loader\Uninstall $uninstall */
-	public $uninstall;
+	/**
+	 * @var array $readonly_properties
+	 */
+	protected $readonly_properties = [
+		'admin',
+		'api',
+		'test',
+		'cron',
+		'uninstall',
+	];
 
 	/**
 	 * initialize

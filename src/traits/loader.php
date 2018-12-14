@@ -78,7 +78,7 @@ trait Loader {
 			/** @var \Technote\Traits\Singleton $class */
 			foreach ( $this->get_namespaces() as $namespace ) {
 				foreach ( $this->get_classes( $this->namespace_to_dir( $namespace ), $this->get_instanceof() ) as $class ) {
-					$slug = $class->class_name;
+					$slug = $class->get_class_name();
 					if ( ! isset( $this->list[ $slug ] ) ) {
 						$this->list[ $slug ] = $class;
 						if ( method_exists( $class, 'get_load_priority' ) ) {
@@ -95,8 +95,8 @@ trait Loader {
 				uasort( $this->list, function ( $a, $b ) use ( $sort ) {
 					/** @var \Technote\Traits\Singleton $a */
 					/** @var \Technote\Traits\Singleton $b */
-					$pa = isset( $sort[ $a->class_name ] ) ? $sort[ $a->class_name ] : 10;
-					$pb = isset( $sort[ $b->class_name ] ) ? $sort[ $b->class_name ] : 10;
+					$pa = isset( $sort[ $a->get_class_name() ] ) ? $sort[ $a->get_class_name() ] : 10;
+					$pb = isset( $sort[ $b->get_class_name() ] ) ? $sort[ $b->get_class_name() ] : 10;
 
 					return $pa == $pb ? 0 : ( $pa < $pb ? - 1 : 1 );
 				} );
@@ -162,8 +162,8 @@ trait Loader {
 	 *
 	 * @return string
 	 */
-	private function get_class_name( $page ) {
-		return $this->apply_filters( 'get_class_name', ucfirst( str_replace( DS, '\\', $page ) ), $page );
+	private function get_page_class_name( $page ) {
+		return $this->apply_filters( 'get_page_class_name', ucfirst( str_replace( DS, '\\', $page ) ), $page );
 	}
 
 	/**
@@ -182,7 +182,7 @@ trait Loader {
 		$namespaces = $this->get_namespaces();
 		if ( ! empty( $namespaces ) ) {
 			foreach ( $namespaces as $namespace ) {
-				$class = rtrim( $namespace, '\\' ) . '\\' . $add_namespace . $this->get_class_name( $page );
+				$class = rtrim( $namespace, '\\' ) . '\\' . $add_namespace . $this->get_page_class_name( $page );
 				if ( class_exists( $class ) ) {
 					$this->cache[ $add_namespace . $page ] = [ $class, $add_namespace ];
 

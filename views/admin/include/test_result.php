@@ -21,7 +21,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 $instance->add_style_view( 'admin/style/table' );
 ?>
 
-<h2><?php $instance->h( $class->class_name ); ?></h2>
+<h2><?php $instance->h( $class->get_class_name() ); ?></h2>
 <table class="widefat striped">
     <tr>
         <td><?php $instance->h( 'Count', true ); ?></td>
