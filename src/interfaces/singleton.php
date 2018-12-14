@@ -21,7 +21,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * Interface Singleton
  * @package Technote\Interfaces
  */
-interface Singleton {
+interface Singleton extends Readonly {
 
 	/**
 	 * @param \Technote $app

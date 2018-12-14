@@ -22,25 +22,25 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * Trait Singleton
  * @package TechnoteTraits
  * @property \Technote $app
- * @property string $class_name
- * @property \ReflectionClass $reflection
  */
 trait Singleton {
 
-	/** @var array */
+	use Readonly;
+
+	/** @var array|Singleton[] $instances */
 	private static $instances = [];
 
-	/** @var array */
+	/** @var array|string[] $slugs */
 	private static $slugs = [];
 
-	/** @var \Technote */
+	/** @var \Technote $app */
 	protected $app;
 
-	/** @var string */
-	public $class_name;
+	/** @var string $class_name */
+	private $class_name;
 
-	/** @var \ReflectionClass */
-	public $reflection;
+	/** @var \ReflectionClass $reflection */
+	private $reflection;
 
 	/**
 	 * Singleton constructor.
@@ -105,7 +105,9 @@ trait Singleton {
 					$app->uninstall->add_uninstall( [ $instance, 'uninstall' ], $instance->get_uninstall_priority() );
 				}
 				self::$instances[ $app->plugin_name ][ $class ] = $instance;
+				$instance->set_allowed_access( true );
 				$instance->initialize();
+				$instance->set_allowed_access( false );
 			}
 
 			return self::$instances[ $app->plugin_name ][ $class ];
@@ -181,5 +183,19 @@ trait Singleton {
 		$this->app->option->delete( $name );
 
 		return true;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_class_name() {
+		return $this->class_name;
+	}
+
+	/**
+	 * @return \ReflectionClass
+	 */
+	public function get_reflection() {
+		return $this->reflection;
 	}
 }
