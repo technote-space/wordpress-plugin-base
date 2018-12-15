@@ -52,7 +52,7 @@ return [
 	/**
 	 * @since 2.4.0
 	 */
-	'upgrade' => [
+	'upgrade'   => [
 		'${prefix}app_activated'    => [
 			'upgrade' => [],
 		],

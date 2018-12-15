@@ -145,15 +145,22 @@ trait Singleton {
 	}
 
 	/**
-	 * @param string $tag
 	 * @param string $method
-	 * @param string $priority
-	 * @param string $accepted_args
+	 *
+	 * @return bool
 	 */
-	public function add_filter( $tag, $method, $priority, $accepted_args ) {
-		add_filter( $tag, function () use ( $method ) {
-			return $this->$method( ...func_get_args() );
-		}, $priority, $accepted_args );
+	public function is_filter_callable( $method ) {
+		return method_exists( $this, $method ) && is_callable( [ $this, $method ] );
+	}
+
+	/**
+	 * @param string $method
+	 * @param array $args
+	 *
+	 * @return mixed
+	 */
+	public function filter_callback( $method, $args ) {
+		return call_user_func( [ $this, $method ], ...$args );
 	}
 
 	/**

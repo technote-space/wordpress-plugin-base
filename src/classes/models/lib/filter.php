@@ -25,59 +25,65 @@ class Filter implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 
 	use \Technote\Traits\Singleton, \Technote\Traits\Hook;
 
-	/** @var array $filter */
-	private $filter = [];
-
 	/**
 	 * initialize
 	 */
 	protected function initialize() {
-		$this->filter = $this->apply_filters( 'filter', $this->app->config->load( 'filter' ) );
-		foreach ( $this->filter as $class => $tags ) {
-			$app = false;
-			if ( strpos( $class, '->' ) !== false ) {
-				$app      = $this->app;
-				$exploded = explode( '->', $class );
-				foreach ( $exploded as $property ) {
-					if ( isset( $app->$property ) ) {
-						$app = $app->$property;
-					} else {
-						$app = false;
-						break;
-					}
-				}
-			} else {
-				if ( isset( $this->app->$class ) ) {
-					$app = $this->app->$class;
-				}
-			}
-			if ( false === $app ) {
-				if ( class_exists( $class ) && is_subclass_of( $class, '\Technote\Interfaces\Singleton' ) ) {
-					try {
-						/** @var \Technote\Interfaces\Singleton $class */
-						$app = $class::get_instance( $this->app );
-					} catch ( \Exception $e ) {
-					}
-				}
-			}
-			if ( false !== $app && is_callable( [ $app, 'add_filter' ] ) ) {
-				foreach ( $tags as $tag => $methods ) {
-					$tag = $this->app->utility->replace( $tag, [ 'prefix' => $this->get_filter_prefix() ] );
-					foreach ( $methods as $method => $params ) {
-						$this->call_add_filter( [ $app, 'add_filter' ], $tag, $method, $params );
-					}
+		foreach ( $this->apply_filters( 'filter', $this->app->config->load( 'filter' ) ) as $class => $tags ) {
+			foreach ( $tags as $tag => $methods ) {
+				$tag = $this->app->utility->replace( $tag, [ 'prefix' => $this->get_filter_prefix() ] );
+				foreach ( $methods as $method => $params ) {
+					list( $priority, $accepted_args ) = $this->get_filter_params( $params );
+					add_filter( $tag, function () use ( $class, $method ) {
+						return $this->call_filter_callback( $class, $method, func_get_args() );
+					}, $priority, $accepted_args );
 				}
 			}
 		}
 	}
 
 	/**
-	 * @param mixed $var
-	 * @param string $tag
-	 * @param string $method
-	 * @param array $params
+	 * @param string $class
+	 *
+	 * @return false|\Technote|\Technote\Interfaces\Singleton
 	 */
-	private function call_add_filter( $var, $tag, $method, $params ) {
+	private function get_target_app( $class ) {
+		$app = false;
+		if ( strpos( $class, '->' ) !== false ) {
+			$app      = $this->app;
+			$exploded = explode( '->', $class );
+			foreach ( $exploded as $property ) {
+				if ( isset( $app->$property ) ) {
+					$app = $app->$property;
+				} else {
+					$app = false;
+					break;
+				}
+			}
+		} else {
+			if ( isset( $this->app->$class ) ) {
+				$app = $this->app->$class;
+			}
+		}
+		if ( false === $app ) {
+			if ( class_exists( $class ) && is_subclass_of( $class, '\Technote\Interfaces\Singleton' ) ) {
+				try {
+					/** @var \Technote\Interfaces\Singleton $class */
+					$app = $class::get_instance( $this->app );
+				} catch ( \Exception $e ) {
+				}
+			}
+		}
+
+		return $app;
+	}
+
+	/**
+	 * @param array $params
+	 *
+	 * @return array
+	 */
+	private function get_filter_params( $params ) {
 		$priority      = 10;
 		$accepted_args = 100;
 		if ( is_array( $params ) ) {
@@ -89,6 +95,27 @@ class Filter implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 			}
 		}
 
-		call_user_func( $var, $tag, $method, $priority, $accepted_args );
+		return [ $priority, $accepted_args ];
+	}
+
+	/**
+	 * @param string $class
+	 * @param string $method
+	 * @param array $args
+	 *
+	 * @return mixed
+	 */
+	private function call_filter_callback( $class, $method, $args ) {
+		$result = empty( $args ) ? null : reset( $args );
+		$app    = $this->get_target_app( $class );
+		if ( empty( $app ) ) {
+			return $result;
+		}
+
+		if ( $app->is_filter_callable( $method ) ) {
+			return $app->filter_callback( $method, $args );
+		}
+
+		return $result;
 	}
 }

@@ -39,11 +39,18 @@ interface Singleton extends Readonly {
 	public function get_slug( $config_name, $suffix = '-' );
 
 	/**
-	 * @param string $tag
-	 * @param string $method
-	 * @param string $priority
-	 * @param string $accepted_args
+	 * @param string $name
+	 *
+	 * @return bool
 	 */
-	public function add_filter( $tag, $method, $priority, $accepted_args );
+	public function is_filter_callable( $name );
+
+	/**
+	 * @param string $method
+	 * @param array $args
+	 *
+	 * @return mixed
+	 */
+	public function filter_callback( $method, $args );
 
 }
