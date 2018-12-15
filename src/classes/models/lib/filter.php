@@ -25,6 +25,9 @@ class Filter implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 
 	use \Technote\Traits\Singleton, \Technote\Traits\Hook;
 
+	/** @var array $_target_app */
+	private $_target_app = [];
+
 	/**
 	 * initialize
 	 */
@@ -48,34 +51,37 @@ class Filter implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	 * @return false|\Technote|\Technote\Interfaces\Singleton
 	 */
 	private function get_target_app( $class ) {
-		$app = false;
-		if ( strpos( $class, '->' ) !== false ) {
-			$app      = $this->app;
-			$exploded = explode( '->', $class );
-			foreach ( $exploded as $property ) {
-				if ( isset( $app->$property ) ) {
-					$app = $app->$property;
-				} else {
-					$app = false;
-					break;
+		if ( ! isset( $this->_target_app[ $class ] ) ) {
+			$app = false;
+			if ( strpos( $class, '->' ) !== false ) {
+				$app      = $this->app;
+				$exploded = explode( '->', $class );
+				foreach ( $exploded as $property ) {
+					if ( isset( $app->$property ) ) {
+						$app = $app->$property;
+					} else {
+						$app = false;
+						break;
+					}
+				}
+			} else {
+				if ( isset( $this->app->$class ) ) {
+					$app = $this->app->$class;
 				}
 			}
-		} else {
-			if ( isset( $this->app->$class ) ) {
-				$app = $this->app->$class;
-			}
-		}
-		if ( false === $app ) {
-			if ( class_exists( $class ) && is_subclass_of( $class, '\Technote\Interfaces\Singleton' ) ) {
-				try {
-					/** @var \Technote\Interfaces\Singleton $class */
-					$app = $class::get_instance( $this->app );
-				} catch ( \Exception $e ) {
+			if ( false === $app ) {
+				if ( class_exists( $class ) && is_subclass_of( $class, '\Technote\Interfaces\Singleton' ) ) {
+					try {
+						/** @var \Technote\Interfaces\Singleton $class */
+						$app = $class::get_instance( $this->app );
+					} catch ( \Exception $e ) {
+					}
 				}
 			}
+			$this->_target_app[ $class ] = $app;
 		}
 
-		return $app;
+		return $this->_target_app[ $class ];
 	}
 
 	/**
