@@ -113,4 +113,18 @@ class Upgrade implements \Technote\Interfaces\Loader {
 
 		return empty( $version ) || version_compare( $version, $this->app->get_plugin_version(), '<' );
 	}
+
+	/**
+	 * show plugin upgrade notices
+	 */
+	public function show_plugin_update_notices() {
+		add_action( 'in_plugin_update_message-' . $this->app->define->plugin_base_name, function ( $data ) {
+			if ( ! empty( $data['upgrade_notice'] ) ) {
+				$notices = (array) preg_split( '~[\r\n]+~', trim( $data['upgrade_notice'] ) );
+				$this->get_view( 'admin/include/upgrade', [
+					'notices' => $notices,
+				], true );
+			}
+		}, 10, 2 );
+	}
 }

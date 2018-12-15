@@ -368,6 +368,8 @@ class Technote {
 		} else {
 			$this->setting->remove_setting( 'check_update' );
 		}
+
+		$this->upgrade->show_plugin_update_notices();
 	}
 
 	/**
