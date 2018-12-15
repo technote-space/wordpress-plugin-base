@@ -2,10 +2,11 @@
 /**
  * Technote Classes Models Lib Filter
  *
- * @version 2.0.0
+ * @version 2.4.2
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0
+ * @since 2.4.2 Improved: change timing to load filter target instance
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -30,6 +31,7 @@ class Filter implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 
 	/**
 	 * initialize
+	 * @since 2.4.2 Improved: change timing to load filter target instance
 	 */
 	protected function initialize() {
 		foreach ( $this->apply_filters( 'filter', $this->app->config->load( 'filter' ) ) as $class => $tags ) {
@@ -46,6 +48,8 @@ class Filter implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	}
 
 	/**
+	 * @since 2.4.2
+	 *
 	 * @param string $class
 	 *
 	 * @return false|\Technote|\Technote\Interfaces\Singleton
@@ -85,6 +89,8 @@ class Filter implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	}
 
 	/**
+	 * @since 2.4.2
+	 *
 	 * @param array $params
 	 *
 	 * @return array
@@ -105,6 +111,8 @@ class Filter implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	}
 
 	/**
+	 * @since 2.4.2
+	 *
 	 * @param string $class
 	 * @param string $method
 	 * @param array $args
