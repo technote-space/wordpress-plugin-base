@@ -2,9 +2,10 @@
 /**
  * Technote Classes Models Lib Upgrade
  *
- * @version 2.4.0
+ * @version 2.4.1
  * @author technote-space
  * @since 2.4.0
+ * @since 2.4.1 Added: show_plugin_update_notices method
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -116,6 +117,7 @@ class Upgrade implements \Technote\Interfaces\Loader {
 
 	/**
 	 * show plugin upgrade notices
+	 * @since 2.4.1
 	 */
 	public function show_plugin_update_notices() {
 		add_action( 'in_plugin_update_message-' . $this->app->define->plugin_base_name, function ( $data ) {

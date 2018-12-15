@@ -2,7 +2,7 @@
 /**
  * Technote
  *
- * @version 2.4.0
+ * @version 2.4.1
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0 Added: Feature to load library of latest version
@@ -18,6 +18,7 @@
  * @since 2.3.0 Added: get_plugin_version method
  * @since 2.3.1 Changed: not load test and uninstall if not required
  * @since 2.4.0 Added: upgrade feature
+ * @since 2.4.1 Added: show plugin upgrade notices feature
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -354,6 +355,7 @@ class Technote {
 	 * setup update checker
 	 * @since 2.1.0 Added: check develop version
 	 * @since 2.1.1 Fixed: check develop version
+	 * @since 2.4.1 Added: plugin upgrade notices feature
 	 */
 	private function setup_update() {
 		$update_info_file_url = $this->get_config( 'config', 'update_info_file_url' );
