@@ -26,6 +26,9 @@ composer を使用してインストールします。
 
 ```composer require technote/wordpress-plugin-base```
 
+　  
+複数のプラグインでこのライブラリを使用する場合、最新のものが自動的に使用されます。
+
 ## このライブラリの使用
 
 作成したプラグインファイルにライブラリを使用する記述を追記します。  
@@ -50,6 +53,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 Technote::get_instance( 'Example', __FILE__ );
 ```
+
+このプラグインファイルと同じフォルダに「functions.php」を作成すると、いろいろな準備ができた後に自動的に読み込まれます。  
+プラグインの構成は以下のようなものになります。
 
 ```
 example
