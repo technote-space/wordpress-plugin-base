@@ -112,7 +112,7 @@ class Define implements \Technote\Interfaces\Singleton {
 			$cache['lib_assets_dir']         = $cache['lib_dir'] . DS . 'assets';
 			$cache['lib_src_dir']            = $cache['lib_dir'] . DS . 'src';
 			$cache['lib_configs_dir']        = $cache['lib_dir'] . DS . 'configs';
-			$cache['lib_views_dir']          = $cache['lib_dir'] . DS . 'views';
+			$cache['lib_views_dir']          = $cache['lib_src_dir'] . DS . 'views';
 			$cache['lib_textdomain']         = TECHNOTE_PLUGIN;
 			$cache['lib_languages_dir']      = $cache['lib_dir'] . DS . 'languages';
 			$cache['lib_languages_rel_path'] = ltrim( str_replace( WP_PLUGIN_DIR, '', $cache['lib_languages_dir'] ), DS );
@@ -127,7 +127,7 @@ class Define implements \Technote\Interfaces\Singleton {
 		$this->plugin_assets_dir  = $this->plugin_dir . DS . 'assets';
 		$this->plugin_src_dir     = $this->plugin_dir . DS . 'src';
 		$this->plugin_configs_dir = $this->plugin_dir . DS . 'configs';
-		$this->plugin_views_dir   = $this->plugin_dir . DS . 'views';
+		$this->plugin_views_dir   = $this->plugin_src_dir . DS . 'views';
 		$domain_path              = trim( $this->app->plugin_data['DomainPath'], '/' . DS );
 		if ( empty( $domain_path ) || ! is_dir( $this->plugin_dir . DS . $domain_path ) ) {
 			$this->plugin_textdomain         = false;
