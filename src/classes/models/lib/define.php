@@ -2,12 +2,13 @@
 /**
  * Technote Classes Models Lib Define
  *
- * @version 2.3.0
+ * @version 2.5.0
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0 Changed: directory structure
  * @since 2.1.0 Changed: load textdomain from plugin data
  * @since 2.3.0 Changed: public properties to readonly properties
+ * @since 2.5.0 Changed: views directory
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
