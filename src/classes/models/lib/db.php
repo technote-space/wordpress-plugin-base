@@ -578,18 +578,6 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	}
 
 	/**
-	 * @since 1.2.0
-	 * @return bool
-	 */
-	private function doing_ajax() {
-		if ( function_exists( 'wp_doing_ajax' ) ) {
-			return wp_doing_ajax();
-		}
-
-		return defined( 'DOING_AJAX' ) && DOING_AJAX;
-	}
-
-	/**
 	 * @param null|array|string $fields
 	 * @param array $columns
 	 *
@@ -612,7 +600,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 				if ( $key === '*' ) {
 					if ( ! is_array( $option ) ) {
 						unset ( $fields[ $k ] );
-						$is_admin = is_admin() && ! $this->doing_ajax();
+						$is_admin = is_admin() && ! $this->app->utility->doing_ajax();
 						foreach ( $columns as $key => $column ) {
 							if ( ! $is_admin && ! empty( $column['only_admin'] ) ) {
 								continue;
@@ -650,7 +638,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 		}
 		if ( empty( $fields ) || ! is_array( $fields ) ) {
 			$fields   = [];
-			$is_admin = is_admin() && ! $this->doing_ajax();
+			$is_admin = is_admin() && ! $this->app->utility->doing_ajax();
 			foreach ( $columns as $key => $column ) {
 				if ( ! $is_admin && ! empty( $column['only_admin'] ) ) {
 					continue;
