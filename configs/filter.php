@@ -59,6 +59,9 @@ return [
 		'upgrader_process_complete' => [
 			'upgrade' => [],
 		],
+		'admin_init'                => [
+			'setup_update' => [],
+		],
 	],
 
 	'loader->admin' => [
