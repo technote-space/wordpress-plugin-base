@@ -46,7 +46,7 @@ class Uninstall implements \Technote\Interfaces\Loader {
 	 */
 	protected function get_namespaces() {
 		return [
-			$this->app->define->plugin_namespace,
+			$this->app->define->plugin_namespace . '\\Classes',
 		];
 	}
 
