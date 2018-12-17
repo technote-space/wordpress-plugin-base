@@ -2,11 +2,14 @@
 /**
  * Technote Classes Models Lib Upgrade
  *
- * @version 2.4.3
+ * @version 2.6.0
  * @author technote-space
  * @since 2.4.0
  * @since 2.4.1 Added: show_plugin_update_notices method
  * @since 2.4.3 Fixed: get plugin upgrade notice from plugin directory
+ * @since 2.6.0 Fixed: search upgrade file namespace
+ * @since 2.6.0 Changed: call setup_update from admin_init filter
+ * @since 2.6.0 Fixed: debug code
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -75,6 +78,7 @@ class Upgrade implements \Technote\Interfaces\Loader {
 	 * @since 2.1.0 Added: check develop version
 	 * @since 2.1.1 Fixed: check develop version
 	 * @since 2.4.1 Added: plugin upgrade notices feature
+	 * @since 2.6.0 Changed: call setup_update from admin_init filter
 	 */
 	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function setup_update() {
@@ -95,6 +99,7 @@ class Upgrade implements \Technote\Interfaces\Loader {
 	}
 
 	/**
+	 * @since 2.6.0 Fixed: search upgrade file namespace
 	 * @return array
 	 */
 	protected function get_namespaces() {
@@ -171,6 +176,7 @@ class Upgrade implements \Technote\Interfaces\Loader {
 
 	/**
 	 * @since 2.4.3
+	 * @since 2.6.0 Fixed: debug code
 	 *
 	 * @param string $version
 	 * @param string $url
