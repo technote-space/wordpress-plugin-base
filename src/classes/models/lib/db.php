@@ -444,7 +444,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	 * @return bool
 	 */
 	private function need_to_update() {
-		return version_compare( $this->get_version(), $this->get_db_version() ) > 0;
+		return version_compare( $this->get_version(), $this->get_db_version() ) > 0 || version_compare( $this->app->get_library_version(), $this->app->get_option( 'lib_version', '0.0.0' ) ) > 0;
 	}
 
 	/**
@@ -465,7 +465,10 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	 * @return bool
 	 */
 	private function update_db_version() {
-		return $this->app->option->set( 'db_version', $this->get_version() );
+		$this->app->option->set( 'db_version', $this->get_version() );
+		$this->app->option->set( 'lib_version', $this->app->get_library_version() );
+
+		return true;
 	}
 
 
