@@ -2,11 +2,12 @@
 /**
  * Technote Configs Setting
  *
- * @version 2.7.0
+ * @version 2.7.1
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.3 Changed: default assets_version
  * @since 2.7.0 Added: log settings
+ * @since 2.7.1 Fixed: for under WordPress v4.4
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -76,6 +77,7 @@ return [
 				],
 				/**
 				 * @since 2.7.0
+				 * @since 2.7.1 Fixed: for under WordPress v4.4
 				 */
 				'save___log_term'         => [
 					'label'   => 'Save log term (set 0 to prevent save)',
