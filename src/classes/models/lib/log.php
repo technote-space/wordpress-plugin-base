@@ -2,10 +2,11 @@
 /**
  * Technote Classes Models Lib Log
  *
- * @version 2.0.0
+ * @version 2.7.0
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0
+ * @since 2.7.0 Changed: save log to db
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -26,6 +27,7 @@ class Log implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook {
 	use \Technote\Traits\Singleton, \Technote\Traits\Hook;
 
 	/**
+	 * @since 2.7.0
 	 * @return bool
 	 */
 	public function is_valid_log() {
@@ -33,6 +35,8 @@ class Log implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook {
 	}
 
 	/**
+	 * @since 2.7.0 Added: $context
+	 *
 	 * @param string $message
 	 * @param mixed $context
 	 *
@@ -58,6 +62,7 @@ class Log implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook {
 	}
 
 	/**
+	 * @since 2.7.0
 	 * @return array
 	 */
 	private function get_called_info() {
@@ -79,6 +84,7 @@ class Log implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook {
 	}
 
 	/**
+	 * @since 2.7.0
 	 * @return int
 	 */
 	public function delete_old_logs() {

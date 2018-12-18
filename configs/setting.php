@@ -2,10 +2,11 @@
 /**
  * Technote Configs Setting
  *
- * @version 2.0.3
+ * @version 2.7.0
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.3 Changed: default assets_version
+ * @since 2.7.0 Added: log settings
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -73,11 +74,17 @@ return [
 						return $app->input->server( 'HTTP_HOST', '' );
 					},
 				],
+				/**
+				 * @since 2.7.0
+				 */
 				'save___log_term'         => [
 					'label'   => 'Save log term (set 0 to prevent save)',
 					'default' => MONTH_IN_SECONDS,
 					'min'     => 0,
 				],
+				/**
+				 * @since 2.7.0
+				 */
 				'delete___log_interval'   => [
 					'label'   => 'Delete log interval',
 					'default' => DAY_IN_SECONDS,
