@@ -20,6 +20,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 /**
  * Interface Presenter
  * @package Technote\Interfaces
+ * @property \Technote $app
  */
 interface Presenter {
 
