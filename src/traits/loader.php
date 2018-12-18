@@ -2,11 +2,13 @@
 /**
  * Technote Traits Loader
  *
- * @version 2.3.0
+ * @version 2.6.1
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0
  * @since 2.3.0 Changed: property access to getter access
+ * @since 2.6.1 Improved: refactoring
+ * @since 2.6.1 Updated: count without load class feature
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -111,6 +113,8 @@ trait Loader {
 	}
 
 	/**
+	 * @since 2.6.1 Updated: count without load class feature
+	 *
 	 * @param bool $exact
 	 *
 	 * @return int
