@@ -391,6 +391,10 @@ class Technote {
 		if ( ! empty( $this->plugin_data['PluginURI'] ) && $this->utility->starts_with( $this->plugin_data['PluginURI'], 'https://wordpress.org' ) ) {
 			$this->setting->edit_setting( 'check_update', 'default', false );
 		}
+		if ( ! $this->log->is_valid_log() ) {
+			$this->setting->remove_setting( 'save___log_term' );
+			$this->setting->remove_setting( 'delete___log_interval' );
+		}
 	}
 
 	/**
@@ -460,14 +464,16 @@ class Technote {
 	}
 
 	/**
-	 * @param mixed $message
+	 * @param string $message
+	 * @param mixed $context
 	 */
-	public function log( $message ) {
+	public function log( $message, $context = null ) {
 		if ( $message instanceof \Exception ) {
-			$this->log->log( $message->getMessage() );
-			$this->log->log( $message->getTraceAsString() );
+			$this->log->log( $message->getMessage(), isset( $context ) ? $context : $message->getTraceAsString() );
+		} elseif ( $message instanceof \WP_Error ) {
+			$this->log->log( $message->get_error_message(), isset( $context ) ? $context : $message->get_error_data() );
 		} else {
-			$this->log->log( $message );
+			$this->log->log( $message, $context );
 		}
 	}
 

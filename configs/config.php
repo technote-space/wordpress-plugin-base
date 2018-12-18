@@ -32,22 +32,13 @@ return [
 	'github'                    => '',
 
 	// db version
-	'db_version'                => '0.0.0',
+	'db_version'                => '0.0.1',
 
 	// update
 	'update_info_file_url'      => '',
 
 	// menu image url
 	'menu_image'                => '',
-
-	// log dir
-	'log_dir'                   => '${Y}/${m}',
-
-	// log name
-	'log_name'                  => '${d}',
-
-	// log extension
-	'log_extension'             => 'txt',
 
 	// api version
 	'api_version'               => 'v1',
@@ -60,4 +51,7 @@ return [
 
 	// cache filter exclude list
 	'cache_filter_exclude_list' => [],
+
+	// prevent use log
+	'prevent_use_log'           => false,
 ];

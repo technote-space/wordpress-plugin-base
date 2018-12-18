@@ -73,6 +73,16 @@ return [
 						return $app->input->server( 'HTTP_HOST', '' );
 					},
 				],
+				'save___log_term'         => [
+					'label'   => 'Save log term (set 0 to prevent save)',
+					'default' => MONTH_IN_SECONDS,
+					'min'     => 0,
+				],
+				'delete___log_interval'   => [
+					'label'   => 'Delete log interval',
+					'default' => DAY_IN_SECONDS,
+					'min'     => MINUTE_IN_SECONDS,
+				],
 			],
 		],
 	],

@@ -25,56 +25,76 @@ class Log implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook {
 
 	use \Technote\Traits\Singleton, \Technote\Traits\Hook;
 
-	/** @var string */
-	private $path = null;
-
 	/**
-	 * initialize
+	 * @return bool
 	 */
-	protected function initialize() {
-		$dir  = trim( $this->app->get_config( 'config', 'log_dir' ) );
-		$dir  = trim( $dir, '/' . DS );
-		$name = trim( $this->app->get_config( 'config', 'log_name' ) );
-		$name = trim( $name, '/' . DS );
-		$ext  = trim( $this->app->get_config( 'config', 'log_extension' ) );
-		$ext  = trim( $ext, '.' );
-		if ( empty( $name ) ) {
-			return;
-		}
-		$path       = $dir . DS . $name . '.' . $ext;
-		$path       = $this->app->define->plugin_logs_dir . DS . $this->app->utility->replace_time( $path );
-		$this->path = $path;
+	public function is_valid_log() {
+		return $this->apply_filters( 'log_validity', defined( 'WP_DEBUG' ) && WP_DEBUG && ! $this->app->get_config( 'config', 'prevent_use_log' ) );
 	}
 
 	/**
-	 * @param mixed $message
+	 * @param string $message
+	 * @param mixed $context
 	 *
 	 * @return bool
 	 */
-	public function log( $message ) {
-		if ( empty( $this->path ) ) {
+	public function log( $message, $context = null ) {
+		if ( ! $this->is_valid_log() ) {
 			return false;
 		}
-		$dir = dirname( $this->path );
-		if ( ! file_exists( $dir ) ) {
-			@mkdir( $dir, 0777, true );
-			@chmod( $dir, 0777 );
-			if ( ! file_exists( $dir ) ) {
-				$this->path = null;
-
-				return false;
-			}
-		}
-		if ( ! file_exists( $this->path ) ) {
-			@touch( $this->path );
-		}
-		if ( ! is_writable( $this->path ) ) {
-			$this->path = null;
-
+		if ( $this->apply_filters( 'save___log_term' ) <= 0 ) {
 			return false;
 		}
-		@error_log( sprintf( "[%s] %s\n", date_i18n( DATE_W3C ), $this->apply_filters( 'log_message', is_string( $message ) ? $this->app->translate( $message ) : json_encode( $message ), $message ) ), 3, $this->path );
+		$data                   = $this->get_called_info();
+		$data['message']        = is_string( $message ) ? $this->app->translate( $message ) : json_encode( $message );
+		$data['lib_version']    = $this->app->get_library_version();
+		$data['plugin_version'] = $this->app->get_plugin_version();
+		if ( isset( $context ) ) {
+			$data['context'] = json_encode( $context );
+		}
+		$this->app->db->insert( '__log', $data );
 
 		return true;
+	}
+
+	/**
+	 * @return array
+	 */
+	private function get_called_info() {
+		$next = false;
+		foreach ( $this->app->utility->get_debug_backtrace() as $item ) {
+			if ( $next ) {
+				$return = [];
+				isset( $item['class'] ) and $return['class'] = $item['class'];
+				isset( $item['line'] ) and $return['line'] = $item['line'];
+
+				return $return;
+			}
+			if ( ! empty( $item['class'] ) && __CLASS__ === $item['class'] && $item['function'] === 'log' ) {
+				$next = true;
+			}
+		}
+
+		return [];
+	}
+
+	/**
+	 * @return int
+	 */
+	public function delete_old_logs() {
+		$count = 0;
+		$term  = $this->apply_filters( 'save___log_term' );
+		foreach (
+			$this->app->db->select( '__log', [
+				'created_at' => [ '<', 'NOW() - INTERVAL ' . (int) $term . ' SECOND', true ],
+			] ) as $log
+		) {
+			$this->app->db->delete( '__log', [
+				'id' => $log['id'],
+			] );
+			$count ++;
+		}
+
+		return $count;
 	}
 }

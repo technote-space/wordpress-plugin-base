@@ -412,7 +412,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 		$index[] = "PRIMARY KEY  ({$define['columns']['id']['name']})";
 		if ( ! empty( $define['index']['key'] ) ) {
 			foreach ( $define['index']['key'] as $name => $columns ) {
-				if ( ! [ $columns ] ) {
+				if ( ! is_array( $columns ) ) {
 					$columns = [ $columns ];
 				}
 				$columns = implode( ', ', $columns );
@@ -421,7 +421,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 		}
 		if ( ! empty( $define['index']['unique'] ) ) {
 			foreach ( $define['index']['unique'] as $name => $columns ) {
-				if ( ! [ $columns ] ) {
+				if ( ! is_array( $columns ) ) {
 					$columns = [ $columns ];
 				}
 				$columns = implode( ', ', $columns );

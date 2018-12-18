@@ -1,6 +1,6 @@
 <?php
 /**
- * Technote Views Admin Style Admin Setting
+ * Technote Views Admin Style Setting
  *
  * @version 1.1.13
  * @author technote-space

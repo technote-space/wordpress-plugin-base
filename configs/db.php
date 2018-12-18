@@ -54,4 +54,39 @@ return [
 //		'delete'  => 'logical', // physical or logical [default = physical]
 //	),
 
+	'__log' => [
+		'columns' => [
+			'message'        => [
+				'type' => 'TEXT',
+				'null' => false,
+			],
+			'context'        => [
+				'type' => 'LONGTEXT',
+				'null' => true,
+			],
+			'class'           => [
+				'type' => 'VARCHAR(255)',
+				'null' => true,
+			],
+			'line'           => [
+				'type'     => 'INT(11)',
+				'unsigned' => true,
+				'null'     => true,
+			],
+			'lib_version'    => [
+				'type' => 'VARCHAR(32)',
+				'null' => false,
+			],
+			'plugin_version' => [
+				'type' => 'VARCHAR(32)',
+				'null' => false,
+			],
+		],
+		'index'   => [
+			'key' => [
+				'created_at' => [ 'created_at' ],
+			],
+		],
+	],
+
 ];
