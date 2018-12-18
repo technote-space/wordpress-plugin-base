@@ -79,7 +79,7 @@ return [
 				 */
 				'save___log_term'         => [
 					'label'   => 'Save log term (set 0 to prevent save)',
-					'default' => MONTH_IN_SECONDS,
+					'default' => 30 * DAY_IN_SECONDS,
 					'min'     => 0,
 				],
 				/**
