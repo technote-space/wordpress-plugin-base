@@ -17,5 +17,5 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 /** @var mixed $data */
 ?>
 <pre>
-<?php var_dump( $data ); ?>
+<?php var_export( $data ); ?>
 </pre>
