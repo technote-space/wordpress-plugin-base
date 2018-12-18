@@ -65,7 +65,7 @@ class Log implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook {
 		foreach ( $this->app->utility->get_debug_backtrace() as $item ) {
 			if ( $next ) {
 				$return = [];
-				isset( $item['class'] ) and $return['class'] = $item['class'];
+				isset( $item['file'] ) and $return['file'] = preg_replace( '/' . preg_quote( ABSPATH, '/' ) . '/A', '', $item['file'] );
 				isset( $item['line'] ) and $return['line'] = $item['line'];
 
 				return $return;
