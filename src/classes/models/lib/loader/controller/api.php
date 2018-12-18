@@ -124,7 +124,7 @@ class Api implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 	private function register_script_common( $get_view_params ) {
 		$functions = [];
 		$scripts   = [];
-		if ( $this->_use_all_api || ! empty( $this->_use_apis ) ) {
+		if ( ! empty( $this->_use_apis ) ) {
 			$this->_use_apis['get_nonce'] = true;
 		}
 		/** @var \Technote\Traits\Controller\Api $api */
