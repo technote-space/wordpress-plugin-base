@@ -1306,7 +1306,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 				return true;
 			} catch ( \Exception $e ) {
 				$this->rollback();
-				$this->app->log( $e->getMessage() );
+				$this->app->log( $e );
 			} finally {
 				$this->transaction_level = $level;
 			}

@@ -82,11 +82,14 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 
 					return $instance;
 				}
-				$page = isset( $_GET['page'] ) ? $_GET['page'] : 'Page';
-				$this->app->log( sprintf( '%s not found.', $page ) );
+				$this->app->log( sprintf( '%s not found.', $_GET['page'] ), [
+					'$_GET[\'page\']' => $_GET['page'],
+					'$page'           => $page,
+					'$add_namespace'  => $add_namespace,
+				] );
 			}
 		} catch ( \Exception $e ) {
-			$this->app->log( $e->getMessage() );
+			$this->app->log( $e );
 		}
 
 		return null;
