@@ -573,6 +573,7 @@ class Technote {
 	private static function find_plugin( $plugin_base_name ) {
 		/** @var \Technote $instance */
 		foreach ( self::$instances as $plugin_name => $instance ) {
+			$instance->plugins_loaded();
 			if ( $instance->define->plugin_base_name === $plugin_base_name ) {
 				return $instance;
 			}
