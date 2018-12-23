@@ -244,15 +244,13 @@ class Technote {
 		}, 1 );
 
 		add_action( 'activated_plugin', function ( $plugin ) {
+			if ( did_action( 'plugins_loaded' ) ) {
+				$this->plugins_loaded();
+			}
+			if ( did_action( 'init' ) ) {
+				$this->initialize();
+			}
 			if ( $this->define->plugin_base_name === $plugin ) {
-				if ( ! $this->initialized ) {
-					if ( did_action( 'plugins_loaded' ) ) {
-						$this->plugins_loaded();
-					}
-					if ( did_action( 'init' ) ) {
-						$this->initialize();
-					}
-				}
 				$this->filter->do_action( 'app_activated', $this );
 			}
 		} );
