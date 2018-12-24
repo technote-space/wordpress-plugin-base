@@ -49,7 +49,7 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 	/**
 	 * @return string
 	 */
-	private function get_menu_slug() {
+	public function get_menu_slug() {
 		return $this->get_page_prefix() . $this->apply_filters( 'get_setting_menu_slug', $this->get_setting_slug() );
 	}
 
