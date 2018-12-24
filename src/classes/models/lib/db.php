@@ -404,7 +404,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 				$sql     .= " DEFAULT '{$default}'";
 			}
 			if ( ! empty( $comment ) ) {
-				$comment = str_replace( '\'', '\\\'', $comment );
+				$comment = str_replace( '\'', '\\\'', $this->app->translate( $comment ) );
 				$sql     .= " COMMENT '{$comment}'";
 			}
 			$sql .= ",\n";
@@ -433,7 +433,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 		$sql .= implode( ",\n", $index );
 		$sql .= "\n) ENGINE = InnoDB DEFAULT CHARSET = {$char}";
 		if ( ! empty( $define['comment'] ) ) {
-			$define['comment'] = str_replace( '\'', '\\\'', $define['comment'] );
+			$define['comment'] = str_replace( '\'', '\\\'', $this->app->translate( $define['comment'] ) );
 			$sql               .= " COMMENT '{$define['comment']}'";
 		}
 		$sql .= ';';
