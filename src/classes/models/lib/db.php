@@ -2,7 +2,7 @@
 /**
  * Technote Classes Models Lib Db
  *
- * @version 2.7.2
+ * @version 2.8.0
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0 Added: Feature to cache result of conversion type format
@@ -14,6 +14,7 @@
  * @since 2.6.0 Changed: move doing_ajax method to utility
  * @since 2.7.0 Changed: log message
  * @since 2.7.2 Fixed: clear table define cache when library was updated
+ * @since 2.8.0 Changed: translate comment
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space

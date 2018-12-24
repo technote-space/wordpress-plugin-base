@@ -2,7 +2,7 @@
 /**
  * Technote
  *
- * @version 2.7.4
+ * @version 2.8.0
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0 Added: Feature to load library of latest version
@@ -23,6 +23,7 @@
  * @since 2.7.0 Changed: log
  * @since 2.7.3 Fixed: suppress error when activate plugin
  * @since 2.7.4 Fixed: suppress error when uninstall plugin
+ * @since 2.8.0 Added: social, custom_post
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -58,6 +59,8 @@ define( 'TECHNOTE_IS_MOCK', false );
  * @property \Technote\Classes\Models\Lib\Utility $utility
  * @property \Technote\Classes\Models\Lib\Test $test
  * @property \Technote\Classes\Models\Lib\Upgrade $upgrade
+ * @property \Technote\Classes\Models\Lib\Social $social
+ * @property \Technote\Classes\Models\Lib\Custom_Post $custom_post
  */
 class Technote {
 
@@ -115,26 +118,31 @@ class Technote {
 	/** @var array $plugin_data */
 	public $plugin_data;
 
-	/** @var array $properties */
+	/**
+	 * @since 2.8.0 Added: social, custom_post
+	 * @var array $properties
+	 */
 	private $properties = [
-		'define'    => '\Technote\Classes\Models\Lib\Define',
-		'config'    => '\Technote\Classes\Models\Lib\Config',
-		'setting'   => '\Technote\Classes\Models\Lib\Setting',
-		'option'    => '\Technote\Classes\Models\Lib\Option',
-		'device'    => '\Technote\Classes\Models\Lib\Device',
-		'minify'    => '\Technote\Classes\Models\Lib\Minify',
-		'filter'    => '\Technote\Classes\Models\Lib\Filter',
-		'user'      => '\Technote\Classes\Models\Lib\User',
-		'post'      => '\Technote\Classes\Models\Lib\Post',
-		'loader'    => '\Technote\Classes\Models\Lib\Loader',
-		'log'       => '\Technote\Classes\Models\Lib\Log',
-		'input'     => '\Technote\Classes\Models\Lib\Input',
-		'db'        => '\Technote\Classes\Models\Lib\Db',
-		'uninstall' => '\Technote\Classes\Models\Lib\Uninstall',
-		'session'   => '\Technote\Classes\Models\Lib\Session',
-		'utility'   => '\Technote\Classes\Models\Lib\Utility',
-		'test'      => '\Technote\Classes\Models\Lib\Test',
-		'upgrade'   => '\Technote\Classes\Models\Lib\Upgrade',
+		'define'      => '\Technote\Classes\Models\Lib\Define',
+		'config'      => '\Technote\Classes\Models\Lib\Config',
+		'setting'     => '\Technote\Classes\Models\Lib\Setting',
+		'option'      => '\Technote\Classes\Models\Lib\Option',
+		'device'      => '\Technote\Classes\Models\Lib\Device',
+		'minify'      => '\Technote\Classes\Models\Lib\Minify',
+		'filter'      => '\Technote\Classes\Models\Lib\Filter',
+		'user'        => '\Technote\Classes\Models\Lib\User',
+		'post'        => '\Technote\Classes\Models\Lib\Post',
+		'loader'      => '\Technote\Classes\Models\Lib\Loader',
+		'log'         => '\Technote\Classes\Models\Lib\Log',
+		'input'       => '\Technote\Classes\Models\Lib\Input',
+		'db'          => '\Technote\Classes\Models\Lib\Db',
+		'uninstall'   => '\Technote\Classes\Models\Lib\Uninstall',
+		'session'     => '\Technote\Classes\Models\Lib\Session',
+		'utility'     => '\Technote\Classes\Models\Lib\Utility',
+		'test'        => '\Technote\Classes\Models\Lib\Test',
+		'upgrade'     => '\Technote\Classes\Models\Lib\Upgrade',
+		'social'      => '\Technote\Classes\Models\Lib\Social',
+		'custom_post' => '\Technote\Classes\Models\Lib\Custom_Post',
 	];
 
 	/** @var array $property_instances */
