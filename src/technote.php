@@ -354,6 +354,13 @@ class Technote {
 				$this->$name;
 			}
 			$this->uninstall->get_class_list();
+		} else {
+			if ( $this->get_config( 'config', 'use_custom_post' ) ) {
+				$this->custom_post;
+			}
+			if ( $this->get_config( 'config', 'use_social_login' ) ) {
+				$this->social;
+			}
 		}
 	}
 

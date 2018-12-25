@@ -34,6 +34,66 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 	private $_validation_errors = false;
 
 	/**
+	 * initialize
+	 * @since 2.8.1
+	 */
+	protected function initialize() {
+		$this->app->filter->register_class_filter( 'custom_post', [
+			'init'                         => [
+				'register_post_types' => [ 9 ],
+			],
+			'manage_posts_columns'         => [
+				'manage_posts_columns' => [],
+			],
+			'manage_posts_custom_column'   => [
+				'manage_posts_custom_column' => [],
+			],
+			'post_row_actions'             => [
+				'delete_edit_links' => [],
+			],
+			'wp_count_posts'               => [
+				'wp_count_posts' => [],
+			],
+			'posts_join'                   => [
+				'posts_join' => [],
+			],
+			'posts_search'                 => [
+				'posts_search' => [],
+			],
+			'save_post'                    => [
+				'save_post' => [],
+			],
+			'delete_post'                  => [
+				'delete_post' => [],
+			],
+			'wp_insert_post_empty_content' => [
+				'post_validation' => [],
+			],
+			'wp_insert_post_data'          => [
+				'wp_insert_post_data' => [],
+			],
+			'send_email_change_email'      => [
+				'send_email_change_email' => [],
+			],
+			'send_password_change_email'   => [
+				'send_password_change_email' => [],
+			],
+			'redirect_post_location'       => [
+				'redirect_post_location' => [],
+			],
+			'load-post.php'                => [
+				'set_admin_notices' => [],
+			],
+			'edit_form_after_title'        => [
+				'edit_form_after_title' => [],
+			],
+			'edit_form_after_editor'       => [
+				'edit_form_after_editor' => [],
+			],
+		] );
+	}
+
+	/**
 	 * register post types
 	 */
 	/** @noinspection PhpUnusedPrivateMethodInspection */

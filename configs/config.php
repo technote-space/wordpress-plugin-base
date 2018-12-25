@@ -55,4 +55,10 @@ return [
 
 	// prevent use log
 	'prevent_use_log'           => false,
+
+	// use custom post
+	'use_custom_post'           => false,
+
+	// use social login
+	'use_social_login'          => false,
 ];

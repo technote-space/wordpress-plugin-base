@@ -25,6 +25,18 @@ class Social implements \Technote\Interfaces\Loader {
 	use \Technote\Traits\Loader;
 
 	/**
+	 * initialize
+	 * @since 2.8.1
+	 */
+	protected function initialize() {
+		$this->app->filter->register_class_filter( 'social', [
+			'template_redirect' => [
+				'check_callback' => [],
+			],
+		] );
+	}
+
+	/**
 	 * @return array
 	 */
 	protected function get_namespaces() {
