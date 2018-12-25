@@ -1,10 +1,10 @@
 <?php
 /**
- * Technote Views Admin Include Action_links
+ * Technote Views Admin Include Custom Post Checkbox
  *
- * @version 1.1.13
+ * @version 2.8.3
  * @author technote-space
- * @since 1.0.0
+ * @since 2.8.3
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space

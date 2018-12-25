@@ -2,7 +2,7 @@
 /**
  * Technote Classes Models Lib Utility
  *
- * @version 2.6.1
+ * @version 2.8.3
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0 Changed: static methods to non static methods
@@ -10,6 +10,7 @@
  * @since 2.1.0 Added: array_map method
  * @since 2.6.0 Added: doing_ajax, get_debug_backtrace methods
  * @since 2.6.1 Added: scan dir method
+ * @since 2.8.3 Changed: move parse_db_type from data helper
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space

@@ -2,9 +2,10 @@
 /**
  * Technote Traits Helper Custom Post
  *
- * @version 2.8.0
+ * @version 2.8.3
  * @author technote-space
  * @since 2.8.0
+ * @since 2.8.3
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -684,6 +685,8 @@ trait Custom_Post {
 	}
 
 	/**
+	 * @since 2.8.3 Added: default form view
+	 *
 	 * @param \WP_Post $post
 	 */
 	public function output_edit_form( $post ) {
@@ -723,6 +726,8 @@ trait Custom_Post {
 	}
 
 	/**
+	 * @since 2.8.3 Added: columns parameter
+	 *
 	 * @param \WP_Post $post
 	 *
 	 * @return array
@@ -737,6 +742,7 @@ trait Custom_Post {
 	}
 
 	/**
+	 * @since 2.8.3
 	 * @return array
 	 */
 	private function get_table_columns() {
@@ -748,6 +754,8 @@ trait Custom_Post {
 	}
 
 	/**
+	 * @since 2.8.3
+	 *
 	 * @param array $columns
 	 *
 	 * @return array
