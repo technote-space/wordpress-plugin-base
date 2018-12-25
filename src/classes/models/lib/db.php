@@ -237,6 +237,10 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 
 			$column['name']            = $this->app->utility->array_get( $column, 'name', $key );
 			$column['format']          = $this->app->utility->array_get( $column, 'format', $this->type2format( $type ) );
+			$column['length'] = null;
+			if ( preg_match( '/\(\s*(\d+)\s*\)/', $type, $matches ) ) {
+				$column['length'] = $matches[1] - 0;
+			}
 			$column['is_user_defined'] = true;
 			if ( ! empty( $column['comment'] ) ) {
 				$column['comment'] = $this->app->translate( $column['comment'] );
