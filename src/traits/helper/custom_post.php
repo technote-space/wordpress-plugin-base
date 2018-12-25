@@ -662,7 +662,7 @@ trait Custom_Post {
 		unset( $columns['deleted_by'] );
 		foreach ( $columns as $k => $v ) {
 			$type          = isset( $v['type'] ) ? $v['type'] : 'string';
-			$type          = $this->parse_db_type( strtolower( trim( $type ) ) );
+			$type          = $this->app->utility->parse_db_type( strtolower( trim( $type ) ) );
 			$columns[ $k ] = [
 				'default'       => isset( $v['default'] ) ? $v['default'] : ( $type === 'string' ? '' : 0 ),
 				'type'          => $type,

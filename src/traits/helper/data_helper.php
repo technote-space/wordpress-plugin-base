@@ -158,30 +158,4 @@ trait Data_Helper {
 
 		return $param;
 	}
-
-	/**
-	 * @param $type
-	 *
-	 * @return string
-	 */
-	protected function parse_db_type( $type ) {
-		switch ( true ) {
-			case stristr( $type, 'INT' ) !== false:
-				return 'int';
-			case stristr( $type, 'BIT' ) !== false:
-				return 'bool';
-			case stristr( $type, 'BOOLEAN' ) !== false:
-				return 'bool';
-			case stristr( $type, 'DECIMAL' ) !== false:
-				return 'number';
-			case stristr( $type, 'FLOAT' ) !== false:
-				return 'float';
-			case stristr( $type, 'DOUBLE' ) !== false:
-				return 'number';
-			case stristr( $type, 'REAL' ) !== false:
-				return 'number';
-		}
-
-		return 'string';
-	}
 }
