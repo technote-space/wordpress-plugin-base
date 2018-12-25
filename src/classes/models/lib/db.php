@@ -115,6 +115,9 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 			$this->table_defines[ $table ]['id']       = $id;
 			$this->table_defines[ $table ]['columns']  = $columns;
 			$this->table_defines[ $table ]['is_added'] = true;
+			if ( ! empty( $this->table_defines[ $table ]['comment'] ) ) {
+				$this->table_defines[ $table ]['comment'] = $this->app->translate( $this->table_defines[ $table ]['comment'] );
+			}
 		}
 		$this->app->option->set( 'table_defines_cache', $this->table_defines );
 	}
@@ -232,9 +235,13 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 				break;
 			}
 
-			$column['name']   = $this->app->utility->array_get( $column, 'name', $key );
-			$column['format'] = $this->app->utility->array_get( $column, 'format', $this->type2format( $type ) );
-			$columns[ $key ]  = $column;
+			$column['name']            = $this->app->utility->array_get( $column, 'name', $key );
+			$column['format']          = $this->app->utility->array_get( $column, 'format', $this->type2format( $type ) );
+			$column['is_user_defined'] = true;
+			if ( ! empty( $column['comment'] ) ) {
+				$column['comment'] = $this->app->translate( $column['comment'] );
+			}
+			$columns[ $key ] = $column;
 		}
 		if ( ! $check ) {
 			return [ false, false ];
@@ -405,7 +412,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 				$sql     .= " DEFAULT '{$default}'";
 			}
 			if ( ! empty( $comment ) ) {
-				$comment = str_replace( '\'', '\\\'', $this->app->translate( $comment ) );
+				$comment = str_replace( '\'', '\\\'', $comment );
 				$sql     .= " COMMENT '{$comment}'";
 			}
 			$sql .= ",\n";
@@ -434,7 +441,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 		$sql .= implode( ",\n", $index );
 		$sql .= "\n) ENGINE = InnoDB DEFAULT CHARSET = {$char}";
 		if ( ! empty( $define['comment'] ) ) {
-			$define['comment'] = str_replace( '\'', '\\\'', $this->app->translate( $define['comment'] ) );
+			$define['comment'] = str_replace( '\'', '\\\'', $define['comment'] );
 			$sql               .= " COMMENT '{$define['comment']}'";
 		}
 		$sql .= ';';
