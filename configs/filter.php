@@ -71,7 +71,7 @@ return [
 
 	'loader->admin' => [
 		'admin_menu'    => [
-			'add_menu' => [],
+			'add_menu' => [ 9 ],
 		],
 		'admin_notices' => [
 			'admin_notice' => [],
