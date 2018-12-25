@@ -258,4 +258,18 @@ interface Presenter {
 	 */
 	public function modal_class( $echo = true );
 
+	/**
+	 * @since 1.1.73
+	 *
+	 * @param string $handle
+	 */
+	public function set_script_translations( $handle );
+
+	/**
+	 * @param string $type
+	 *
+	 * @return string
+	 */
+	public function get_form_by_type( $type );
+
 }

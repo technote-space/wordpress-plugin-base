@@ -693,7 +693,9 @@ trait Custom_Post {
 		$this->add_style_view( 'admin/style/custom_post/' . $this->get_post_type_slug(), $params );
 		$this->add_script_view( 'admin/script/custom_post', $params );
 		$this->add_script_view( 'admin/script/custom_post/' . $this->get_post_type_slug(), $params );
-		$this->get_view( 'admin/custom_post/' . $this->get_post_type_slug(), $params, true, false );
+		if ( ! $this->get_view( 'admin/custom_post/' . $this->get_post_type_slug(), $params, true, false ) ) {
+			$this->get_view( 'admin/custom_post', $params, true, false );
+		}
 		$this->after_output_edit_form( $post, $params );
 	}
 
@@ -727,10 +729,31 @@ trait Custom_Post {
 	 */
 	protected function get_edit_form_params( $post ) {
 		return $this->filter_edit_form_params( [
-			'post'   => $post,
-			'data'   => $this->get_related_data( $post->ID ),
-			'prefix' => $this->get_post_field_name_prefix(),
+			'post'    => $post,
+			'data'    => $this->get_related_data( $post->ID ),
+			'prefix'  => $this->get_post_field_name_prefix(),
+			'columns' => $this->filter_table_columns( $this->get_table_columns() ),
 		], $post );
+	}
+
+	/**
+	 * @return array
+	 */
+	private function get_table_columns() {
+		return $this->app->utility->array_map( $this->app->db->get_columns( $this->get_related_table_name() ), function ( $d ) {
+			$d['form_type'] = $this->get_form_by_type( $d['type'] );
+
+			return $d;
+		} );
+	}
+
+	/**
+	 * @param array $columns
+	 *
+	 * @return array
+	 */
+	protected function filter_table_columns( $columns ) {
+		return $columns;
 	}
 
 	/**

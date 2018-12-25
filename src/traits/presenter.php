@@ -611,4 +611,25 @@ trait Presenter {
 			);
 		}
 	}
+
+	/**
+	 * @param string $type
+	 *
+	 * @return string
+	 */
+	public function get_form_by_type( $type ) {
+		switch ( $this->app->utility->parse_db_type( $type, true ) ) {
+			case 'int':
+				return 'number';
+			case 'bool':
+				return 'checkbox';
+			case 'number';
+			case 'float';
+				return 'text';
+			case 'text';
+				return 'textarea';
+		}
+
+		return 'text';
+	}
 }
