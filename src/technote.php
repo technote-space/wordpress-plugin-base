@@ -2,7 +2,7 @@
 /**
  * Technote
  *
- * @version 2.8.0
+ * @version 2.8.1
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0 Added: Feature to load library of latest version
@@ -23,7 +23,8 @@
  * @since 2.7.0 Changed: log
  * @since 2.7.3 Fixed: suppress error when activate plugin
  * @since 2.7.4 Fixed: suppress error when uninstall plugin
- * @since 2.8.0 Added: social, custom_post
+ * @since 2.8.0 Added: social login, custom post
+ * @since 2.8.1 Added: setup social login, custom post filters
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -255,8 +256,8 @@ class Technote {
 		}, 1 );
 
 		add_action( 'activated_plugin', function ( $plugin ) {
-				$this->plugins_loaded();
-				$this->initialize();
+			$this->plugins_loaded();
+			$this->initialize();
 			if ( $this->define->plugin_base_name === $plugin ) {
 				$this->filter->do_action( 'app_activated', $this );
 			}
@@ -346,6 +347,8 @@ class Technote {
 	}
 
 	/**
+	 * @since 2.8.1 Added: setup social login, custom post filters
+	 *
 	 * @param bool $uninstall
 	 */
 	private function setup_property( $uninstall ) {

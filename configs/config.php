@@ -2,11 +2,13 @@
 /**
  * Technote Configs Config
  *
- * @version 2.8.0
+ * @version 2.8.1
  * @author technote-space
  * @since 1.0.0
  * @since 2.1.0 Deleted: text_domain
  * @since 2.7.0 Added: prevent use log flag
+ * @since 2.8.1 Added: use custom post flag
+ * @since 2.8.1 Added: use social login flag
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -18,7 +20,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 
 return [
 	// library version
-	'library_version'           => '2.8.0',
+	'library_version'           => '2.8.1',
 
 	// plugin title
 	'plugin_title'              => '',

@@ -2,11 +2,12 @@
 /**
  * Technote Classes Models Lib Filter
  *
- * @version 2.4.2
+ * @version 2.8.1
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0
  * @since 2.4.2 Improved: change timing to load filter target instance
+ * @since 2.8.1 Improved: refactoring
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -47,7 +48,7 @@ class Filter implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 		if ( empty( $class ) || ! is_array( $tags ) ) {
 			return;
 		}
-			foreach ( $tags as $tag => $methods ) {
+		foreach ( $tags as $tag => $methods ) {
 			$this->register_filter( $class, $tag, $methods );
 		}
 	}
@@ -58,11 +59,11 @@ class Filter implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	 * @param array $methods
 	 */
 	public function register_filter( $class, $tag, $methods ) {
-				$tag = $this->app->utility->replace( $tag, [ 'prefix' => $this->get_filter_prefix() ] );
+		$tag = $this->app->utility->replace( $tag, [ 'prefix' => $this->get_filter_prefix() ] );
 		if ( empty( $class ) || empty( $tag ) || ! is_array( $methods ) ) {
 			return;
 		}
-				foreach ( $methods as $method => $params ) {
+		foreach ( $methods as $method => $params ) {
 			if ( ! is_array( $params ) && is_string( $params ) ) {
 				$method = $params;
 				$params = [];
@@ -70,12 +71,12 @@ class Filter implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 			if ( empty( $method ) || ! is_string( $method ) ) {
 				continue;
 			}
-					list( $priority, $accepted_args ) = $this->get_filter_params( $params );
-					add_filter( $tag, function () use ( $class, $method ) {
-						return $this->call_filter_callback( $class, $method, func_get_args() );
-					}, $priority, $accepted_args );
-				}
-			}
+			list( $priority, $accepted_args ) = $this->get_filter_params( $params );
+			add_filter( $tag, function () use ( $class, $method ) {
+				return $this->call_filter_callback( $class, $method, func_get_args() );
+			}, $priority, $accepted_args );
+		}
+	}
 
 	/**
 	 * @since 2.4.2

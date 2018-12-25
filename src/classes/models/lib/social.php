@@ -2,9 +2,10 @@
 /**
  * Technote Classes Models Lib Social
  *
- * @version 2.8.0
+ * @version 2.8.1
  * @author technote-space
  * @since 2.8.0
+ * @since 2.8.1 Added: filter settings
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
