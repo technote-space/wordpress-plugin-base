@@ -2,9 +2,10 @@
 /**
  * Technote Configs Db
  *
- * @version 0.0.0.0.0
+ * @version 2.7.0
  * @author technote-space
- * @since 0.0.0.0.0
+ * @since 1.0.0
+ * @since 2.7.0 Added: __log table
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -14,9 +15,9 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 	exit;
 }
 
-return array(
+return [
 
-    // example
+	// example
 //	'test' => array(
 //		'id'      => 'test_id',     // optional [default = $table_name . '_id']
 //		'columns' => array(
@@ -51,7 +52,42 @@ return array(
 //				'value' => array( 'value1', 'value2' ),
 //			),
 //		),
-//		'delete'  => 'logical', // physical or logical [default = logical]
+//		'delete'  => 'logical', // physical or logical [default = physical]
 //	),
 
-);
+	'__log' => [
+		'columns' => [
+			'message'        => [
+				'type' => 'TEXT',
+				'null' => false,
+			],
+			'context'        => [
+				'type' => 'LONGTEXT',
+				'null' => true,
+			],
+			'file'           => [
+				'type' => 'VARCHAR(255)',
+				'null' => true,
+			],
+			'line'           => [
+				'type'     => 'INT(11)',
+				'unsigned' => true,
+				'null'     => true,
+			],
+			'lib_version'    => [
+				'type' => 'VARCHAR(32)',
+				'null' => false,
+			],
+			'plugin_version' => [
+				'type' => 'VARCHAR(32)',
+				'null' => false,
+			],
+		],
+		'index'   => [
+			'key' => [
+				'created_at' => [ 'created_at' ],
+			],
+		],
+	],
+
+];

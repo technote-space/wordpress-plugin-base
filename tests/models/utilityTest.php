@@ -2,9 +2,11 @@
 /**
  * Technote Models Utility Test
  *
- * @version 0.0.0.0.0
+ * @version 2.1.0
  * @author technote-space
- * @since 0.0.0.0.0
+ * @since 1.0.0
+ * @since 2.0.0
+ * @since 2.1.0 Added: tests for starts_with and ends_with
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -21,6 +23,20 @@ namespace Technote\Tests\Models;
 class UtilityTest extends \Technote\Tests\TestCase {
 
 	/**
+	 * @since 2.0.0
+	 * @var \Technote\Classes\Models\Lib\Utility $utility
+	 */
+	private static $utility;
+
+	/**
+	 * @since 2.0.0
+	 */
+	public static function setUpBeforeClass() {
+		parent::setUpBeforeClass();
+		static::$utility = \Technote\Classes\Models\Lib\Utility::get_instance( static::$app );
+	}
+
+	/**
 	 * @dataProvider _test_flatten_provider
 	 *
 	 * @param array $array
@@ -28,52 +44,52 @@ class UtilityTest extends \Technote\Tests\TestCase {
 	 * @param array $expected
 	 */
 	public function test_flatten( $array, $preserve_keys, $expected ) {
-		$this->assertEquals( $expected, \Technote\Models\Utility::flatten( $array, $preserve_keys ) );
+		$this->assertEquals( $expected, static::$utility->flatten( $array, $preserve_keys ) );
 	}
 
 	/**
 	 * @return array
 	 */
 	public function _test_flatten_provider() {
-		return array(
-			array(
-				array(),
+		return [
+			[
+				[],
 				false,
-				array(),
-			),
-			array(
-				array(
-					array( 'test1', 'test2' ),
-					array( 'test3', 'test4' ),
-				),
+				[],
+			],
+			[
+				[
+					[ 'test1', 'test2' ],
+					[ 'test3', 'test4' ],
+				],
 				false,
-				array( 'test1', 'test2', 'test3', 'test4' ),
-			),
-			array(
-				array(
-					array( 'a' => 'test1', 'b' => 'test2' ),
-					array( 'c' => 'test3', 'd' => 'test4' ),
-				),
+				[ 'test1', 'test2', 'test3', 'test4' ],
+			],
+			[
+				[
+					[ 'a' => 'test1', 'b' => 'test2' ],
+					[ 'c' => 'test3', 'd' => 'test4' ],
+				],
 				false,
-				array( 'test1', 'test2', 'test3', 'test4' ),
-			),
-			array(
-				array(
-					array( 'a' => 'test1', 'b' => 'test2' ),
-					array( 'c' => 'test3', 'd' => 'test4' ),
-				),
+				[ 'test1', 'test2', 'test3', 'test4' ],
+			],
+			[
+				[
+					[ 'a' => 'test1', 'b' => 'test2' ],
+					[ 'c' => 'test3', 'd' => 'test4' ],
+				],
 				true,
-				array( 'a' => 'test1', 'b' => 'test2', 'c' => 'test3', 'd' => 'test4' ),
-			),
-			array(
-				array(
-					array( 'a' => 'test1', 'b' => 'test2' ),
-					array( 'a' => 'test3', 'b' => 'test4' ),
-				),
+				[ 'a' => 'test1', 'b' => 'test2', 'c' => 'test3', 'd' => 'test4' ],
+			],
+			[
+				[
+					[ 'a' => 'test1', 'b' => 'test2' ],
+					[ 'a' => 'test3', 'b' => 'test4' ],
+				],
 				true,
-				array( 'a' => 'test3', 'b' => 'test4' ),
-			),
-		);
+				[ 'a' => 'test3', 'b' => 'test4' ],
+			],
+		];
 	}
 
 	/**
@@ -85,39 +101,39 @@ class UtilityTest extends \Technote\Tests\TestCase {
 	 * @param mixed $expected
 	 */
 	public function test_array_get( $array, $key, $default, $expected ) {
-		$this->assertEquals( $expected, \Technote\Models\Utility::array_get( $array, $key, $default ) );
+		$this->assertEquals( $expected, static::$utility->array_get( $array, $key, $default ) );
 	}
 
 	/**
 	 * @return array
 	 */
 	public function _test_array_get_provider() {
-		return array(
-			array(
-				array(),
+		return [
+			[
+				[],
 				'test',
 				null,
 				null,
-			),
-			array(
-				array(
+			],
+			[
+				[
 					'test1' => true,
 					'test2' => 100,
-				),
+				],
 				'test2',
 				false,
 				100,
-			),
-			array(
-				array(
+			],
+			[
+				[
 					'test1' => true,
 					'test2' => 100,
-				),
+				],
 				'test3',
 				false,
 				false,
-			),
-		);
+			],
+		];
 	}
 
 	/**
@@ -129,44 +145,44 @@ class UtilityTest extends \Technote\Tests\TestCase {
 	 * @param mixed $value
 	 */
 	public function test_array_set( $array, $key, $value ) {
-		\Technote\Models\Utility::array_set( $array, $key, $value );
-		$this->assertEquals( $value, \Technote\Models\Utility::array_get( $array, $key ) );
+		static::$utility->array_set( $array, $key, $value );
+		$this->assertEquals( $value, static::$utility->array_get( $array, $key ) );
 	}
 
 	/**
 	 * @return array
 	 */
 	public function _test_array_set_provider() {
-		return array(
-			array(
-				array(),
+		return [
+			[
+				[],
 				'test',
 				null,
-			),
-			array(
-				array(
+			],
+			[
+				[
 					'test' => true,
-				),
+				],
 				'test',
 				100,
-			),
-			array(
-				array(
+			],
+			[
+				[
 					'test' => true,
-				),
+				],
 				'test2',
 				false,
-			),
-			array(
-				array(
+			],
+			[
+				[
 					'test' => true,
-				),
+				],
 				'test',
-				array(
+				[
 					'test1' => true,
-				),
-			),
-		);
+				],
+			],
+		];
 	}
 
 	/**
@@ -177,29 +193,157 @@ class UtilityTest extends \Technote\Tests\TestCase {
 	 * @param string $expected
 	 */
 	public function test_replace( $string, $data, $expected ) {
-		$this->assertEquals( $expected, \Technote\Models\Utility::replace( $string, $data ) );
+		$this->assertEquals( $expected, static::$utility->replace( $string, $data ) );
 	}
 
 	/**
 	 * @return array
 	 */
 	public function _test_replace_provider() {
-		return array(
-			array(
+		return [
+			[
 				'test',
-				array( 'a' => 'b' ),
+				[ 'a' => 'b' ],
 				'test',
-			),
-			array(
+			],
+			[
 				'test1${a}test2',
-				array( 'a' => 'b' ),
+				[ 'a' => 'b' ],
 				'test1btest2',
-			),
-			array(
+			],
+			[
 				'test1${test}test2',
-				array( 'test' => '' ),
+				[ 'test' => '' ],
 				'test1test2',
-			),
-		);
+			],
+		];
+	}
+
+	/**
+	 * @dataProvider _test_starts_with_provider
+	 *
+	 * @param $haystack
+	 * @param $needle
+	 * @param $expected
+	 */
+	public function test_starts_with( $haystack, $needle, $expected ) {
+		$this->assertEquals( $expected, static::$utility->starts_with( $haystack, $needle ) );
+	}
+
+	/**
+	 * @return array
+	 */
+	public function _test_starts_with_provider() {
+		return [
+			[
+				'abc',
+				'a',
+				true,
+			],
+			[
+				'abc',
+				'ab',
+				true,
+			],
+			[
+				'abc',
+				'abc',
+				true,
+			],
+			[
+				'abc',
+				'abcd',
+				false,
+			],
+			[
+				'abc',
+				'b',
+				false,
+			],
+			[
+				'abc',
+				'bcd',
+				false,
+			],
+			[
+				'',
+				'',
+				false,
+			],
+			[
+				'',
+				'a',
+				false,
+			],
+			[
+				'a',
+				'',
+				false,
+			],
+		];
+	}
+
+	/**
+	 * @dataProvider _test_ends_with_provider
+	 *
+	 * @param $haystack
+	 * @param $needle
+	 * @param $expected
+	 */
+	public function test_ends_with( $haystack, $needle, $expected ) {
+		$this->assertEquals( $expected, static::$utility->ends_with( $haystack, $needle ) );
+	}
+
+	/**
+	 * @return array
+	 */
+	public function _test_ends_with_provider() {
+		return [
+			[
+				'abc',
+				'c',
+				true,
+			],
+			[
+				'abc',
+				'bc',
+				true,
+			],
+			[
+				'abc',
+				'abc',
+				true,
+			],
+			[
+				'abc',
+				'0abc',
+				false,
+			],
+			[
+				'abc',
+				'b',
+				false,
+			],
+			[
+				'abc',
+				'0ba',
+				false,
+			],
+			[
+				'',
+				'',
+				false,
+			],
+			[
+				'',
+				'a',
+				false,
+			],
+			[
+				'a',
+				'',
+				false,
+			],
+		];
 	}
 }

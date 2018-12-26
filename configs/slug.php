@@ -2,9 +2,9 @@
 /**
  * Technote Configs Slug
  *
- * @version 0.0.0.0.0
+ * @version 1.1.13
  * @author technote-space
- * @since 0.0.0.0.0
+ * @since 1.0.0
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -14,7 +14,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 	exit;
 }
 
-return array(
+return [
 
 	// table prefix
 	'table_prefix'  => '',
@@ -37,7 +37,10 @@ return array(
 	// api namespace
 	'api_namespace' => '',
 
-	// js class
-	'js_class'      => '',
+	// api class
+	'api_class'     => '',
 
-);
+	// modal class
+	'modal_class'   => '',
+
+];

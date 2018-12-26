@@ -2,9 +2,10 @@
 /**
  * Technote Models Config Test
  *
- * @version 0.0.0.0.0
+ * @version 2.0.0
  * @author technote-space
- * @since 0.0.0.0.0
+ * @since 1.0.0
+ * @since 2.0.0
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -20,7 +21,7 @@ namespace Technote\Tests\Models;
  */
 class ConfigTest extends \Technote\Tests\TestCase {
 
-	/** @var \Technote\Models\Config */
+	/** @var \Technote\Classes\Models\Lib\Config */
 	private static $config;
 
 	/** @var string */
@@ -28,7 +29,7 @@ class ConfigTest extends \Technote\Tests\TestCase {
 
 	public static function setUpBeforeClass() {
 		parent::setUpBeforeClass();
-		static::$config = \Technote\Models\Config::get_instance( static::$app );
+		static::$config = \Technote\Classes\Models\Lib\Config::get_instance( static::$app );
 
 		static::$config_file = 'technote_test_config';
 		touch( static::$app->define->lib_configs_dir . DS . static::$config_file . '.php' );

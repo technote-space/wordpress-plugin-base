@@ -27,25 +27,32 @@ define( 'TECHNOTE_PLUGIN', 'technote' );
 
 define( 'TECHNOTE_BOOTSTRAP', __FILE__ );
 
-define( 'TECHNOTE_VERSION', '0.0.0.0.0' );
+define( 'TECHNOTE_REQUIRED_PHP_VERSION', '5.6' );
 
-define( 'TECHNOTE_REQUIRED_PHP_VERSION', '5.4' );
+/**
+ * @since 1.2.0
+ */
+define( 'TECHNOTE_REQUIRED_WP_VERSION', '3.9.3' );
 
 if ( ! defined( 'DS' ) ) {
 	define( 'DS', DIRECTORY_SEPARATOR );
 }
 
 if ( defined( 'WP_INSTALLING' ) && WP_INSTALLING ) {
-	require_once dirname( __FILE__ ) . DS . 'classes' . DS . 'technote_mock.php';
+	require_once dirname( __FILE__ ) . DS . 'src' . DS . 'technote_mock.php';
 
 	return;
 }
 
-if ( version_compare( phpversion(), TECHNOTE_REQUIRED_PHP_VERSION, '<' ) ) {
+global $wp_version;
+if (
+	version_compare( phpversion(), TECHNOTE_REQUIRED_PHP_VERSION, '<' ) ||
+	( ! empty( $wp_version ) && version_compare( $wp_version, TECHNOTE_REQUIRED_WP_VERSION, '<' ) )
+) {
 	// unsupported version
-	require_once dirname( __FILE__ ) . DS . 'classes' . DS . 'technote_mock.php';
+	require_once dirname( __FILE__ ) . DS . 'src' . DS . 'technote_mock.php';
 
 	return;
 }
 
-require_once dirname( __FILE__ ) . DS . 'classes' . DS . 'technote.php';
+require_once dirname( __FILE__ ) . DS . 'src' . DS . 'technote.php';

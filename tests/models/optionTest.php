@@ -2,9 +2,10 @@
 /**
  * Technote Models Option Test
  *
- * @version 0.0.0.0.0
+ * @version 2.0.0
  * @author technote-space
- * @since 0.0.0.0.0
+ * @since 1.0.0
+ * @since 2.0.0
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -20,12 +21,12 @@ namespace Technote\Tests\Models;
  */
 class OptionTest extends \Technote\Tests\TestCase {
 
-	/** @var \Technote\Models\Option */
+	/** @var \Technote\Classes\Models\Lib\Option $option */
 	private static $option;
 
 	public static function setUpBeforeClass() {
 		parent::setUpBeforeClass();
-		static::$option = \Technote\Models\Option::get_instance( static::$app );
+		static::$option = \Technote\Classes\Models\Lib\Option::get_instance( static::$app );
 		foreach ( static::get_test_value() as $value ) {
 			static::$option->delete( $value[0] );
 		}
@@ -62,7 +63,10 @@ class OptionTest extends \Technote\Tests\TestCase {
 	 * @param string $key
 	 * @param mixed $value
 	 */
-	public function test_delete( $key, $value ) {
+	public function test_delete(
+		/** @noinspection PhpUnusedParameterInspection */
+		$key, $value
+	) {
 		$this->assertEquals( true, static::$option->delete( $key ) );
 		$this->assertEquals( '', static::$option->get( $key ) );
 	}
@@ -71,21 +75,21 @@ class OptionTest extends \Technote\Tests\TestCase {
 	 * @return array
 	 */
 	private static function get_test_value() {
-		return array(
-			array( 'technote_test_option_bool', true ),
-			array( 'technote_test_option_int', 123 ),
-			array( 'technote_test_option_float', 0.987 ),
-			array( 'technote_test_option_string', 'test' ),
-			array(
+		return [
+			[ 'technote_test_option_bool', true ],
+			[ 'technote_test_option_int', 123 ],
+			[ 'technote_test_option_float', 0.987 ],
+			[ 'technote_test_option_string', 'test' ],
+			[
 				'technote_test_option_array',
-				array(
+				[
 					'test1' => 'test1',
 					'test2' => 2,
 					'test3' => false,
-				)
-			),
-			array( 'technote_test_option_null', null ),
-		);
+				],
+			],
+			[ 'technote_test_option_null', null ],
+		];
 	}
 
 	/**
@@ -94,5 +98,4 @@ class OptionTest extends \Technote\Tests\TestCase {
 	public function _test_value_provider() {
 		return static::get_test_value();
 	}
-
 }

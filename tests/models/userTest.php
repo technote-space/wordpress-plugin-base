@@ -2,9 +2,10 @@
 /**
  * Technote Models User Test
  *
- * @version 0.0.0.0.0
+ * @version 2.0.0
  * @author technote-space
- * @since 0.0.0.0.0
+ * @since 1.0.0
+ * @since 2.0.0
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -20,12 +21,12 @@ namespace Technote\Tests\Models;
  */
 class UserTest extends \Technote\Tests\TestCase {
 
-	/** @var \Technote\Models\User */
+	/** @var \Technote\Classes\Models\Lib\User $user */
 	private static $user;
 
 	public static function setUpBeforeClass() {
 		parent::setUpBeforeClass();
-		static::$user = \Technote\Models\User::get_instance( static::$app );
+		static::$user = \Technote\Classes\Models\Lib\User::get_instance( static::$app );
 		foreach ( static::get_test_value() as $value ) {
 			static::$user->delete( $value[0], 1 );
 		}
@@ -64,7 +65,10 @@ class UserTest extends \Technote\Tests\TestCase {
 	 * @param string $key
 	 * @param mixed $value
 	 */
-	public function test_delete( $key, $value ) {
+	public function test_delete(
+		/** @noinspection PhpUnusedParameterInspection */
+		$key, $value
+	) {
 		$this->assertEquals( true, static::$user->delete( $key, 1 ) );
 		$this->assertEquals( '', static::$user->get( $key, 1 ) );
 	}
@@ -73,21 +77,21 @@ class UserTest extends \Technote\Tests\TestCase {
 	 * @return array
 	 */
 	private static function get_test_value() {
-		return array(
-			array( 'technote_test_user_bool', true ),
-			array( 'technote_test_user_int', 123 ),
-			array( 'technote_test_user_float', 0.987 ),
-			array( 'technote_test_user_string', 'test' ),
-			array(
+		return [
+			[ 'technote_test_user_bool', true ],
+			[ 'technote_test_user_int', 123 ],
+			[ 'technote_test_user_float', 0.987 ],
+			[ 'technote_test_user_string', 'test' ],
+			[
 				'technote_test_user_array',
-				array(
+				[
 					'test1' => 'test1',
 					'test2' => 2,
 					'test3' => false,
-				)
-			),
-			array( 'technote_test_user_null', null ),
-		);
+				],
+			],
+			[ 'technote_test_user_null', null ],
+		];
 	}
 
 	/**
@@ -96,5 +100,4 @@ class UserTest extends \Technote\Tests\TestCase {
 	public function _test_value_provider() {
 		return static::get_test_value();
 	}
-
 }

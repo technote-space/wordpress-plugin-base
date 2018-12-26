@@ -4,8 +4,8 @@ Wordpress plugin 開発用のライブラリです。
 管理画面やAPIなどの追加や設定値の読み書き等を容易にする機能が用意されています。  
 
 # 要件
-- PHP 5.4 以上
-
+- PHP 5.6 以上
+- WordPress 3.9.3 以上
 
 # 手順
 
@@ -26,6 +26,9 @@ composer を使用してインストールします。
 
 ```composer require technote/wordpress-plugin-base```
 
+　  
+複数のプラグインでこのライブラリを使用する場合、最新のものが自動的に使用されます。
+
 ## このライブラリの使用
 
 作成したプラグインファイルにライブラリを使用する記述を追記します。  
@@ -38,7 +41,7 @@ Plugin Name: example
 Plugin URI:
 Description: Plugin Description
 Author: example
-Version: 0.0.0.0
+Version: 0.0.0
 Author URI: http://example.com/
 */
 
@@ -48,21 +51,38 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 @require_once dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
-$example = Technote::get_instance( 'Example', __FILE__ );
+Technote::get_instance( 'Example', __FILE__ );
 ```
 
+このプラグインファイルと同じフォルダに「functions.php」を作成すると、いろいろな準備ができた後に自動的に読み込まれます。  
+プラグインの構成は以下のようなものになります。
+
 ```
-example - example.php
+example
     |
-    - classes
-    |    |
-    |    - controllers
-    |           |
-    |           - admin
-    |           - api
-    - views
-    |   |
-    |   - admin
+    - example.php
+    |
+    - functions.php
+    |
+    - src
+    |  |
+        - classes
+    |  |     |
+    |  |     - controllers
+    |  |     |      |
+    |  |     |      - admin
+    |  |     |      |
+    |  |     |      - api 
+    |  |     |
+    |  |     - models
+    |  |     |
+    |  |     - tests
+    |  |
+    |  - views 
+    |      |
+    |      - admin
+    |          |
+    |          - help
     |
     - configs
 ```
@@ -73,11 +93,13 @@ example - example.php
 
 |設定値|説明|
 |---|---|
-|plugin_version|プラグインのバージョンを指定します|
+|plugin_title|管理画面のメニュー名になります|
 |db_version|DBの設定を変更したら更新します|
-|twitter|ツイッターのアカウントを指定します（空で未使用）|
-|github|Githubのアカウントを指定します（空で未使用）|
-|contact_url|プラグインのお問い合わせ用のページのURLを指定します|
+|twitter|ツイッターのアカウントを指定します（ダッシュボードでヘルプに表示されます。空で未使用）|
+|github|Githubのアカウントを指定します（ダッシュボードでヘルプに表示されます。空で未使用）|
+|contact_url|プラグインのお問い合わせ用のページのURLを指定します（ダッシュボードでヘルプに表示されます）|
+|menu_image|管理画面のメニューアイコンを指定します|
+|update_info_file_url|開発バージョンチェック情報用のURLを指定します|
 
 - configs/db.php
 
@@ -131,7 +153,7 @@ example - example.php
     ),
     
     // 論理削除 or 物理削除
-    'delete'  => 'logical', // physical or logical [default = logical]
+    'delete'  => 'logical', // physical or logical [default = physical]
 ),
 ```
 
@@ -226,43 +248,50 @@ if ( $this->apply_filters( 'minify_js' ) ) {
 }
 ```
 
-- configs/filter.php
+- configs/filter.php  
+今後ドキュメント追加予定
 
-- configs/slug.php
+- configs/slug.php  
+今後ドキュメント追加予定
 
-- configs/capability.php
-
+- configs/capability.php  
+今後ドキュメント追加予定
 
 ## 画面の追加
 
-- classes/controllers/admin に PHP ファイルを追加
+- src/classes/controllers/admin に PHP ファイル (例：test.php) を追加
 ```
 <?php
 
-namespace Example\Controllers\Admin;
+namespace Example\Classes\Controllers\Admin;
 
 if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 	exit;
 }
 
-class Test extends \Technote\Controllers\Admin\Base {
-	
+class Test extends \Technote\Classes\Controllers\Admin\Base {
+
 	// タイトル
 	public function get_page_title() {
 		return 'Test';
 	}
-	
+
 	// GET の時に行う動作
-	public function get_action() {
+	protected function get_action() {
 
 	}
-	
+
 	// POST の時に行う動作
-	public function post_action() {
+	protected function post_action() {
 		$aaa = $this->app->input->post( 'aaa' );
 		// ... 
 	}
-	
+
+    // GET, POST 共通で行う動作
+	protected function common_action() {
+        // wp_enqueue_script('media-upload');
+	}
+
 	// view に渡す変数設定
 	public function get_view_args() {
 	    return array(
@@ -272,18 +301,29 @@ class Test extends \Technote\Controllers\Admin\Base {
 }
 ```
 
-- views/admin に PHP ファイルを追加
+POST の時に行う動作は事前にnonce checkが行われます。
+
+- src/views/admin に PHP ファイル (例：test.php) を追加
 ```
 <?php
 
 if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 	return;
 }
-/** @var \Technote\Controllers\Admin\Base $instance */
+/** @var \Technote\Interfaces\Presenter $instance */
 /** @var string $test */
 ?>
 
+<?php $instance->form( 'open', $args ); ?>
+
 <?php $instance->h( $test ); ?>
+<?php $instance->form( 'input/submit', $args, array(
+	'name'  => 'update',
+	'value' => 'Update',
+	'class' => 'button-primary'
+) ); ?>
+
+<?php $instance->form( 'close', $args ); ?>
 ```
 
 - $instance
@@ -295,7 +335,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 	- img
 
 - ヘルプの追加
-	- classes/controllers/admin に追加した PHP に以下を追記
+	- src/classes/controllers/admin に追加した上記 PHP ファイル に以下を追記
 ```
 protected function get_help_contents() {
     return array(
@@ -308,14 +348,14 @@ protected function get_help_contents() {
 ```
 
 -
-	- views/admin/help に PHP ファイルを追加
+	- src/views/admin/help に PHP ファイル (例：test.php) を追加
 ```
 <?php
 
 if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 	return;
 }
-/** @var \Technote\Controllers\Admin\Base $instance */
+/** @var \Technote\Interfaces\Presenter $instance */
 ?>
 
 test
@@ -324,12 +364,53 @@ test
 ## API の追加
 今後ドキュメント追加予定
 
-## filterの追加
+## filter の追加
 今後ドキュメント追加予定
 
-## サンプルプラグイン
-追加予定
+## cron の追加
+今後ドキュメント追加予定
 
+## テストの追加
+
+- PHPUnitの追加  
+```composer require --dev phpunit/phpunit```
+
+- src/classes/tests に PHP ファイル (例：sample.php) を追加
+```
+<?php
+
+namespace Example\Classes\Tests;
+
+if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
+	exit;
+}
+
+/**
+ * Class Sample
+ * @package Example\Classes\Tests
+ */
+class Sample extends \Technote\Classes\Tests\Base {
+
+	public function test_sample1() {
+		$this->assertEquals( 2, 1 + 1 );
+	}
+
+	public function test_sample2() {
+		$this->assertEquals( 1, 1 + 1 );
+	}
+
+}
+```
+
+- 管理画面から実行
+
+![test1](https://raw.githubusercontent.com/technote-space/wordpress-plugin-base/images/test1.png)
+![test2](https://raw.githubusercontent.com/technote-space/wordpress-plugin-base/images/test2.png)
+
+## サンプルプラグイン
+[関連記事提供用プラグイン](https://github.com/technote-space/wp-related-post-jp)  
+[Contact Form 7 拡張用プラグイン](https://github.com/technote-space/contact-form-7-huge-file-upload)  
+[Marker Animation プラグイン](https://github.com/technote-space/marker-animation) 
 
 # Author
 
