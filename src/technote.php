@@ -63,6 +63,7 @@ define( 'TECHNOTE_IS_MOCK', false );
  * @property \Technote\Classes\Models\Lib\Upgrade $upgrade
  * @property \Technote\Classes\Models\Lib\Social $social
  * @property \Technote\Classes\Models\Lib\Custom_Post $custom_post
+ * @property \Technote\Classes\Models\Lib\Mail $mail
  */
 class Technote {
 
@@ -145,6 +146,7 @@ class Technote {
 		'upgrade'     => '\Technote\Classes\Models\Lib\Upgrade',
 		'social'      => '\Technote\Classes\Models\Lib\Social',
 		'custom_post' => '\Technote\Classes\Models\Lib\Custom_Post',
+		'mail'        => '\Technote\Classes\Models\Lib\Mail',
 	];
 
 	/** @var array $property_instances */
