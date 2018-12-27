@@ -22,6 +22,9 @@ $attr = $instance->app->utility->array_get( $column, 'attributes', [] );
 if ( isset( $column['maxlength'] ) ) {
 	$attr['maxlength'] = $column['maxlength'];
 }
+if ( ! empty( $column['unsigned'] ) ) {
+	$attr['min'] = 0;
+}
 $attr['placeholder'] = $instance->app->utility->array_get( $column, 'default', '' );
 ?>
 <?php $instance->form( 'input/number', [
