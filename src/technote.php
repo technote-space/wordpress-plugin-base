@@ -285,6 +285,12 @@ class Technote {
 		$this->plugin_data = get_plugin_data( $this->plugin_file, false, false );
 
 		spl_autoload_register( [ $this, 'load_class' ] );
+
+		if ( $this->get_config( 'config', 'capture_shutdown_error' ) ) {
+			add_action( 'shutdown', function () {
+				$this->shutdown();
+			}, 0 );
+		}
 		$this->load_functions();
 	}
 
@@ -411,6 +417,17 @@ class Technote {
 			$this->setting->remove_setting( 'save___log_term' );
 			$this->setting->remove_setting( 'delete___log_interval' );
 		}
+	}
+
+	/**
+	 * shutdown
+	 */
+	private function shutdown() {
+		$error = error_get_last();
+		if ( $error === null ) {
+			return;
+		}
+		$this->log( $error['message'], $error );
 	}
 
 	/**

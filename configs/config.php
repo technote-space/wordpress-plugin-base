@@ -63,4 +63,7 @@ return [
 
 	// use social login
 	'use_social_login'          => false,
+
+	// capture shutdown error
+	'capture_shutdown_error'    => defined( 'WP_DEBUG' ) && WP_DEBUG,
 ];
