@@ -2,10 +2,11 @@
 /**
  * Technote Traits Helper Custom Post
  *
- * @version 2.8.3
+ * @version 2.8.5
  * @author technote-space
  * @since 2.8.0
  * @since 2.8.3
+ * @since 2.8.5 Fixed: hide unnecessary columns
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -281,6 +282,8 @@ trait Custom_Post {
 	}
 
 	/**
+	 * @since 2.8.5 Fixed: hide unnecessary columns
+	 *
 	 * @param array $columns
 	 * @param bool $sortable
 	 *
