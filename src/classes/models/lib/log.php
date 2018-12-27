@@ -31,7 +31,7 @@ class Log implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook {
 	 * @return bool
 	 */
 	public function is_valid_log() {
-		return $this->apply_filters( 'log_validity', defined( 'WP_DEBUG' ) && WP_DEBUG && ! $this->app->get_config( 'config', 'prevent_use_log' ) );
+		return $this->apply_filters( 'log_validity', $this->app->utility->definedv( 'WP_DEBUG' ) && ! $this->app->get_config( 'config', 'prevent_use_log' ) );
 	}
 
 	/**

@@ -577,7 +577,7 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 	 * @return bool
 	 */
 	private function is_valid_update( $post_status, $post_type ) {
-		return ! ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) && in_array( $post_status, [
+		return ! $this->app->utility->defined( 'DOING_AUTOSAVE' ) && in_array( $post_status, [
 				'publish',
 				'future',
 				'draft',

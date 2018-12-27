@@ -387,7 +387,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	 */
 	protected function table_update( $table, $define ) {
 		require_once ABSPATH . "wp-admin" . DS . "includes" . DS . "upgrade.php";
-		$char = defined( "DB_CHARSET" ) ? DB_CHARSET : "utf8";
+		$char = $this->app->utility->definedv( 'DB_CHARSET', 'utf8' );
 		if ( empty( $define['id'] ) ) {
 			$define['id'] = $table . '_id';
 		}
