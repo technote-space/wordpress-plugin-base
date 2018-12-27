@@ -46,6 +46,18 @@ return [
 		],
 	],
 
+	'mail' => [
+		'wp_mail_failed'    => [
+			'wp_mail_failed' => [],
+		],
+		'wp_mail_from'      => [
+			'wp_mail_from' => [],
+		],
+		'wp_mail_from_name' => [
+			'wp_mail_from_name' => [],
+		],
+	],
+
 	'uninstall' => [
 		'${prefix}app_activated' => [
 			'register_uninstall' => [],
@@ -96,5 +108,4 @@ return [
 			'rest_pre_dispatch' => [ 999 ],
 		],
 	],
-
 ];
