@@ -287,6 +287,10 @@ trait Custom_Post {
 	 * @return array
 	 */
 	protected function pre_filter_posts_columns( $columns, $sortable = false ) {
+		// for cocoon
+		unset( $columns['thumbnail'] );
+		unset( $columns['memo'] );
+
 		$_columns = $this->app->db->get_columns( $this->get_related_table_name() );
 		foreach ( $this->get_manage_posts_columns() as $k => $v ) {
 			if ( $sortable && ( ! is_array( $v ) || empty( $v['sortable'] ) ) ) {
