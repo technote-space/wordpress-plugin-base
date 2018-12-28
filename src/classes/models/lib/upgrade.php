@@ -235,8 +235,8 @@ class Upgrade implements \Technote\Interfaces\Loader {
 		if ( preg_match( '#==\s*Upgrade Notice\s*==([\s\S]+?)==#', $content, $matches ) ) {
 			foreach ( (array) preg_split( '~[\r\n]+~', trim( $matches[1] ) ) as $line ) {
 				$line = preg_replace( '~\[([^\]]*)\]\(([^\)]*)\)~', '<a href="${2}">${1}</a>', $line );
-				$line = preg_replace( '#^\s*\*+\s*#', '', $line );
-				$line = preg_replace( '#^\s*=\s*([^\s]+)\s*=\s*$#', '[ $1 ]', $line );
+				$line = preg_replace( '#\A\s*\*+\s*#', '', $line );
+				$line = preg_replace( '#\A\s*=\s*([^\s]+)\s*=\s*\z#', '[ $1 ]', $line );
 				$line = trim( $line );
 				if ( '' !== $line ) {
 					$notices[] = $line;

@@ -70,7 +70,7 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 	private function load_page() {
 		try {
 			$prefix  = $this->get_page_prefix();
-			$pattern = "#^{$prefix}(.+)#";
+			$pattern = "#\A{$prefix}(.+)#";
 			if ( isset( $_GET['page'] ) && preg_match( $pattern, $_GET['page'], $matches ) ) {
 				$page          = $matches[1];
 				$exploded      = explode( '-', $page );

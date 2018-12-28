@@ -540,13 +540,13 @@ class Technote {
 		$dir   = null;
 		if ( empty( $this->define ) ) {
 			$namespace = ucfirst( TECHNOTE_PLUGIN );
-			$class     = preg_replace( "#^{$namespace}#", '', $class );
+			$class     = preg_replace( "#\A{$namespace}#", '', $class );
 			$dir       = self::$latest_library_directory . DS . 'src';
-		} elseif ( preg_match( "#^{$this->define->plugin_namespace}#", $class ) ) {
-			$class = preg_replace( "#^{$this->define->plugin_namespace}#", '', $class );
+		} elseif ( preg_match( "#\A{$this->define->plugin_namespace}#", $class ) ) {
+			$class = preg_replace( "#\A{$this->define->plugin_namespace}#", '', $class );
 			$dir   = $this->define->plugin_src_dir;
-		} elseif ( preg_match( "#^{$this->define->lib_namespace}#", $class ) ) {
-			$class = preg_replace( "#^{$this->define->lib_namespace}#", '', $class );
+		} elseif ( preg_match( "#\A{$this->define->lib_namespace}#", $class ) ) {
+			$class = preg_replace( "#\A{$this->define->lib_namespace}#", '', $class );
 			$dir   = $this->define->lib_src_dir;
 		}
 
@@ -579,7 +579,7 @@ class Technote {
 	 * @param $arguments
 	 */
 	public static function __callStatic( $name, $arguments ) {
-		if ( preg_match( '#register_uninstall_(.+)$#', $name, $matches ) ) {
+		if ( preg_match( '#register_uninstall_(.+)\z#', $name, $matches ) ) {
 			$plugin_base_name = $matches[1];
 			self::uninstall( $plugin_base_name );
 		}
