@@ -12,7 +12,7 @@
 
 namespace Technote\Tests\Models;
 
-require_once __DIR__ . DS . 'db.php';
+require_once __DIR__ . DS . 'misc' . DS . 'db.php';
 
 /**
  * Class DbTest
@@ -22,12 +22,12 @@ require_once __DIR__ . DS . 'db.php';
  */
 class DbTest extends \Technote\Tests\TestCase {
 
-	/** @var Db */
+	/** @var Misc\Db */
 	private static $db;
 
 	public static function setUpBeforeClass() {
 		parent::setUpBeforeClass();
-		static::$db = Db::get_instance( static::$app );
+		static::$db = Misc\Db::get_instance( static::$app );
 		static::$db->drop( 'technote_test_table1' );
 		static::$db->drop( 'technote_test_table2' );
 		static::$db->setup( 'technote_test_table1', [

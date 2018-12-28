@@ -25,7 +25,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  */
 trait Custom_Post {
 
-	use \Technote\Traits\Hook, \Technote\Traits\Presenter;
+	use \Technote\Traits\Singleton, \Technote\Traits\Hook, \Technote\Traits\Presenter;
 
 	/** @var string $_slug */
 	private $_slug;

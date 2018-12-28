@@ -20,7 +20,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * Interface Custom_Post
  * @package Technote\Interfaces\Helper
  */
-interface Custom_Post extends \Technote\Interfaces\Hook, \Technote\Interfaces\Presenter, Data_Helper {
+interface Custom_Post extends \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \Technote\Interfaces\Presenter, Data_Helper, Validate {
 
 	/**
 	 * @return string
