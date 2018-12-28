@@ -2,11 +2,13 @@
 /**
  * Technote Classes Models Lib Log
  *
- * @version 2.7.0
+ * @version 2.9.0
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0
  * @since 2.7.0 Changed: save log to db
+ * @since 2.9.0 Improved: log level
+ * @since 2.9.0 Added: send mail feature
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -36,6 +38,8 @@ class Log implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, 
 
 	/**
 	 * @since 2.7.0 Added: $context
+	 * @since 2.9.0 Added: log level arg
+	 * @since 2.9.0 Added: send mail feature
 	 *
 	 * @param string $message
 	 * @param mixed $context
@@ -66,6 +70,8 @@ class Log implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, 
 	}
 
 	/**
+	 * @since 2.9.0
+	 *
 	 * @param string $level
 	 * @param array $log_level
 	 *
@@ -84,6 +90,8 @@ class Log implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, 
 	}
 
 	/**
+	 * @since 2.9.0
+	 *
 	 * @param string $level
 	 * @param array $log_level
 	 * @param array $data
@@ -99,6 +107,8 @@ class Log implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, 
 	}
 
 	/**
+	 * @since 2.9.0
+	 *
 	 * @param string $level
 	 * @param array $log_level
 	 * @param string $message

@@ -2,10 +2,11 @@
 /**
  * Technote Traits Controller Api
  *
- * @version 2.0.0
+ * @version 2.9.0
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0
+ * @since 2.9.0 Changed: moved validation methods to Validate
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space

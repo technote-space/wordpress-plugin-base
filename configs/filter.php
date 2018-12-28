@@ -2,13 +2,14 @@
 /**
  * Technote Configs Filter
  *
- * @version 2.8.2
+ * @version 2.9.0
  * @author technote-space
  * @since 1.0.0
  * @since 2.4.0 Added: filter for upgrade
  * @since 2.6.0 Changed: call setup_update from admin_init filter
  * @since 2.6.1 Changed: filter for ajax api
  * @since 2.8.2 Changed: filter priority of admin_menu
+ * @since 2.9.0 Added: filters for mail
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -40,12 +41,15 @@ return [
 		],
 	],
 
-	'db' => [
+	'db'   => [
 		'switch_blog' => [
 			'switch_blog' => [],
 		],
 	],
 
+	/**
+	 * @since 2.9.0
+	 */
 	'mail' => [
 		'wp_mail_failed'    => [
 			'wp_mail_failed' => [],

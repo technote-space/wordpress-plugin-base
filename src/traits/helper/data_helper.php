@@ -2,10 +2,11 @@
 /**
  * Technote Traits Helper Data Helper
  *
- * @version 2.8.3
+ * @version 2.9.0
  * @author technote-space
  * @since 2.8.0
  * @since 2.8.3 Changed: move parse_db_type to utility
+ * @since 2.9.0 Changed: move validation methods to Validate
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space

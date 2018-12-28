@@ -2,7 +2,7 @@
 /**
  * Technote
  *
- * @version 2.8.5
+ * @version 2.9.0
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0 Added: Feature to load library of latest version
@@ -26,6 +26,8 @@
  * @since 2.8.0 Added: social login, custom post
  * @since 2.8.1 Added: setup social login, custom post filters
  * @since 2.8.5 Added: capture fatal error
+ * @since 2.9.0 Added: mail
+ * @since 2.9.0 Improved: log
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -123,6 +125,7 @@ class Technote {
 
 	/**
 	 * @since 2.8.0 Added: social, custom_post
+	 * @since 2.9.0 Added: mail
 	 * @var array $properties
 	 */
 	private $properties = [
@@ -425,6 +428,7 @@ class Technote {
 	/**
 	 * shutdown
 	 * @since 2.8.5
+	 * @since 2.9.0 Changed: capture error target
 	 */
 	private function shutdown() {
 		$error = error_get_last();

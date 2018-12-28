@@ -2,11 +2,13 @@
 /**
  * Technote Traits Helper Custom Post
  *
- * @version 2.8.5
+ * @version 2.9.0
  * @author technote-space
  * @since 2.8.0
  * @since 2.8.3
  * @since 2.8.5 Fixed: hide unnecessary columns
+ * @since 2.9.0 Fixed: null, default, bool behaviors
+ * @since 2.9.0 Added: title validation
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -596,7 +598,7 @@ trait Custom_Post {
 		$params = [];
 		foreach ( $this->get_data_field_settings() as $k => $v ) {
 			$params[ $k ] = $this->get_post_field( $k, $update || ! $v['required'] ? null : $v['default'], null, $v );
-				$params[ $k ] = $this->sanitize_input( $params[ $k ], $v['type'] );
+			$params[ $k ] = $this->sanitize_input( $params[ $k ], $v['type'] );
 			if ( ! isset( $params[ $k ] ) && ! $update ) {
 				unset( $params[ $k ] );
 				continue;
@@ -642,6 +644,8 @@ trait Custom_Post {
 	}
 
 	/**
+	 * @since 2.9.0
+	 *
 	 * @param string $key
 	 * @param array $post_array
 	 *
@@ -652,6 +656,9 @@ trait Custom_Post {
 	}
 
 	/**
+	 * @since 2.9.0 Changed: consider null setting
+	 * @since 2.9.0 Added: filter value
+	 *
 	 * @param string $key
 	 * @param mixed $default
 	 * @param array|null $post_array
@@ -679,6 +686,8 @@ trait Custom_Post {
 	}
 
 	/**
+	 * @since 2.9.0
+	 *
 	 * @param string $key
 	 * @param mixed $value
 	 * @param mixed $default
@@ -708,10 +717,10 @@ trait Custom_Post {
 		unset( $columns['deleted_at'] );
 		unset( $columns['deleted_by'] );
 		foreach ( $columns as $k => $v ) {
-			$type                           = $this->app->utility->parse_db_type( $v['type'], true );
-			$columns[ $k ]['default']       = isset( $v['default'] ) ? $v['default'] : ( 'string' === $type || 'text' === $type ? '' : 0 );
-			$columns[ $k ]['type']          = $type;
-			$columns[ $k ]['required']      = ! isset( $v['default'] ) && isset( $v['null'] ) && empty( $v['null'] );
+			$type                      = $this->app->utility->parse_db_type( $v['type'], true );
+			$columns[ $k ]['default']  = isset( $v['default'] ) ? $v['default'] : ( 'string' === $type || 'text' === $type ? '' : 0 );
+			$columns[ $k ]['type']     = $type;
+			$columns[ $k ]['required'] = ! isset( $v['default'] ) && isset( $v['null'] ) && empty( $v['null'] );
 		}
 
 		return $this->filter_data_field_settings( $columns );
@@ -728,6 +737,7 @@ trait Custom_Post {
 
 	/**
 	 * @since 2.8.3 Added: default form view
+	 * @since 2.9.0 Improved: not load view if no column
 	 *
 	 * @param \WP_Post $post
 	 */
@@ -742,8 +752,8 @@ trait Custom_Post {
 			$columns = $this->app->utility->array_pluck( $params['columns'], 'is_user_defined' );
 			unset( $columns['post_id'] );
 			if ( ! empty( array_filter( $columns ) ) ) {
-			$this->get_view( 'admin/custom_post', $params, true, false );
-		}
+				$this->get_view( 'admin/custom_post', $params, true, false );
+			}
 		}
 		$this->after_output_edit_form( $post, $params );
 	}
@@ -825,6 +835,8 @@ trait Custom_Post {
 	}
 
 	/**
+	 * @since 2.9.0 Improved: validation
+	 *
 	 * @param array|null $post_array
 	 *
 	 * @return array

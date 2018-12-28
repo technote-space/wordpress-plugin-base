@@ -2,10 +2,11 @@
 /**
  * Technote Classes Models Lib Minify
  *
- * @version 2.0.0
+ * @version 2.9.0
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0
+ * @since 2.9.0 Added: method to clear cache
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -61,6 +62,8 @@ class Minify implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	}
 
 	/**
+	 * @since 2.9.0
+	 *
 	 * @param string $name
 	 */
 	private function clear_cache( $name ) {
@@ -105,6 +108,8 @@ class Minify implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	}
 
 	/**
+	 * @since 2.9.0 Added: clear cache
+	 *
 	 * @param bool $clear_cache
 	 */
 	public function output_js( $clear_cache = false ) {
@@ -167,6 +172,8 @@ class Minify implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	}
 
 	/**
+	 * @since 2.9.0 Added: clear cache
+	 *
 	 * @param bool $clear_cache
 	 */
 	public function output_css( $clear_cache = false ) {

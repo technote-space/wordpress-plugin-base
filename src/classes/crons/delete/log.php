@@ -2,9 +2,10 @@
 /**
  * Technote Crons Delete Log
  *
- * @version 2.7.0
+ * @version 2.9.0
  * @author technote-space
  * @since 2.7.0
+ * @since 2.9.0 Changed: is_valid_log > is_valid
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space

@@ -2,10 +2,11 @@
 /**
  * Technote Classes Models Lib Custom Post
  *
- * @version 2.8.1
+ * @version 2.9.0
  * @author technote-space
  * @since 2.8.0
  * @since 2.8.1 Added: filter settings
+ * @since 2.9.0 Improved: display db error
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -269,6 +270,7 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 	}
 
 	/**
+	 * @since 2.9.0 Improved: handle db error
 	 * @param int $post_id
 	 * @param \WP_Post $post
 	 * @param bool $update
@@ -283,7 +285,7 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 					if ( $related ) {
 						$old = $custom_post->get_data( $related['id'] );
 					} else {
-						$old = false;
+						$old    = false;
 						$update = false;
 					}
 				} else {
