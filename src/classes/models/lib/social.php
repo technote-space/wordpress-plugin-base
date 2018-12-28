@@ -150,7 +150,7 @@ class Social implements \Technote\Interfaces\Loader {
 	 * @param array $params
 	 */
 	private function safe_redirect( $params ) {
-		if ( ! empty( $params['redirect'] ) && preg_match( '#^/[^/]+#', $params['redirect'] ) ) {
+		if ( ! empty( $params['redirect'] ) && preg_match( '#\A/[^/]+#', $params['redirect'] ) ) {
 			wp_safe_redirect( $params['redirect'] );
 			exit;
 		}
@@ -178,7 +178,7 @@ class Social implements \Technote\Interfaces\Loader {
 	 * @return bool
 	 */
 	public function is_pseudo_email( $email ) {
-		return preg_match( '#' . preg_quote( '@' . $this->get_pseudo_email_domain() ) . '$#', trim( $email ) ) > 0;
+		return preg_match( '#' . preg_quote( '@' . $this->get_pseudo_email_domain() ) . '\z#', trim( $email ) ) > 0;
 	}
 
 	/**

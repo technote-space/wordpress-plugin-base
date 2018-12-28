@@ -204,7 +204,7 @@ trait Social {
 			empty( $params ) ||
 			empty( $params['uuid'] ) ||
 			empty( $params['redirect'] ) ||
-			! preg_match( '#^/[^/]+#', $params['redirect'] ) ||
+			! preg_match( '#\A/[^/]+#', $params['redirect'] ) ||
 			! $this->app->session->exists( $this->get_auth_session_name() )
 		) {
 			return false;
