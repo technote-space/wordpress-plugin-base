@@ -27,7 +27,7 @@ $instance->add_style_view( 'common/style/mail' );
     <meta http-equiv="Content-Language" content="ja">
     <meta http-equiv="Content-Style-Type" content="text/css">
     <title><?php $instance->h( $subject ); ?></title>
-	<?php $instance->app->minify->output_css(); ?>
+	<?php $instance->app->minify->output_css( true ); ?>
 </head>
 <!-- BODY -->
 <body bgcolor="#FFFFFF">
