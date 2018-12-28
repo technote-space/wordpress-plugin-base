@@ -23,7 +23,10 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
     <dl>
 		<?php foreach ( $columns as $name => $column ): ?>
 			<?php if ( empty( $column['is_user_defined'] ) || 'post_id' === $column['name'] ): continue; endif; ?>
-            <dt><?php $instance->h( $instance->app->utility->array_get( $column, 'comment', $column['name'] ) ); ?></dt>
+            <dt>
+				<?php $instance->h( $instance->app->utility->array_get( $column, 'comment', $column['name'] ) ); ?>
+				<?php if ( ! empty( $column['required'] ) ): ?><span class="required">*</span><?php endif; ?>
+            </dt>
             <dd>
 				<?php $instance->get_view( 'admin/include/custom_post/' . $column['form_type'], [
 					'data'   => $data,

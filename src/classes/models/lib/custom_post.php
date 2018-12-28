@@ -284,6 +284,7 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 						$old = $custom_post->get_data( $related['id'] );
 					} else {
 						$old = false;
+						$update = false;
 					}
 				} else {
 					$old = false;

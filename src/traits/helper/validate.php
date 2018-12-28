@@ -348,10 +348,14 @@ trait Validate {
 	 * @return bool|\WP_Error
 	 */
 	protected function validate( $var, $setting ) {
+		$validate = $this->validate_not_empty( $var );
 		if ( $setting['required'] ) {
-			$validate = $this->validate_not_empty( $var );
 			if ( $validate instanceof \WP_Error ) {
 				return $validate;
+			}
+		} else {
+			if ( $validate instanceof \WP_Error ) {
+				return true;
 			}
 		}
 		switch ( $setting['type'] ) {
