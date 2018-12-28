@@ -641,6 +641,16 @@ trait Custom_Post {
 
 	/**
 	 * @param string $key
+	 * @param array $post_array
+	 *
+	 * @return mixed
+	 */
+	protected function get_validation_var( $key, $post_array ) {
+		return $this->app->utility->array_get( $post_array, $this->get_post_field_name( $key ) );
+	}
+
+	/**
+	 * @param string $key
 	 * @param mixed $default
 	 * @param array|null $post_array
 	 *
