@@ -66,4 +66,30 @@ return [
 
 	// capture shutdown error
 	'capture_shutdown_error'    => defined( 'WP_DEBUG' ) && WP_DEBUG,
+
+	// log level (for developer)
+	'log_level'                 => [
+		'error' => [
+			'is_valid_log'  => true,
+			'is_valid_mail' => true,
+			'roles'  => [
+				// 'administrator',
+			],
+			'emails' => [
+				// 'test@example.com',
+			],
+		],
+		'info'  => [
+			'is_valid_log'  => true,
+			'is_valid_mail' => true,
+			'roles'  => [
+				// 'administrator',
+			],
+			'emails' => [
+				// 'test@example.com',
+			],
+		],
+		// set default level
+		''      => 'info',
+	],
 ];

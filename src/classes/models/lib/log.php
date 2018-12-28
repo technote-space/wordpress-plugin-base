@@ -22,15 +22,15 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * Class Log
  * @package Technote\Classes\Models\Lib
  */
-class Log implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook {
+class Log implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \Technote\Interfaces\Presenter {
 
-	use \Technote\Traits\Singleton, \Technote\Traits\Hook;
+	use \Technote\Traits\Singleton, \Technote\Traits\Hook, \Technote\Traits\Presenter;
 
 	/**
 	 * @since 2.7.0
 	 * @return bool
 	 */
-	public function is_valid_log() {
+	public function is_valid() {
 		return $this->apply_filters( 'log_validity', $this->app->utility->definedv( 'WP_DEBUG' ) && ! $this->app->get_config( 'config', 'prevent_use_log' ) );
 	}
 
@@ -39,26 +39,96 @@ class Log implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook {
 	 *
 	 * @param string $message
 	 * @param mixed $context
+	 * @param string $level
 	 *
 	 * @return bool
 	 */
-	public function log( $message, $context = null ) {
-		if ( ! $this->is_valid_log() ) {
+	public function log( $message, $context = null, $level = '' ) {
+		$log_level = $this->app->get_config( 'config', 'log_level' );
+		$level     = $this->get_log_level( $level, $log_level );
+		if ( ! $this->is_valid() || empty( $log_level[ $level ] ) ) {
 			return false;
 		}
-		if ( $this->apply_filters( 'save___log_term' ) <= 0 ) {
-			return false;
-		}
+
 		$data                   = $this->get_called_info();
 		$data['message']        = is_string( $message ) ? $this->app->translate( $message ) : json_encode( $message );
 		$data['lib_version']    = $this->app->get_library_version();
 		$data['plugin_version'] = $this->app->get_plugin_version();
+		$data['level']          = $level;
 		if ( isset( $context ) ) {
 			$data['context'] = json_encode( $context );
 		}
-		$this->app->db->insert( '__log', $data );
+
+		$this->send_mail( $level, $log_level, $message, $data );
+		$this->insert_log( $level, $log_level, $data );
 
 		return true;
+	}
+
+	/**
+	 * @param string $level
+	 * @param array $log_level
+	 *
+	 * @return string
+	 */
+	private function get_log_level( $level, $log_level ) {
+		if ( ! isset( $log_level[ $level ] ) && ! isset( $log_level[''] ) ) {
+			return 'info';
+		}
+		'' === $level || ! isset( $log_level[ $level ] ) and $level = $log_level[''];
+		if ( empty( $log_level[ $level ] ) ) {
+			return 'info';
+		}
+
+		return $level;
+	}
+
+	/**
+	 * @param string $level
+	 * @param array $log_level
+	 * @param array $data
+	 */
+	private function insert_log( $level, $log_level, $data ) {
+		if ( empty( $log_level[ $level ]['is_valid_log'] ) ) {
+			return;
+		}
+		if ( $this->apply_filters( 'save___log_term' ) <= 0 ) {
+			return;
+		}
+		$this->app->db->insert( '__log', $data );
+	}
+
+	/**
+	 * @param string $level
+	 * @param array $log_level
+	 * @param string $message
+	 * @param array $data
+	 */
+	private function send_mail( $level, $log_level, $message, $data ) {
+		if ( empty( $log_level[ $level ]['is_valid_mail'] ) ) {
+			return;
+		}
+
+		$level  = $log_level[ $level ];
+		$roles  = $this->app->utility->array_get( $level, 'roles' );
+		$emails = $this->app->utility->array_get( $level, 'emails' );
+
+		if ( empty( $roles ) && empty( $emails ) ) {
+			return;
+		}
+
+		$emails = array_unique( $emails );
+		$emails = array_combine( $emails, $emails );
+		foreach ( $roles as $role ) {
+			foreach ( get_users( [ 'role' => $role ] ) as $user ) {
+				/** @var \WP_User $user */
+				! empty( $user->user_email ) and $emails[ $user->user_email ] = $user->user_email;
+			}
+		}
+
+		foreach ( $emails as $email ) {
+			$this->app->mail->send( $email, $message, $this->dump( $data, false ) );
+		}
 	}
 
 	/**

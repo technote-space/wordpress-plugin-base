@@ -26,7 +26,7 @@ class Log extends \Technote\Classes\Crons\Base {
 	 * @return int
 	 */
 	protected function get_interval() {
-		if ( ! $this->app->log->is_valid_log() ) {
+		if ( ! $this->app->log->is_valid() ) {
 			return - 1;
 		}
 
