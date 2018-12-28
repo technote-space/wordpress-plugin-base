@@ -403,6 +403,10 @@ trait Custom_Post {
 			$data['edit_link'] = get_edit_post_link( $post->ID );
 		}
 
+		foreach ( $this->get_data_field_settings() as $k => $v ) {
+			$data[ $k ] = $param = $this->sanitize_input( $this->app->utility->array_get( $data, $k ), $v['type'] );
+		}
+
 		return $data;
 	}
 
@@ -592,12 +596,12 @@ trait Custom_Post {
 		$params = [];
 		foreach ( $this->get_data_field_settings() as $k => $v ) {
 			$params[ $k ] = $this->get_post_field( $k, $update ? null : $v['default'] );
+			if ( isset( $v['type'] ) ) {
+				$params[ $k ] = $this->sanitize_input( $params[ $k ], $v['type'] );
+			}
 			if ( ! isset( $params[ $k ] ) && ! empty( $v['unset_if_null'] ) ) {
 				unset( $params[ $k ] );
 				continue;
-			}
-			if ( isset( $v['type'] ) && isset( $params[ $k ] ) ) {
-				$params[ $k ] = $this->sanitize_input( $params[ $k ], $v['type'] );
 			}
 		}
 
@@ -679,14 +683,11 @@ trait Custom_Post {
 		unset( $columns['deleted_at'] );
 		unset( $columns['deleted_by'] );
 		foreach ( $columns as $k => $v ) {
-			$type          = isset( $v['type'] ) ? $v['type'] : 'string';
-			$type          = $this->app->utility->parse_db_type( strtolower( trim( $type ) ) );
-			$columns[ $k ] = [
-				'default'       => isset( $v['default'] ) ? $v['default'] : ( $type === 'string' ? '' : 0 ),
-				'type'          => $type,
-				'unset_if_null' => true,
-				'required'      => ! isset( $v['default'] ) && isset( $v['null'] ) && empty( $v['null'] ),
-			];
+			$type                           = $this->app->utility->parse_db_type( $v['type'], true );
+			$columns[ $k ]['default']       = isset( $v['default'] ) ? $v['default'] : ( 'string' === $type || 'text' === $type ? '' : 0 );
+			$columns[ $k ]['type']          = $type;
+			$columns[ $k ]['unset_if_null'] = true;
+			$columns[ $k ]['required']      = ! isset( $v['default'] ) && isset( $v['null'] ) && empty( $v['null'] );
 		}
 
 		return $this->filter_data_field_settings( $columns );
@@ -803,12 +804,11 @@ trait Custom_Post {
 		! isset( $post_array ) and $post_array = $this->app->input->post();
 		$errors = [];
 		foreach ( $this->get_data_field_settings() as $k => $v ) {
-			$param = $this->get_post_field( $k, null, $post_array );
-			if ( $v['required'] ) {
-				$param = $this->sanitize_input( $param, $v['type'] );
-				if ( (string) $param === '' ) {
-					$errors[ $k ][] = $this->app->translate( 'Value is required.' );
-				}
+			$param    = $this->get_post_field( $k, null, $post_array );
+			$param    = $this->sanitize_input( $param, $v['type'] );
+			$validate = $this->validate( $param, $v );
+			if ( $validate instanceof \WP_Error ) {
+				$errors[ $k ][] = $validate->get_error_message();
 			}
 		}
 
