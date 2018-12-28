@@ -81,7 +81,7 @@ return [
 		],
 		'info'  => [
 			'is_valid_log'  => true,
-			'is_valid_mail' => true,
+			'is_valid_mail' => false,
 			'roles'  => [
 				// 'administrator',
 			],
