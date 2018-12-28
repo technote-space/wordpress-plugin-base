@@ -61,6 +61,14 @@ class Minify implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	}
 
 	/**
+	 * @param string $name
+	 */
+	private function clear_cache( $name ) {
+		$name = $name . '_minify_cache';
+		$this->app->delete_shared_object( $name, 'all' );
+	}
+
+	/**
 	 * @param string $script
 	 * @param int $priority
 	 */
@@ -97,9 +105,12 @@ class Minify implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	}
 
 	/**
-	 * output js
+	 * @param bool $clear_cache
 	 */
-	public function output_js() {
+	public function output_js( $clear_cache = false ) {
+		if ( $clear_cache ) {
+			$this->clear_cache( 'script' );
+		}
 		if ( empty( $this->script ) ) {
 			return;
 		}
@@ -156,9 +167,12 @@ class Minify implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	}
 
 	/**
-	 * output css
+	 * @param bool $clear_cache
 	 */
-	public function output_css() {
+	public function output_css( $clear_cache = false ) {
+		if ( $clear_cache ) {
+			$this->clear_cache( 'style' );
+		}
 		if ( empty( $this->css ) ) {
 			return;
 		}
