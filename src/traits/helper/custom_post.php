@@ -535,7 +535,7 @@ trait Custom_Post {
 	 * @param \WP_Post $post
 	 * @param bool $update
 	 *
-	 * @return int
+	 * @return int|false
 	 */
 	public function update_data( $params, $where, $post, $update ) {
 		$table  = $this->get_related_table_name();

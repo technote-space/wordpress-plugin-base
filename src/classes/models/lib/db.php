@@ -46,6 +46,11 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	private $_type2format = [];
 
 	/**
+	 * @var \Exception $_error
+	 */
+	private $_error = null;
+
+	/**
 	 * initialize
 	 */
 	protected function initialize() {
@@ -1040,7 +1045,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	 * @param array $data
 	 * @param string $method
 	 *
-	 * @return bool|false|int
+	 * @return false|int
 	 */
 	private function _insert_replace( $table, $data, $method ) {
 		if ( ! isset( $this->table_defines[ $table ] ) ) {
@@ -1074,6 +1079,23 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	}
 
 	/**
+	 * @return string
+	 */
+	public function get_last_error() {
+		/** @var \wpdb $wpdb */
+		global $wpdb;
+
+		return $wpdb->last_error;
+	}
+
+	/**
+	 * @return \Exception|null
+	 */
+	public function get_last_transaction_error() {
+		return $this->_error;
+	}
+
+	/**
 	 * @param string $table
 	 * @param array $data
 	 *
@@ -1088,7 +1110,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	 * @param array $fields
 	 * @param array $data_list
 	 *
-	 * @return bool|false|int
+	 * @return false|int
 	 */
 	public function bulk_insert( $table, $fields, $data_list ) {
 		if ( ! isset( $this->table_defines[ $table ] ) || empty( $fields ) || empty( $data_list ) ) {
@@ -1132,7 +1154,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	 * @param string $table
 	 * @param array $data
 	 *
-	 * @return bool|false|int
+	 * @return false|int
 	 */
 	public function replace( $table, $data ) {
 		return $this->_insert_replace( $table, $data, 'replace' );
@@ -1143,7 +1165,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	 * @param array $data
 	 * @param array $where
 	 *
-	 * @return bool|false|int
+	 * @return false|int
 	 */
 	public function update( $table, $data, $where ) {
 		if ( ! isset( $this->table_defines[ $table ] ) ) {
@@ -1170,7 +1192,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	 * @param $data
 	 * @param $where
 	 *
-	 * @return int
+	 * @return int|false
 	 */
 	public function insert_or_update( $table, $data, $where ) {
 		if ( ! isset( $this->table_defines[ $table ] ) ) {
@@ -1184,11 +1206,17 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 		$row = $this->select_row( $table, $where, 'id' );
 		if ( empty( $row ) ) {
 			$this->insert( $table, $data );
+			if ( $this->get_last_error() ) {
+				return false;
+			}
 
 			return $this->get_insert_id();
 		}
 		$where = [ 'id' => $row['id'] ];
 		$this->update( $table, $data, $where );
+		if ( $this->get_last_error() ) {
+			return false;
+		}
 
 		return $row['id'];
 	}
@@ -1274,7 +1302,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	 * @param string $table
 	 * @param bool $write
 	 *
-	 * @return bool|string
+	 * @return false|int
 	 */
 	public function lock( $table, $write ) {
 		if ( ! isset( $this->table_defines[ $table ] ) ) {
@@ -1317,6 +1345,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 		$level = $this->transaction_level;
 		$this->transaction_level ++;
 		if ( $level === 0 ) {
+			$this->_error = null;
 			try {
 				$this->begin();
 				$func();
@@ -1326,6 +1355,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 			} catch ( \Exception $e ) {
 				$this->rollback();
 				$this->app->log( $e );
+				$this->_error = $e;
 			} finally {
 				$this->transaction_level = $level;
 			}

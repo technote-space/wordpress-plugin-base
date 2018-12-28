@@ -288,20 +288,30 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 				} else {
 					$old = false;
 				}
-				$id = $custom_post->update_data( [
-					'post_id' => $post_id,
-				], [
-					'post_id' => $post_id,
-				], $post, $update );
-				if ( ! empty( $id ) ) {
-					$data = $custom_post->get_data( $id );
-					if ( $data ) {
-						if ( $update ) {
-							$custom_post->data_updated( $post_id, $post, $old, $data );
-						} else {
-							$custom_post->data_inserted( $post_id, $post, $data );
+				if ( ! $this->app->db->transaction( function () use ( $custom_post, $post_id, $post, $update, $old ) {
+					$id = $custom_post->update_data( [
+						'post_id' => $post_id,
+					], [
+						'post_id' => $post_id,
+					], $post, $update );
+					if ( ! empty( $id ) ) {
+						$data = $custom_post->get_data( $id );
+						if ( $data ) {
+							if ( $update ) {
+								$custom_post->data_updated( $post_id, $post, $old, $data );
+							} else {
+								$custom_post->data_inserted( $post_id, $post, $data );
+							}
 						}
+					} else {
+						throw new \Exception( $this->app->db->get_last_error() );
 					}
+				} ) ) {
+					$this->_validation_errors = [
+						'Db error' => [
+							$this->app->db->get_last_transaction_error()->getMessage(),
+						],
+					];
 				}
 			}
 		}
