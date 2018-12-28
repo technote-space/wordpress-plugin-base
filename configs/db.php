@@ -57,6 +57,10 @@ return [
 
 	'__log' => [
 		'columns' => [
+			'level'          => [
+				'type' => 'VARCHAR(32)',
+				'null' => false,
+			],
 			'message'        => [
 				'type' => 'TEXT',
 				'null' => false,

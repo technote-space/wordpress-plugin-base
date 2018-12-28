@@ -28,7 +28,7 @@ class Logs extends Base {
 	 * @return int
 	 */
 	public function get_load_priority() {
-		return $this->app->log->is_valid_log() ? $this->apply_filters( 'logs_page_priority', 999 ) : - 1;
+		return $this->app->log->is_valid() ? $this->apply_filters( 'logs_page_priority', 999 ) : - 1;
 	}
 
 	/**
