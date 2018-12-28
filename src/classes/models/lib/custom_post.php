@@ -2,10 +2,11 @@
 /**
  * Technote Classes Models Lib Custom Post
  *
- * @version 2.8.1
+ * @version 2.9.0
  * @author technote-space
  * @since 2.8.0
  * @since 2.8.1 Added: filter settings
+ * @since 2.9.0 Improved: display db error
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -269,6 +270,7 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 	}
 
 	/**
+	 * @since 2.9.0 Improved: handle db error
 	 * @param int $post_id
 	 * @param \WP_Post $post
 	 * @param bool $update
@@ -283,25 +285,36 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 					if ( $related ) {
 						$old = $custom_post->get_data( $related['id'] );
 					} else {
-						$old = false;
+						$old    = false;
+						$update = false;
 					}
 				} else {
 					$old = false;
 				}
-				$id = $custom_post->update_data( [
-					'post_id' => $post_id,
-				], [
-					'post_id' => $post_id,
-				], $post, $update );
-				if ( ! empty( $id ) ) {
-					$data = $custom_post->get_data( $id );
-					if ( $data ) {
-						if ( $update ) {
-							$custom_post->data_updated( $post_id, $post, $old, $data );
-						} else {
-							$custom_post->data_inserted( $post_id, $post, $data );
+				if ( ! $this->app->db->transaction( function () use ( $custom_post, $post_id, $post, $update, $old ) {
+					$id = $custom_post->update_data( [
+						'post_id' => $post_id,
+					], [
+						'post_id' => $post_id,
+					], $post, $update );
+					if ( ! empty( $id ) ) {
+						$data = $custom_post->get_data( $id );
+						if ( $data ) {
+							if ( $update ) {
+								$custom_post->data_updated( $post_id, $post, $old, $data );
+							} else {
+								$custom_post->data_inserted( $post_id, $post, $data );
+							}
 						}
+					} else {
+						throw new \Exception( $this->app->db->get_last_error() );
 					}
+				} ) ) {
+					$this->_validation_errors = [
+						'Db error' => [
+							$this->app->db->get_last_transaction_error()->getMessage(),
+						],
+					];
 				}
 			}
 		}
@@ -577,7 +590,7 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 	 * @return bool
 	 */
 	private function is_valid_update( $post_status, $post_type ) {
-		return ! ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) && in_array( $post_status, [
+		return ! $this->app->utility->defined( 'DOING_AUTOSAVE' ) && in_array( $post_status, [
 				'publish',
 				'future',
 				'draft',

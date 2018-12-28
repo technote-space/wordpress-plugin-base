@@ -2,9 +2,10 @@
 /**
  * Technote Traits Helper Social
  *
- * @version 2.8.0
+ * @version 2.9.0
  * @author technote-space
  * @since 2.8.0
+ * @since 2.9.0 Improved: regexp
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -204,7 +205,7 @@ trait Social {
 			empty( $params ) ||
 			empty( $params['uuid'] ) ||
 			empty( $params['redirect'] ) ||
-			! preg_match( '#^/[^/]+#', $params['redirect'] ) ||
+			! preg_match( '#\A/[^/]+#', $params['redirect'] ) ||
 			! $this->app->session->exists( $this->get_auth_session_name() )
 		) {
 			return false;

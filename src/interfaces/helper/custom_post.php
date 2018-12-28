@@ -2,9 +2,10 @@
 /**
  * Technote Interfaces Helper Custom Post
  *
- * @version 2.8.0
+ * @version 2.9.0
  * @author technote-space
  * @since 2.8.0
+ * @since 2.9.0 Changed: implements Singleton, Validate
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -20,7 +21,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * Interface Custom_Post
  * @package Technote\Interfaces\Helper
  */
-interface Custom_Post extends \Technote\Interfaces\Hook, \Technote\Interfaces\Presenter, Data_Helper {
+interface Custom_Post extends \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \Technote\Interfaces\Presenter, Data_Helper, Validate {
 
 	/**
 	 * @return string

@@ -2,9 +2,10 @@
 /**
  * Technote Views Admin Include Custom Post Number
  *
- * @version 2.8.3
+ * @version 2.9.0
  * @author technote-space
  * @since 2.8.3
+ * @since 2.9.0 Improved: set min attribute if unsigned
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -21,6 +22,9 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 $attr = $instance->app->utility->array_get( $column, 'attributes', [] );
 if ( isset( $column['maxlength'] ) ) {
 	$attr['maxlength'] = $column['maxlength'];
+}
+if ( ! empty( $column['unsigned'] ) ) {
+	$attr['min'] = 0;
 }
 $attr['placeholder'] = $instance->app->utility->array_get( $column, 'default', '' );
 ?>

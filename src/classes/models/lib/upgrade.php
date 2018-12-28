@@ -2,7 +2,7 @@
 /**
  * Technote Classes Models Lib Upgrade
  *
- * @version 2.7.0
+ * @version 2.9.0
  * @author technote-space
  * @since 2.4.0
  * @since 2.4.1 Added: show_plugin_update_notices method
@@ -11,6 +11,7 @@
  * @since 2.6.0 Changed: call setup_update from admin_init filter
  * @since 2.6.0 Fixed: debug code
  * @since 2.7.0 Added: error handling
+ * @since 2.9.0 Improved: regexp
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -235,8 +236,8 @@ class Upgrade implements \Technote\Interfaces\Loader {
 		if ( preg_match( '#==\s*Upgrade Notice\s*==([\s\S]+?)==#', $content, $matches ) ) {
 			foreach ( (array) preg_split( '~[\r\n]+~', trim( $matches[1] ) ) as $line ) {
 				$line = preg_replace( '~\[([^\]]*)\]\(([^\)]*)\)~', '<a href="${2}">${1}</a>', $line );
-				$line = preg_replace( '#^\s*\*+\s*#', '', $line );
-				$line = preg_replace( '#^\s*=\s*([^\s]+)\s*=\s*$#', '[ $1 ]', $line );
+				$line = preg_replace( '#\A\s*\*+\s*#', '', $line );
+				$line = preg_replace( '#\A\s*=\s*([^\s]+)\s*=\s*\z#', '[ $1 ]', $line );
 				$line = trim( $line );
 				if ( '' !== $line ) {
 					$notices[] = $line;

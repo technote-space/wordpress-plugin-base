@@ -2,11 +2,13 @@
 /**
  * Technote Traits Helper Custom Post
  *
- * @version 2.8.5
+ * @version 2.9.0
  * @author technote-space
  * @since 2.8.0
  * @since 2.8.3
  * @since 2.8.5 Fixed: hide unnecessary columns
+ * @since 2.9.0 Fixed: null, default, bool behaviors
+ * @since 2.9.0 Added: title validation
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -25,7 +27,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  */
 trait Custom_Post {
 
-	use \Technote\Traits\Hook, \Technote\Traits\Presenter;
+	use \Technote\Traits\Singleton, \Technote\Traits\Hook, \Technote\Traits\Presenter;
 
 	/** @var string $_slug */
 	private $_slug;
@@ -403,6 +405,10 @@ trait Custom_Post {
 			$data['edit_link'] = get_edit_post_link( $post->ID );
 		}
 
+		foreach ( $this->get_data_field_settings() as $k => $v ) {
+			$data[ $k ] = $this->sanitize_input( $this->app->utility->array_get( $data, $k ), $v['type'] );
+		}
+
 		return $data;
 	}
 
@@ -535,7 +541,7 @@ trait Custom_Post {
 	 * @param \WP_Post $post
 	 * @param bool $update
 	 *
-	 * @return int
+	 * @return int|false
 	 */
 	public function update_data( $params, $where, $post, $update ) {
 		$table  = $this->get_related_table_name();
@@ -591,13 +597,11 @@ trait Custom_Post {
 	) {
 		$params = [];
 		foreach ( $this->get_data_field_settings() as $k => $v ) {
-			$params[ $k ] = $this->get_post_field( $k, $update ? null : $v['default'] );
-			if ( ! isset( $params[ $k ] ) && ! empty( $v['unset_if_null'] ) ) {
+			$params[ $k ] = $this->get_post_field( $k, $update || ! $v['required'] ? null : $v['default'], null, $v );
+			$params[ $k ] = $this->sanitize_input( $params[ $k ], $v['type'] );
+			if ( ! isset( $params[ $k ] ) && ! $update ) {
 				unset( $params[ $k ] );
 				continue;
-			}
-			if ( isset( $v['type'] ) && isset( $params[ $k ] ) ) {
-				$params[ $k ] = $this->sanitize_input( $params[ $k ], $v['type'] );
 			}
 		}
 
@@ -640,18 +644,62 @@ trait Custom_Post {
 	}
 
 	/**
+	 * @since 2.9.0
+	 *
 	 * @param string $key
+	 * @param array $post_array
+	 *
+	 * @return mixed
+	 */
+	protected function get_validation_var( $key, $post_array ) {
+		return $this->app->utility->array_get( $post_array, $this->get_post_field_name( $key ) );
+	}
+
+	/**
+	 * @since 2.9.0 Changed: consider null setting
+	 * @since 2.9.0 Added: filter value
+	 *
+	 * @param string $key
+	 * @param mixed $default
+	 * @param array|null $post_array
+	 * @param array $setting
+	 * @param bool $filter
+	 *
+	 * @return mixed
+	 */
+	protected function get_post_field( $key, $default = null, $post_array = null, $setting = [], $filter = true ) {
+		if ( isset( $post_array ) ) {
+			$value = $this->app->utility->array_get( $post_array, $this->get_post_field_name( $key ), $default );
+		} else {
+			$value = $this->app->input->post( $this->get_post_field_name( $key ), $default );
+		}
+
+		if ( isset( $setting['null'] ) && empty( $setting['null'] ) && (string) $value === '' ) {
+			$value = null;
+		}
+
+		if ( ! $filter ) {
+			return $value;
+		}
+
+		return $this->filter_post_field( $key, $value, $default, $post_array );
+	}
+
+	/**
+	 * @since 2.9.0
+	 *
+	 * @param string $key
+	 * @param mixed $value
 	 * @param mixed $default
 	 * @param array|null $post_array
 	 *
 	 * @return mixed
 	 */
-	protected function get_post_field( $key, $default = null, $post_array = null ) {
-		if ( isset( $post_array ) ) {
-			return $this->app->utility->array_get( $post_array, $this->get_post_field_name( $key ), $default );
-		}
-
-		return $this->app->input->post( $this->get_post_field_name( $key ), $default );
+	protected function filter_post_field(
+		/** @noinspection PhpUnusedParameterInspection */
+		$key, $value, $default, $post_array
+	) {
+		return $value;
 	}
 
 	/**
@@ -669,14 +717,10 @@ trait Custom_Post {
 		unset( $columns['deleted_at'] );
 		unset( $columns['deleted_by'] );
 		foreach ( $columns as $k => $v ) {
-			$type          = isset( $v['type'] ) ? $v['type'] : 'string';
-			$type          = $this->app->utility->parse_db_type( strtolower( trim( $type ) ) );
-			$columns[ $k ] = [
-				'default'       => isset( $v['default'] ) ? $v['default'] : ( $type === 'string' ? '' : 0 ),
-				'type'          => $type,
-				'unset_if_null' => true,
-				'required'      => ! isset( $v['default'] ) && isset( $v['null'] ) && empty( $v['null'] ),
-			];
+			$type                      = $this->app->utility->parse_db_type( $v['type'], true );
+			$columns[ $k ]['default']  = isset( $v['default'] ) ? $v['default'] : ( 'string' === $type || 'text' === $type ? '' : 0 );
+			$columns[ $k ]['type']     = $type;
+			$columns[ $k ]['required'] = ! isset( $v['default'] ) && isset( $v['null'] ) && empty( $v['null'] );
 		}
 
 		return $this->filter_data_field_settings( $columns );
@@ -693,6 +737,7 @@ trait Custom_Post {
 
 	/**
 	 * @since 2.8.3 Added: default form view
+	 * @since 2.9.0 Improved: not load view if no column
 	 *
 	 * @param \WP_Post $post
 	 */
@@ -704,7 +749,11 @@ trait Custom_Post {
 		$this->add_script_view( 'admin/script/custom_post', $params );
 		$this->add_script_view( 'admin/script/custom_post/' . $this->get_post_type_slug(), $params );
 		if ( ! $this->get_view( 'admin/custom_post/' . $this->get_post_type_slug(), $params, true, false ) ) {
-			$this->get_view( 'admin/custom_post', $params, true, false );
+			$columns = $this->app->utility->array_pluck( $params['columns'], 'is_user_defined' );
+			unset( $columns['post_id'] );
+			if ( ! empty( array_filter( $columns ) ) ) {
+				$this->get_view( 'admin/custom_post', $params, true, false );
+			}
 		}
 		$this->after_output_edit_form( $post, $params );
 	}
@@ -755,6 +804,7 @@ trait Custom_Post {
 	private function get_table_columns() {
 		return $this->app->utility->array_map( $this->app->db->get_columns( $this->get_related_table_name() ), function ( $d ) {
 			$d['form_type'] = $this->get_form_by_type( $d['type'] );
+			$d['required']  = ! isset( $d['default'] ) && isset( $d['null'] ) && empty( $d['null'] );
 
 			return $d;
 		} );
@@ -785,6 +835,8 @@ trait Custom_Post {
 	}
 
 	/**
+	 * @since 2.9.0 Improved: validation
+	 *
 	 * @param array|null $post_array
 	 *
 	 * @return array
@@ -793,16 +845,28 @@ trait Custom_Post {
 		! isset( $post_array ) and $post_array = $this->app->input->post();
 		$errors = [];
 		foreach ( $this->get_data_field_settings() as $k => $v ) {
-			$param = $this->get_post_field( $k, null, $post_array );
-			if ( $v['required'] ) {
-				$param = $this->sanitize_input( $param, $v['type'] );
-				if ( (string) $param === '' ) {
-					$errors[ $k ][] = $this->app->translate( 'Value is required.' );
-				}
+			$param    = $this->get_post_field( $k, null, $post_array, $v );
+			$param    = $this->sanitize_input( $param, $v['type'] );
+			$validate = $this->validate( $param, $v );
+			if ( $validate instanceof \WP_Error ) {
+				$errors[ $k ][] = $validate->get_error_message();
+			}
+		}
+
+		if ( $this->validate_post_title() && in_array( 'title', $this->get_post_type_supports() ) ) {
+			if ( ! isset( $post_array['post_title'] ) || '' === trim( $post_array['post_title'] ) ) {
+				$errors['post_title'][] = $this->app->translate( 'Value is required.' );
 			}
 		}
 
 		return $this->filter_validate_input( $errors, $post_array );
+	}
+
+	/**
+	 * @return bool
+	 */
+	protected function validate_post_title() {
+		return true;
 	}
 
 	/**
