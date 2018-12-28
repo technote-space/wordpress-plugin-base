@@ -67,6 +67,9 @@ return [
 	// capture shutdown error
 	'capture_shutdown_error'    => defined( 'WP_DEBUG' ) && WP_DEBUG,
 
+	// target shutdown error
+	'target_shutdown_error'     => E_ALL & ~E_NOTICE & ~E_WARNING,
+
 	// log level (for developer)
 	'log_level'                 => [
 		'error' => [

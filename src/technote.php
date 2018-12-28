@@ -431,7 +431,10 @@ class Technote {
 		if ( $error === null ) {
 			return;
 		}
-		$this->log( $error['message'], $error );
+
+		if ( $error['type'] & $this->get_config( 'config', 'target_shutdown_error' ) ) {
+			$this->log( $error['message'], $error, 'error' );
+		}
 	}
 
 	/**
