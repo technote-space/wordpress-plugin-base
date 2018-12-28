@@ -231,7 +231,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 				$check = false;
 				break;
 			}
-			$type = $this->app->utility->array_get( $column, 'type' );
+			$type = trim( $this->app->utility->array_get( $column, 'type' ) );
 			if ( empty( $type ) ) {
 				$check = false;
 				break;

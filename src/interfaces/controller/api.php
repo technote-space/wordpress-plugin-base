@@ -21,7 +21,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * Interface Api
  * @package Technote\Interfaces\Controller
  */
-interface Api extends \Technote\Interfaces\Controller {
+interface Api extends \Technote\Interfaces\Controller, \Technote\Interfaces\Helper\Validate {
 
 	/**
 	 * @return string

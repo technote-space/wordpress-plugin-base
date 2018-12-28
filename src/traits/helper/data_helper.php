@@ -24,77 +24,6 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  */
 trait Data_Helper {
 
-	use \Technote\Traits\Singleton;
-
-	/**
-	 * @param string $key
-	 *
-	 * @return string
-	 */
-	protected function filter_key( $key ) {
-		return $key;
-	}
-
-	/**
-	 * @param string $key
-	 * @param array $post_array
-	 *
-	 * @return bool
-	 */
-	protected function validate_kana( $key, $post_array ) {
-		$key = $this->filter_key( $key );
-
-		return empty( $post_array[ $key ] ) || preg_match( '#^[ァ-ヴ][ァ-ヴー・]*$#u', $post_array[ $key ] ) > 0;
-	}
-
-	/**
-	 * @param string $key
-	 * @param array $post_array
-	 *
-	 * @return bool
-	 */
-	protected function validate_date( $key, $post_array ) {
-		$key = $this->filter_key( $key );
-
-		return ! empty( $post_array[ $key ] ) && preg_match( '#^\d{4}[/-]\d{1,2}[/-]\d{1,2}$#', $post_array[ $key ] ) > 0;
-	}
-
-	/**
-	 * @param string $key
-	 * @param array $post_array
-	 *
-	 * @return bool
-	 */
-	protected function validate_time( $key, $post_array ) {
-		$key = $this->filter_key( $key );
-
-		return ! empty( $post_array[ $key ] ) && preg_match( '#^\d{1,2}:\d{1,2}$#', $post_array[ $key ] ) > 0;
-	}
-
-	/**
-	 * @param string $key
-	 * @param array $post_array
-	 *
-	 * @return bool
-	 */
-	protected function validate_email( $key, $post_array ) {
-		$key = $this->filter_key( $key );
-
-		return ! empty( $post_array[ $key ] ) && is_email( $post_array[ $key ] );
-	}
-
-	/**
-	 * @param string $key
-	 * @param array $post_array
-	 *
-	 * @return bool
-	 */
-	protected function validate_phone( $key, $post_array ) {
-		$key = $this->filter_key( $key );
-
-		return ! empty( $post_array[ $key ] ) && preg_match( '#^\d{2,3}-?\d{3,4}-?\d{4,5}$#', $post_array[ $key ] ) > 0;
-	}
-
 	/**
 	 * @param array $data
 	 * @param string $key
@@ -121,7 +50,7 @@ trait Data_Helper {
 	 * @return mixed
 	 */
 	protected function sanitize_input( $param, $type ) {
-		switch ( strtolower( trim( $type ) ) ) {
+		switch ( $type ) {
 			case 'int':
 				if ( ! is_int( $param ) && ! ctype_digit( ltrim( $param, '-' ) ) ) {
 					return null;
@@ -137,7 +66,6 @@ trait Data_Helper {
 				$param -= 0;
 				break;
 			case 'bool':
-			case 'boolean':
 				if ( is_string( $param ) ) {
 					$param = strtolower( trim( $param ) );
 					if ( $param === 'true' ) {

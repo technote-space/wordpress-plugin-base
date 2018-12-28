@@ -25,7 +25,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  */
 trait Custom_Post {
 
-	use \Technote\Traits\Hook, \Technote\Traits\Presenter;
+	use \Technote\Traits\Singleton, \Technote\Traits\Hook, \Technote\Traits\Presenter;
 
 	/** @var string $_slug */
 	private $_slug;
@@ -637,6 +637,16 @@ trait Custom_Post {
 	 */
 	public function get_post_field_name( $key ) {
 		return $this->get_post_field_name_prefix() . $key;
+	}
+
+	/**
+	 * @param string $key
+	 * @param array $post_array
+	 *
+	 * @return mixed
+	 */
+	protected function get_validation_var( $key, $post_array ) {
+		return $this->app->utility->array_get( $post_array, $this->get_post_field_name( $key ) );
 	}
 
 	/**
