@@ -65,6 +65,9 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 			'save_post'                    => [
 				'save_post' => [],
 			],
+			'wp_trash_post'                => [
+				'wp_trash_post' => [],
+			],
 			'delete_post'                  => [
 				'delete_post' => [],
 			],
@@ -271,6 +274,7 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 
 	/**
 	 * @since 2.9.0 Improved: handle db error
+	 *
 	 * @param int $post_id
 	 * @param \WP_Post $post
 	 * @param bool $update
@@ -316,6 +320,21 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 						],
 					];
 				}
+			}
+		}
+	}
+
+	/**
+	 * @param int $post_id
+	 */
+	/** @noinspection PhpUnusedPrivateMethodInspection */
+	private function wp_trash_post( $post_id ) {
+		$post      = get_post( $post_id );
+		$post_type = $post->post_type;
+		if ( $this->is_valid_custom_post_type( $post_type ) ) {
+			$custom_post = $this->get_custom_post_type( $post_type );
+			if ( ! empty( $custom_post ) ) {
+				$custom_post->trash_post( $post_id );
 			}
 		}
 	}
