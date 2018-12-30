@@ -2,9 +2,10 @@
 /**
  * Technote Views Admin Include Custom Post Checkbox
  *
- * @version 2.8.3
+ * @version 2.9.1
  * @author technote-space
  * @since 2.8.3
+ * @since 2.9.1 Improved: enable to overwrite args
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -31,4 +32,4 @@ if ( ! empty( $val ) ) {
 	'value'      => 1,
 	'label'      => $instance->app->utility->array_get( $column, 'label', $instance->app->utility->array_get( $column, 'comment', $column['name'] ) ),
 	'attributes' => $attr,
-] ); ?>
+], $instance->app->utility->array_get( $column, 'args', [] ) ); ?>
