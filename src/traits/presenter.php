@@ -139,7 +139,7 @@ trait Presenter {
 	 * @return string
 	 */
 	public function form( $name, $args = [], $overwrite = [], $echo = true, $error = true ) {
-		return $this->get_view( 'include/form/' . trim( $name, '/' . DS ), array_merge( $args, $overwrite ), $echo, $error );
+		return $this->get_view( 'include/form/' . trim( $name, '/' . DS ), array_replace_recursive( $args, $overwrite ), $echo, $error );
 	}
 
 	/**
@@ -314,7 +314,7 @@ trait Presenter {
 			$overwrite['target'] = '_blank';
 		}
 
-		return $this->get_view( 'include/url', array_merge( $args, $overwrite ), $echo, true, true );
+		return $this->get_view( 'include/url', array_replace_recursive( $args, $overwrite ), $echo, true, true );
 	}
 
 	/**
