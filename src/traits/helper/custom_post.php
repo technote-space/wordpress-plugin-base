@@ -609,6 +609,13 @@ trait Custom_Post {
 	}
 
 	/**
+	 * @param int $post_id
+	 */
+	public function trash_post( $post_id ) {
+
+	}
+
+	/**
 	 * @param array $where
 	 *
 	 * @return bool|false|int

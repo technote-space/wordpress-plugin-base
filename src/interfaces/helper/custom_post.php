@@ -170,6 +170,11 @@ interface Custom_Post extends \Technote\Interfaces\Singleton, \Technote\Interfac
 	public function get_update_data_params( $post, $update );
 
 	/**
+	 * @param int $post_id
+	 */
+	public function trash_post( $post_id );
+
+	/**
 	 * @param array $where
 	 *
 	 * @return bool|false|int
