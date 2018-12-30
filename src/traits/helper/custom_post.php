@@ -609,15 +609,17 @@ trait Custom_Post {
 	}
 
 	/**
-	 * @param array $where
+	 * @param int $post_id
 	 *
 	 * @return bool|false|int
 	 */
-	public function delete_data( $where ) {
+	public function delete_data( $post_id ) {
 		$table = $this->get_related_table_name();
-		$this->delete_misc( $where['post_id'] );
+		$this->delete_misc( $post_id );
 
-		return $this->app->db->delete( $table, $where );
+		return $this->app->db->delete( $table, [
+			'post_id' => $post_id,
+		] );
 	}
 
 	/**
