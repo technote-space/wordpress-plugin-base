@@ -2,7 +2,7 @@
 /**
  * Technote Traits Helper Custom Post
  *
- * @version 2.9.3
+ * @version 2.9.6
  * @author technote-space
  * @since 2.8.0
  * @since 2.8.3
@@ -12,6 +12,7 @@
  * @since 2.9.2 Added: trash post
  * @since 2.9.2 Changed: delete data arg
  * @since 2.9.3 Added: insert, update methods
+ * @since 2.9.6 Improved: behavior of column which has default and nullable
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -667,6 +668,8 @@ trait Custom_Post {
 	}
 
 	/**
+	 * @since 2.9.6 Improved: behavior of column which has default and nullable
+	 *
 	 * @param \WP_Post $post
 	 * @param bool $update
 	 *
@@ -680,7 +683,7 @@ trait Custom_Post {
 		foreach ( $this->get_data_field_settings() as $k => $v ) {
 			$params[ $k ] = $this->get_post_field( $k, $update || ! $v['required'] ? null : $v['default'], null, $v );
 			$params[ $k ] = $this->sanitize_input( $params[ $k ], $v['type'] );
-			if ( ! isset( $params[ $k ] ) && ! $update ) {
+			if ( ! isset( $params[ $k ] ) && ! $update && $v['unset_if_null'] ) {
 				unset( $params[ $k ] );
 				continue;
 			}
@@ -795,6 +798,7 @@ trait Custom_Post {
 	}
 
 	/**
+	 * @since 2.9.6 Added: nullable, unset_if_null
 	 * @return array
 	 */
 	public function get_data_field_settings() {
@@ -808,11 +812,17 @@ trait Custom_Post {
 		unset( $columns['updated_by'] );
 		unset( $columns['deleted_at'] );
 		unset( $columns['deleted_by'] );
+		$prior_default = $this->app->get_config( 'config', 'prior_default' );
 		foreach ( $columns as $k => $v ) {
-			$type                      = $this->app->utility->parse_db_type( $v['type'], true );
-			$columns[ $k ]['default']  = isset( $v['default'] ) ? $v['default'] : ( 'string' === $type || 'text' === $type ? '' : 0 );
-			$columns[ $k ]['type']     = $type;
-			$columns[ $k ]['required'] = ! isset( $v['default'] ) && isset( $v['null'] ) && empty( $v['null'] );
+			$type                           = $this->app->utility->parse_db_type( $v['type'], true );
+			$columns[ $k ]['default']       = isset( $v['default'] ) ? $v['default'] : ( 'string' === $type || 'text' === $type ? '' : 0 );
+			$columns[ $k ]['type']          = $type;
+			$columns[ $k ]['nullable']      = ! isset( $v['null'] ) || ! empty( $v['null'] );
+			$columns[ $k ]['required']      = ! isset( $v['default'] ) && ! $columns[ $k ]['nullable'];
+			$columns[ $k ]['unset_if_null'] = ! $columns[ $k ]['nullable'];
+			if ( $columns[ $k ]['nullable'] && isset( $v['default'] ) and ( $prior_default || ! empty( $v['prior_default'] ) ) ) {
+				$columns[ $k ]['unset_if_null'] = true;
+			}
 		}
 
 		return $this->filter_data_field_settings( $columns );
