@@ -2,7 +2,7 @@
 /**
  * Technote Traits Helper Custom Post
  *
- * @version 2.9.2
+ * @version 2.9.3
  * @author technote-space
  * @since 2.8.0
  * @since 2.8.3
@@ -11,6 +11,7 @@
  * @since 2.9.0 Added: title validation
  * @since 2.9.2 Added: trash post
  * @since 2.9.2 Changed: delete data arg
+ * @since 2.9.3 Added: insert, update methods
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -49,6 +50,8 @@ trait Custom_Post {
 	}
 
 	/**
+	 * @since 2.9.3
+	 *
 	 * @param array $data
 	 * @param bool $convert_name
 	 *
@@ -79,6 +82,8 @@ trait Custom_Post {
 	}
 
 	/**
+	 * @since 2.9.3
+	 *
 	 * @param array $data
 	 * @param array $where
 	 * @param bool $convert_name
