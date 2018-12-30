@@ -2,7 +2,7 @@
 /**
  * Technote Traits Helper Custom Post
  *
- * @version 2.9.2
+ * @version 2.9.3
  * @author technote-space
  * @since 2.8.0
  * @since 2.8.3
@@ -11,6 +11,7 @@
  * @since 2.9.0 Added: title validation
  * @since 2.9.2 Added: trash post
  * @since 2.9.2 Changed: delete data arg
+ * @since 2.9.3 Added: insert, update methods
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -46,6 +47,84 @@ trait Custom_Post {
 		$args[0] = $this->get_post_type_slug() . '-' . $key;
 
 		return $this->apply_filters( ...$args );
+	}
+
+	/**
+	 * @since 2.9.3
+	 *
+	 * @param array $data
+	 * @param bool $convert_name
+	 *
+	 * @return array|bool|int
+	 */
+	public function insert( $data, $convert_name = true ) {
+		$_data                 = [];
+		$_data['post_type']    = $this->get_post_type();
+		$_data['post_title']   = $this->app->utility->array_get( $data, 'post_title', '' );
+		$_data['post_content'] = $this->app->utility->array_get( $data, 'post_content', '' );
+		$_data['post_status']  = $this->app->utility->array_get( $data, 'post_status', 'publish' );
+		unset( $data['post_type'] );
+		unset( $data['post_title'] );
+		unset( $data['post_content'] );
+		unset( $data['post_status'] );
+
+		foreach ( $this->get_data_field_settings() as $k => $v ) {
+			$name = $convert_name ? $this->get_post_field_name( $k ) : $k;
+			unset( $_POST[ $name ] );
+		}
+		foreach ( $data as $k => $v ) {
+			$name           = $convert_name ? $this->get_post_field_name( $k ) : $k;
+			$_data[ $name ] = $v;
+			$_POST[ $name ] = $v;
+		}
+
+		return wp_insert_post( $_data );
+	}
+
+	/**
+	 * @since 2.9.3
+	 *
+	 * @param array $data
+	 * @param array $where
+	 * @param bool $convert_name
+	 *
+	 * @return array|bool|int
+	 */
+	public function update( $data, $where, $convert_name = true ) {
+		if ( empty( $where['id'] ) && empty( $where['post_id'] ) ) {
+			return false;
+		}
+		if ( ! empty( $where['id'] ) ) {
+			$d = $this->get_data( $where['id'] );
+		} else {
+			$d = $this->get_related_data( $where['post_id'] );
+		}
+		if ( empty( $d ) ) {
+			return false;
+		}
+
+		$_data              = [];
+		$_data['ID']        = $d['post_id'];
+		$_data['post_type'] = $this->get_post_type();
+		! empty( $data['post_title'] ) and $_data['post_title'] = $data['post_title'];
+		! empty( $data['post_content'] ) and $_data['post_content'] = $data['post_content'];
+		! empty( $data['post_status'] ) and $_data['post_status'] = $data['post_status'];
+		unset( $data['post_type'] );
+		unset( $data['post_title'] );
+		unset( $data['post_content'] );
+		unset( $data['post_status'] );
+
+		foreach ( $this->get_data_field_settings() as $k => $v ) {
+			$name = $convert_name ? $this->get_post_field_name( $k ) : $k;
+			unset( $_POST[ $name ] );
+		}
+		foreach ( $data as $k => $v ) {
+			$name           = $convert_name ? $this->get_post_field_name( $k ) : $k;
+			$_data[ $name ] = $v;
+			$_POST[ $name ] = $v;
+		}
+
+		return wp_update_post( $_data );
 	}
 
 	/**
