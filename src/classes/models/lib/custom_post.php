@@ -620,7 +620,7 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 				'draft',
 				'pending',
 				'private',
-			] ) && $this->is_valid_custom_post_type( $post_type );
+			] ) && $this->is_valid_custom_post_type( $post_type ) && 'untrash' !== $this->app->input->get( 'action' );
 	}
 
 	/**
