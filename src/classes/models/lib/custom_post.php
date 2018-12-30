@@ -2,13 +2,14 @@
 /**
  * Technote Classes Models Lib Custom Post
  *
- * @version 2.9.2
+ * @version 2.9.4
  * @author technote-space
  * @since 2.8.0
  * @since 2.8.1 Added: filter settings
  * @since 2.9.0 Improved: display db error
  * @since 2.9.2 Added: trash post
  * @since 2.9.2 Improved: limit delete data target
+ * @since 2.9.4 Fixed: exclude untrash
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -607,6 +608,8 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 	}
 
 	/**
+	 * @since 2.9.4 Fixed: exclude untrash
+	 *
 	 * @param string $post_status
 	 * @param string $post_type
 	 *
