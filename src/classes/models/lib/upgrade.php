@@ -2,7 +2,7 @@
 /**
  * Technote Classes Models Lib Upgrade
  *
- * @version 2.9.0
+ * @version 2.9.1
  * @author technote-space
  * @since 2.4.0
  * @since 2.4.1 Added: show_plugin_update_notices method
@@ -12,6 +12,7 @@
  * @since 2.6.0 Fixed: debug code
  * @since 2.7.0 Added: error handling
  * @since 2.9.0 Improved: regexp
+ * @since 2.9.1 Fixed: compare version
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
