@@ -344,11 +344,13 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 	 */
 	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function delete_post( $post_id ) {
-		foreach ( $this->get_custom_posts() as $custom_post ) {
-			/** @var \Technote\Interfaces\Helper\Custom_Post $custom_post */
-			$custom_post->delete_data( [
-				'post_id' => $post_id,
-			] );
+		$post      = get_post( $post_id );
+		$post_type = $post->post_type;
+		if ( $this->is_valid_custom_post_type( $post_type ) ) {
+			$custom_post = $this->get_custom_post_type( $post_type );
+			if ( ! empty( $custom_post ) ) {
+				$custom_post->delete_data( $post_id );
+			}
 		}
 	}
 

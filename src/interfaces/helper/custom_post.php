@@ -175,11 +175,11 @@ interface Custom_Post extends \Technote\Interfaces\Singleton, \Technote\Interfac
 	public function trash_post( $post_id );
 
 	/**
-	 * @param array $where
+	 * @param int $post_id
 	 *
 	 * @return bool|false|int
 	 */
-	public function delete_data( $where );
+	public function delete_data( $post_id );
 
 	/**
 	 * @return string
