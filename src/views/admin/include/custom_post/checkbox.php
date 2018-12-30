@@ -31,4 +31,4 @@ if ( ! empty( $val ) ) {
 	'value'      => 1,
 	'label'      => $instance->app->utility->array_get( $column, 'label', $instance->app->utility->array_get( $column, 'comment', $column['name'] ) ),
 	'attributes' => $attr,
-] ); ?>
+], $instance->app->utility->array_get( $column, 'args', [] ) ); ?>

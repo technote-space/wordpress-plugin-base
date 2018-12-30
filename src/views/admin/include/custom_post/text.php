@@ -29,4 +29,4 @@ $attr['placeholder'] = $instance->app->utility->array_get( $column, 'default', '
 	'id'         => $prefix . $name,
 	'value'      => $instance->old( $prefix . $name, $data, $name ),
 	'attributes' => $attr,
-] ); ?>
+], $instance->app->utility->array_get( $column, 'args', [] ) ); ?>
