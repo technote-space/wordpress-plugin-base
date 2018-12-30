@@ -690,6 +690,8 @@ trait Custom_Post {
 	}
 
 	/**
+	 * @since 2.9.2
+	 *
 	 * @param int $post_id
 	 */
 	public function trash_post( $post_id ) {

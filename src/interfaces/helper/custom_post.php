@@ -2,12 +2,13 @@
 /**
  * Technote Interfaces Helper Custom Post
  *
- * @version 2.9.2
+ * @version 2.9.3
  * @author technote-space
  * @since 2.8.0
  * @since 2.9.0 Changed: implements Singleton, Validate
  * @since 2.9.2 Added: trash post
  * @since 2.9.2 Changed: delete data arg
+ * @since 2.9.3 Added: insert, update methods
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -24,6 +25,27 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * @package Technote\Interfaces\Helper
  */
 interface Custom_Post extends \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \Technote\Interfaces\Presenter, Data_Helper, Validate {
+
+	/**
+	 * @since 2.9.3
+	 *
+	 * @param array $data
+	 * @param bool $convert_name
+	 *
+	 * @return array|bool|int
+	 */
+	public function insert( $data, $convert_name = true );
+
+	/**
+	 * @since 2.9.3
+	 *
+	 * @param array $data
+	 * @param array $where
+	 * @param bool $convert_name
+	 *
+	 * @return array|bool|int
+	 */
+	public function update( $data, $where, $convert_name = true );
 
 	/**
 	 * @return string
@@ -172,6 +194,8 @@ interface Custom_Post extends \Technote\Interfaces\Singleton, \Technote\Interfac
 	public function get_update_data_params( $post, $update );
 
 	/**
+	 * @since 2.9.2
+	 *
 	 * @param int $post_id
 	 */
 	public function trash_post( $post_id );
