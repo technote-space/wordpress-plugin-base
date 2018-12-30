@@ -610,6 +610,13 @@ trait Custom_Post {
 
 	/**
 	 * @param int $post_id
+	 */
+	public function trash_post( $post_id ) {
+
+	}
+
+	/**
+	 * @param int $post_id
 	 *
 	 * @return bool|false|int
 	 */
