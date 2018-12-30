@@ -2,11 +2,13 @@
 /**
  * Technote Classes Models Lib Custom Post
  *
- * @version 2.9.0
+ * @version 2.9.2
  * @author technote-space
  * @since 2.8.0
  * @since 2.8.1 Added: filter settings
  * @since 2.9.0 Improved: display db error
+ * @since 2.9.2 Added: trash post
+ * @since 2.9.2 Improved: limit delete data target
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -64,6 +66,9 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 			],
 			'save_post'                    => [
 				'save_post' => [],
+			],
+			'wp_trash_post'                => [
+				'wp_trash_post' => [],
 			],
 			'delete_post'                  => [
 				'delete_post' => [],
@@ -271,6 +276,7 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 
 	/**
 	 * @since 2.9.0 Improved: handle db error
+	 *
 	 * @param int $post_id
 	 * @param \WP_Post $post
 	 * @param bool $update
@@ -324,12 +330,29 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 	 * @param int $post_id
 	 */
 	/** @noinspection PhpUnusedPrivateMethodInspection */
+	private function wp_trash_post( $post_id ) {
+		$post      = get_post( $post_id );
+		$post_type = $post->post_type;
+		if ( $this->is_valid_custom_post_type( $post_type ) ) {
+			$custom_post = $this->get_custom_post_type( $post_type );
+			if ( ! empty( $custom_post ) ) {
+				$custom_post->trash_post( $post_id );
+			}
+		}
+	}
+
+	/**
+	 * @param int $post_id
+	 */
+	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function delete_post( $post_id ) {
-		foreach ( $this->get_custom_posts() as $custom_post ) {
-			/** @var \Technote\Interfaces\Helper\Custom_Post $custom_post */
-			$custom_post->delete_data( [
-				'post_id' => $post_id,
-			] );
+		$post      = get_post( $post_id );
+		$post_type = $post->post_type;
+		if ( $this->is_valid_custom_post_type( $post_type ) ) {
+			$custom_post = $this->get_custom_post_type( $post_type );
+			if ( ! empty( $custom_post ) ) {
+				$custom_post->delete_data( $post_id );
+			}
 		}
 	}
 

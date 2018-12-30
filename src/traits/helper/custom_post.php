@@ -2,13 +2,15 @@
 /**
  * Technote Traits Helper Custom Post
  *
- * @version 2.9.0
+ * @version 2.9.2
  * @author technote-space
  * @since 2.8.0
  * @since 2.8.3
  * @since 2.8.5 Fixed: hide unnecessary columns
  * @since 2.9.0 Fixed: null, default, bool behaviors
  * @since 2.9.0 Added: title validation
+ * @since 2.9.2 Added: trash post
+ * @since 2.9.2 Changed: delete data arg
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -609,15 +611,24 @@ trait Custom_Post {
 	}
 
 	/**
-	 * @param array $where
+	 * @param int $post_id
+	 */
+	public function trash_post( $post_id ) {
+
+	}
+
+	/**
+	 * @param int $post_id
 	 *
 	 * @return bool|false|int
 	 */
-	public function delete_data( $where ) {
+	public function delete_data( $post_id ) {
 		$table = $this->get_related_table_name();
-		$this->delete_misc( $where['post_id'] );
+		$this->delete_misc( $post_id );
 
-		return $this->app->db->delete( $table, $where );
+		return $this->app->db->delete( $table, [
+			'post_id' => $post_id,
+		] );
 	}
 
 	/**
