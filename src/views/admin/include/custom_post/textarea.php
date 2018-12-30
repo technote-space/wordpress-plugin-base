@@ -26,4 +26,4 @@ $attr['rows'] = $instance->app->utility->array_get( $column, 'rows', 5 );
 	'id'         => $prefix . $name,
 	'value'      => $instance->old( $prefix . $name, $data, $name, $instance->app->utility->array_get( $column, 'default', '' ) ),
 	'attributes' => $attr,
-] ); ?>
+], $instance->app->utility->array_get( $column, 'args', [] ) ); ?>
