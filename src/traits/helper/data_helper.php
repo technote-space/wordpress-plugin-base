@@ -51,6 +51,9 @@ trait Data_Helper {
 	 * @return mixed
 	 */
 	protected function sanitize_input( $param, $type ) {
+		if ( is_null( $param ) ) {
+			return $param;
+		}
 		switch ( $type ) {
 			case 'int':
 				if ( ! is_int( $param ) && ! ctype_digit( ltrim( $param, '-' ) ) ) {

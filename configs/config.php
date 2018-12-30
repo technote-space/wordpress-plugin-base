@@ -52,6 +52,9 @@ return [
 	// default delete rule
 	'default_delete_rule'       => 'physical',
 
+	// prior default (to nullable)
+	'prior_default'             => false,
+
 	// cache filter result
 	'cache_filter_result'       => true,
 
