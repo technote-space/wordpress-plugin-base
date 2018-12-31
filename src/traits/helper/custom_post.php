@@ -39,6 +39,9 @@ trait Custom_Post {
 	/** @var array $_related_data */
 	private $_related_data = [];
 
+	/** @var \WP_Post_Type $_post_type_obj */
+	private $_post_type_obj;
+
 	/**
 	 * @return mixed
 	 */
@@ -48,6 +51,34 @@ trait Custom_Post {
 		$args[0] = $this->get_post_type_slug() . '-' . $key;
 
 		return $this->apply_filters( ...$args );
+	}
+
+	/**
+	 * register post type
+	 * @since 1.4.0
+	 */
+	public function register_post_type() {
+		$post_type            = $this->get_post_type();
+		$this->_post_type_obj = register_post_type( $post_type, $this->get_post_type_args() );
+		if ( is_wp_error( $this->_post_type_obj ) ) {
+			$this->app->log( $this->_post_type_obj );
+
+			return;
+		}
+		add_filter( "views_edit-{$post_type}", function ( $views ) {
+			unset( $views['mine'] );
+			unset( $views['publish'] );
+
+			return $views;
+		} );
+		add_filter( "bulk_actions-edit-{$post_type}", function ( $actions ) {
+			unset( $actions['edit'] );
+
+			return $actions;
+		} );
+		add_filter( "manage_edit-{$post_type}_sortable_columns", function ( $sortable_columns ) {
+			return $this->manage_posts_columns( $sortable_columns, true );
+		} );
 	}
 
 	/**
@@ -149,6 +180,13 @@ trait Custom_Post {
 	 */
 	public function get_post_type() {
 		return $this->get_slug( 'post_type-' . $this->get_post_type_slug(), '-' . $this->get_post_type_slug() );
+	}
+
+	/**
+	 * @return \WP_Post_Type
+	 */
+	public function get_post_type_object() {
+		return $this->_post_type_obj;
 	}
 
 	/**

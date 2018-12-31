@@ -107,22 +107,7 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function register_post_types() {
 		foreach ( $this->get_custom_posts() as $post ) {
-			$post_type = $post->get_post_type();
-			register_post_type( $post_type, $post->get_post_type_args() );
-			add_filter( "views_edit-{$post_type}", function ( $views ) {
-				unset( $views['mine'] );
-				unset( $views['publish'] );
-
-				return $views;
-			} );
-			add_filter( "bulk_actions-edit-{$post_type}", function ( $actions ) {
-				unset( $actions['edit'] );
-
-				return $actions;
-			} );
-			add_filter( "manage_edit-{$post_type}_sortable_columns", function ( $sortable_columns ) use ( $post ) {
-				return $post->manage_posts_columns( $sortable_columns, true );
-			} );
+			$post->register_post_type();
 		}
 	}
 

@@ -63,6 +63,11 @@ interface Custom_Post extends \Technote\Interfaces\Singleton, \Technote\Interfac
 	public function get_post_type();
 
 	/**
+	 * @return \WP_Post_Type
+	 */
+	public function get_post_type_object();
+
+	/**
 	 * @param null|array $capabilities
 	 *
 	 * @return array
