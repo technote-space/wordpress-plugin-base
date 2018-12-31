@@ -121,7 +121,7 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 	private function manage_posts_columns( $columns, $post_type ) {
 		if ( $this->is_valid_custom_post_type( $post_type ) ) {
 			$custom_post = $this->get_custom_post_type( $post_type );
-			if ( ! $this->app->user_can( 'edit_others_' . $custom_post->get_post_type_plural_name() ) ) {
+			if ( ! $this->app->user_can( $custom_post->get_post_type_object()->cap->edit_others_posts ) ) {
 				unset( $columns['cb'] );
 			}
 			$custom_post = $this->get_custom_post_type( $post_type );
@@ -158,12 +158,12 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function delete_edit_links( $actions, $post ) {
 		if ( $this->is_valid_custom_post_type( $post->post_type ) ) {
-			$post_type = get_post_type_object( $post->post_type );
+			$custom_post = $this->get_custom_post_type( $post->post_type );
 			unset( $actions['inline hide-if-no-js'] );
 			unset( $actions['edit'] );
 			unset( $actions['clone'] );
 			unset( $actions['edit_as_new_draft'] );
-			if ( ! current_user_can( $post_type->cap->delete_posts ) ) {
+			if ( ! $this->app->user_can( $custom_post->get_post_type_object()->cap->delete_posts ) ) {
 				unset( $actions['trash'] );
 			}
 		}
