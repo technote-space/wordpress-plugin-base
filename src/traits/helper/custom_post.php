@@ -2,7 +2,7 @@
 /**
  * Technote Traits Helper Custom Post
  *
- * @version 2.9.6
+ * @version 2.9.7
  * @author technote-space
  * @since 2.8.0
  * @since 2.8.3
@@ -13,6 +13,8 @@
  * @since 2.9.2 Changed: delete data arg
  * @since 2.9.3 Added: insert, update methods
  * @since 2.9.6 Improved: behavior of column which has default and nullable
+ * @since 2.9.7 Changed: move register post type from model
+ * @since 2.9.7 Fixed: capability check
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -39,7 +41,10 @@ trait Custom_Post {
 	/** @var array $_related_data */
 	private $_related_data = [];
 
-	/** @var \WP_Post_Type $_post_type_obj */
+	/**
+	 * @since 2.9.7
+	 * @var \WP_Post_Type $_post_type_obj
+	 */
 	private $_post_type_obj;
 
 	/**
@@ -55,7 +60,7 @@ trait Custom_Post {
 
 	/**
 	 * register post type
-	 * @since 1.4.0
+	 * @since 2.9.7 Changed: move register post type from model
 	 */
 	public function register_post_type() {
 		$post_type            = $this->get_post_type();
@@ -183,6 +188,7 @@ trait Custom_Post {
 	}
 
 	/**
+	 * @since 2.9.7
 	 * @return \WP_Post_Type
 	 */
 	public function get_post_type_object() {
