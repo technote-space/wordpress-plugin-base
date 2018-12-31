@@ -2,10 +2,11 @@
 /**
  * Technote Classes Models Lib Social
  *
- * @version 2.8.1
+ * @version 2.9.0
  * @author technote-space
  * @since 2.8.0
  * @since 2.8.1 Added: filter settings
+ * @since 2.9.0 Improved: regexp
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -150,7 +151,7 @@ class Social implements \Technote\Interfaces\Loader {
 	 * @param array $params
 	 */
 	private function safe_redirect( $params ) {
-		if ( ! empty( $params['redirect'] ) && preg_match( '#^/[^/]+#', $params['redirect'] ) ) {
+		if ( ! empty( $params['redirect'] ) && preg_match( '#\A/[^/]+#', $params['redirect'] ) ) {
 			wp_safe_redirect( $params['redirect'] );
 			exit;
 		}
@@ -178,7 +179,7 @@ class Social implements \Technote\Interfaces\Loader {
 	 * @return bool
 	 */
 	public function is_pseudo_email( $email ) {
-		return preg_match( '#' . preg_quote( '@' . $this->get_pseudo_email_domain() ) . '$#', trim( $email ) ) > 0;
+		return preg_match( '#' . preg_quote( '@' . $this->get_pseudo_email_domain() ) . '\z#', trim( $email ) ) > 0;
 	}
 
 	/**

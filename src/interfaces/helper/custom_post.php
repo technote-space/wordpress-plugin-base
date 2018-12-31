@@ -2,9 +2,14 @@
 /**
  * Technote Interfaces Helper Custom Post
  *
- * @version 2.8.0
+ * @version 2.9.7
  * @author technote-space
  * @since 2.8.0
+ * @since 2.9.0 Changed: implements Singleton, Validate
+ * @since 2.9.2 Added: trash post
+ * @since 2.9.2 Changed: delete data arg
+ * @since 2.9.3 Added: insert, update methods
+ * @since 2.9.7 Added: get_post_type_object method
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -20,7 +25,28 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * Interface Custom_Post
  * @package Technote\Interfaces\Helper
  */
-interface Custom_Post extends \Technote\Interfaces\Hook, \Technote\Interfaces\Presenter, Data_Helper {
+interface Custom_Post extends \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \Technote\Interfaces\Presenter, Data_Helper, Validate {
+
+	/**
+	 * @since 2.9.3
+	 *
+	 * @param array $data
+	 * @param bool $convert_name
+	 *
+	 * @return array|bool|int
+	 */
+	public function insert( $data, $convert_name = true );
+
+	/**
+	 * @since 2.9.3
+	 *
+	 * @param array $data
+	 * @param array $where
+	 * @param bool $convert_name
+	 *
+	 * @return array|bool|int
+	 */
+	public function update( $data, $where, $convert_name = true );
 
 	/**
 	 * @return string
@@ -36,6 +62,12 @@ interface Custom_Post extends \Technote\Interfaces\Hook, \Technote\Interfaces\Pr
 	 * @return string
 	 */
 	public function get_post_type();
+
+	/**
+	 * @since 2.9.7
+	 * @return \WP_Post_Type
+	 */
+	public function get_post_type_object();
 
 	/**
 	 * @param null|array $capabilities
@@ -169,11 +201,18 @@ interface Custom_Post extends \Technote\Interfaces\Hook, \Technote\Interfaces\Pr
 	public function get_update_data_params( $post, $update );
 
 	/**
-	 * @param array $where
+	 * @since 2.9.2
+	 *
+	 * @param int $post_id
+	 */
+	public function trash_post( $post_id );
+
+	/**
+	 * @param int $post_id
 	 *
 	 * @return bool|false|int
 	 */
-	public function delete_data( $where );
+	public function delete_data( $post_id );
 
 	/**
 	 * @return string

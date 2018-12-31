@@ -2,10 +2,16 @@
 /**
  * Technote Classes Models Lib Custom Post
  *
- * @version 2.8.1
+ * @version 2.9.7
  * @author technote-space
  * @since 2.8.0
  * @since 2.8.1 Added: filter settings
+ * @since 2.9.0 Improved: display db error
+ * @since 2.9.2 Added: trash post
+ * @since 2.9.2 Improved: limit delete data target
+ * @since 2.9.4 Fixed: exclude untrash
+ * @since 2.9.7 Changed: move register post type to traits
+ * @since 2.9.7 Fixed: capability check
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -64,6 +70,9 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 			'save_post'                    => [
 				'save_post' => [],
 			],
+			'wp_trash_post'                => [
+				'wp_trash_post' => [],
+			],
 			'delete_post'                  => [
 				'delete_post' => [],
 			],
@@ -96,26 +105,12 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 
 	/**
 	 * register post types
+	 * @since 2.9.7 Changed: move register post type to traits
 	 */
 	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function register_post_types() {
 		foreach ( $this->get_custom_posts() as $post ) {
-			$post_type = $post->get_post_type();
-			register_post_type( $post_type, $post->get_post_type_args() );
-			add_filter( "views_edit-{$post_type}", function ( $views ) {
-				unset( $views['mine'] );
-				unset( $views['publish'] );
-
-				return $views;
-			} );
-			add_filter( "bulk_actions-edit-{$post_type}", function ( $actions ) {
-				unset( $actions['edit'] );
-
-				return $actions;
-			} );
-			add_filter( "manage_edit-{$post_type}_sortable_columns", function ( $sortable_columns ) use ( $post ) {
-				return $post->manage_posts_columns( $sortable_columns, true );
-			} );
+			$post->register_post_type();
 		}
 	}
 
@@ -129,7 +124,7 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 	private function manage_posts_columns( $columns, $post_type ) {
 		if ( $this->is_valid_custom_post_type( $post_type ) ) {
 			$custom_post = $this->get_custom_post_type( $post_type );
-			if ( ! $this->app->user_can( 'edit_others_' . $custom_post->get_post_type_plural_name() ) ) {
+			if ( ! $this->app->user_can( $custom_post->get_post_type_object()->cap->edit_others_posts ) ) {
 				unset( $columns['cb'] );
 			}
 			$custom_post = $this->get_custom_post_type( $post_type );
@@ -166,12 +161,12 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function delete_edit_links( $actions, $post ) {
 		if ( $this->is_valid_custom_post_type( $post->post_type ) ) {
-			$post_type = get_post_type_object( $post->post_type );
+			$custom_post = $this->get_custom_post_type( $post->post_type );
 			unset( $actions['inline hide-if-no-js'] );
 			unset( $actions['edit'] );
 			unset( $actions['clone'] );
 			unset( $actions['edit_as_new_draft'] );
-			if ( ! current_user_can( $post_type->cap->delete_posts ) ) {
+			if ( ! $this->app->user_can( $custom_post->get_post_type_object()->cap->delete_posts ) ) {
 				unset( $actions['trash'] );
 			}
 		}
@@ -269,6 +264,8 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 	}
 
 	/**
+	 * @since 2.9.0 Improved: handle db error
+	 *
 	 * @param int $post_id
 	 * @param \WP_Post $post
 	 * @param bool $update
@@ -283,25 +280,36 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 					if ( $related ) {
 						$old = $custom_post->get_data( $related['id'] );
 					} else {
-						$old = false;
+						$old    = false;
+						$update = false;
 					}
 				} else {
 					$old = false;
 				}
-				$id = $custom_post->update_data( [
-					'post_id' => $post_id,
-				], [
-					'post_id' => $post_id,
-				], $post, $update );
-				if ( ! empty( $id ) ) {
-					$data = $custom_post->get_data( $id );
-					if ( $data ) {
-						if ( $update ) {
-							$custom_post->data_updated( $post_id, $post, $old, $data );
-						} else {
-							$custom_post->data_inserted( $post_id, $post, $data );
+				if ( ! $this->app->db->transaction( function () use ( $custom_post, $post_id, $post, $update, $old ) {
+					$id = $custom_post->update_data( [
+						'post_id' => $post_id,
+					], [
+						'post_id' => $post_id,
+					], $post, $update );
+					if ( ! empty( $id ) ) {
+						$data = $custom_post->get_data( $id );
+						if ( $data ) {
+							if ( $update ) {
+								$custom_post->data_updated( $post_id, $post, $old, $data );
+							} else {
+								$custom_post->data_inserted( $post_id, $post, $data );
+							}
 						}
+					} else {
+						throw new \Exception( $this->app->db->get_last_error() );
 					}
+				} ) ) {
+					$this->_validation_errors = [
+						'Db error' => [
+							$this->app->db->get_last_transaction_error()->getMessage(),
+						],
+					];
 				}
 			}
 		}
@@ -311,12 +319,29 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 	 * @param int $post_id
 	 */
 	/** @noinspection PhpUnusedPrivateMethodInspection */
+	private function wp_trash_post( $post_id ) {
+		$post      = get_post( $post_id );
+		$post_type = $post->post_type;
+		if ( $this->is_valid_custom_post_type( $post_type ) ) {
+			$custom_post = $this->get_custom_post_type( $post_type );
+			if ( ! empty( $custom_post ) ) {
+				$custom_post->trash_post( $post_id );
+			}
+		}
+	}
+
+	/**
+	 * @param int $post_id
+	 */
+	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function delete_post( $post_id ) {
-		foreach ( $this->get_custom_posts() as $custom_post ) {
-			/** @var \Technote\Interfaces\Helper\Custom_Post $custom_post */
-			$custom_post->delete_data( [
-				'post_id' => $post_id,
-			] );
+		$post      = get_post( $post_id );
+		$post_type = $post->post_type;
+		if ( $this->is_valid_custom_post_type( $post_type ) ) {
+			$custom_post = $this->get_custom_post_type( $post_type );
+			if ( ! empty( $custom_post ) ) {
+				$custom_post->delete_data( $post_id );
+			}
 		}
 	}
 
@@ -571,20 +596,22 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 	}
 
 	/**
+	 * @since 2.9.4 Fixed: exclude untrash
+	 *
 	 * @param string $post_status
 	 * @param string $post_type
 	 *
 	 * @return bool
 	 */
 	private function is_valid_update( $post_status, $post_type ) {
-		return ! ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) && in_array( $post_status, [
+		return ! $this->app->utility->defined( 'DOING_AUTOSAVE' ) && in_array( $post_status, [
 				'publish',
 				'future',
 				'draft',
 				'draft',
 				'pending',
 				'private',
-			] ) && $this->is_valid_custom_post_type( $post_type );
+			] ) && $this->is_valid_custom_post_type( $post_type ) && 'untrash' !== $this->app->input->get( 'action' );
 	}
 
 	/**
