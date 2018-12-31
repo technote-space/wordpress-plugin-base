@@ -42,6 +42,9 @@ class Upgrade implements \Technote\Interfaces\Loader {
 		}
 		$last_version = $this->get_last_upgrade_version();
 		$this->set_last_upgrade_version();
+		if ( empty( $last_version ) ) {
+			return;
+		}
 
 		try {
 			$upgrades = [];
@@ -56,7 +59,7 @@ class Upgrade implements \Technote\Interfaces\Loader {
 					if ( ! isset( $version ) || empty( $callback ) || ! is_string( $version ) ) {
 						continue;
 					}
-					if ( empty( $last_version ) || version_compare( $version, $last_version, '<=' ) ) {
+					if ( version_compare( $version, $last_version, '<=' ) ) {
 						continue;
 					}
 					if ( ! is_callable( $callback ) && ( ! is_string( $callback ) || ! method_exists( $class, $callback ) || ! is_callable( [ $class, $callback ] ) ) ) {
