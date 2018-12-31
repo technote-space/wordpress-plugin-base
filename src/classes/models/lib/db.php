@@ -378,7 +378,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 					return ! empty( $d );
 				} ) );
 				if ( $message ) {
-					$this->app->add_message( $message, 'db' );
+					$this->app->add_message( $message, 'db', false, false );
 				}
 			}
 		}
