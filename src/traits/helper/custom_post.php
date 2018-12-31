@@ -521,7 +521,7 @@ trait Custom_Post {
 	protected function set_post_data( $data, $post ) {
 		$data['post_title'] = $post->post_title;
 		$data['post']       = $post;
-		if ( $this->app->user_can( 'read_' . $this->get_post_type_slug() ) ) {
+		if ( $this->app->user_can( $this->get_post_type_object()->cap->read_post ) ) {
 			$data['edit_link'] = get_edit_post_link( $post->ID );
 		}
 
@@ -634,13 +634,12 @@ trait Custom_Post {
 			'post_type' => $this->get_post_type(),
 		] );
 		$posts    = $this->app->utility->array_combine( $posts, 'ID' );
-		$editable = $this->app->user_can( 'read_' . $this->get_post_type_slug() );
 
 		return [
 			'total'      => $total,
 			'total_page' => $total_page,
 			'page'       => $page,
-			'data'       => array_map( function ( $d ) use ( $posts, $editable ) {
+			'data'       => array_map( function ( $d ) use ( $posts ) {
 				return $this->filter_item( $this->set_post_data( $d, $posts[ $d['post_id'] ] ) );
 			}, $list ),
 		];
