@@ -54,9 +54,6 @@ trait Data_Helper {
 	 * @return mixed
 	 */
 	protected function sanitize_input( $param, $type ) {
-		if ( is_null( $param ) ) {
-			return $param;
-		}
 		switch ( $type ) {
 			case 'int':
 				if ( ! is_int( $param ) && ! ctype_digit( ltrim( $param, '-' ) ) ) {
@@ -73,6 +70,9 @@ trait Data_Helper {
 				$param -= 0;
 				break;
 			case 'bool':
+				// bool 以外は $param = null は null
+				// bool は !nullable (checkboxにチェックを入れたか入れてないかの二値しか取れない想定のため)
+				// したがって is_null のチェックはしない(null は false)
 				if ( is_string( $param ) ) {
 					$param = strtolower( trim( $param ) );
 					if ( $param === 'true' ) {
@@ -89,6 +89,9 @@ trait Data_Helper {
 				}
 				break;
 			default:
+				if ( is_null( $param ) ) {
+					return null;
+				}
 				break;
 		}
 
