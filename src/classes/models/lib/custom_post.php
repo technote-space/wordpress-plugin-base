@@ -109,9 +109,7 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 	 */
 	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function register_post_types() {
-		foreach ( $this->get_custom_posts() as $post ) {
-			$post->register_post_type();
-		}
+		$this->get_custom_posts();
 	}
 
 	/**
@@ -124,7 +122,7 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 	private function manage_posts_columns( $columns, $post_type ) {
 		if ( $this->is_valid_custom_post_type( $post_type ) ) {
 			$custom_post = $this->get_custom_post_type( $post_type );
-			if ( ! $this->app->user_can( $custom_post->get_post_type_object()->cap->edit_others_posts ) ) {
+			if ( ! $custom_post->user_can( 'edit_others_posts' ) ) {
 				unset( $columns['cb'] );
 			}
 			$custom_post = $this->get_custom_post_type( $post_type );
@@ -166,7 +164,7 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 			unset( $actions['edit'] );
 			unset( $actions['clone'] );
 			unset( $actions['edit_as_new_draft'] );
-			if ( ! $this->app->user_can( $custom_post->get_post_type_object()->cap->delete_posts ) ) {
+			if ( ! $custom_post->user_can( 'delete_posts' ) ) {
 				unset( $actions['trash'] );
 			}
 		}

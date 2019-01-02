@@ -43,9 +43,16 @@ trait Custom_Post {
 
 	/**
 	 * @since 2.9.7
-	 * @var \WP_Post_Type $_post_type_obj
+	 * @var \WP_Post_Type|\WP_Error $_post_type_obj
 	 */
 	private $_post_type_obj;
+
+	/**
+	 * initialized
+	 */
+	protected function initialized() {
+		$this->register_post_type();
+	}
 
 	/**
 	 * @return mixed
@@ -62,7 +69,7 @@ trait Custom_Post {
 	 * register post type
 	 * @since 2.9.7 Changed: move register post type from model
 	 */
-	public function register_post_type() {
+	private function register_post_type() {
 		$post_type            = $this->get_post_type();
 		$this->_post_type_obj = register_post_type( $post_type, $this->get_post_type_args() );
 		if ( is_wp_error( $this->_post_type_obj ) ) {
@@ -189,10 +196,23 @@ trait Custom_Post {
 
 	/**
 	 * @since 2.9.7
-	 * @return \WP_Post_Type
+	 * @return \WP_Post_Type|\WP_Error
 	 */
 	public function get_post_type_object() {
 		return $this->_post_type_obj;
+	}
+
+	/**
+	 * @param $capability
+	 *
+	 * @return bool
+	 */
+	public function user_can( $capability ) {
+		if ( ! ( $this->_post_type_obj instanceof \WP_Post_Type ) ) {
+			return false;
+		}
+
+		return ! empty( $this->_post_type_obj->cap->$capability );
 	}
 
 	/**
@@ -527,7 +547,7 @@ trait Custom_Post {
 	protected function set_post_data( $data, $post ) {
 		$data['post_title'] = $post->post_title;
 		$data['post']       = $post;
-		if ( $this->app->user_can( $this->get_post_type_object()->cap->read_post ) ) {
+		if ( $this->user_can( 'read_post' ) ) {
 			$data['edit_link'] = get_edit_post_link( $post->ID );
 		}
 
