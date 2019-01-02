@@ -70,6 +70,13 @@ interface Custom_Post extends \Technote\Interfaces\Singleton, \Technote\Interfac
 	public function get_post_type_object();
 
 	/**
+	 * @param $capability
+	 *
+	 * @return bool
+	 */
+	public function user_can( $capability );
+
+	/**
 	 * @param null|array $capabilities
 	 *
 	 * @return array
