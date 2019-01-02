@@ -65,7 +65,7 @@ interface Custom_Post extends \Technote\Interfaces\Singleton, \Technote\Interfac
 
 	/**
 	 * @since 2.9.7
-	 * @return \WP_Post_Type
+	 * @return \WP_Post_Type|\WP_Error
 	 */
 	public function get_post_type_object();
 

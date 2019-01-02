@@ -43,7 +43,7 @@ trait Custom_Post {
 
 	/**
 	 * @since 2.9.7
-	 * @var \WP_Post_Type $_post_type_obj
+	 * @var \WP_Post_Type|\WP_Error $_post_type_obj
 	 */
 	private $_post_type_obj;
 
@@ -196,7 +196,7 @@ trait Custom_Post {
 
 	/**
 	 * @since 2.9.7
-	 * @return \WP_Post_Type
+	 * @return \WP_Post_Type|\WP_Error
 	 */
 	public function get_post_type_object() {
 		return $this->_post_type_obj;
