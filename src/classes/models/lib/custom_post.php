@@ -2,7 +2,7 @@
 /**
  * Technote Classes Models Lib Custom Post
  *
- * @version 2.9.7
+ * @version 2.9.10
  * @author technote-space
  * @since 2.8.0
  * @since 2.8.1 Added: filter settings
@@ -12,6 +12,7 @@
  * @since 2.9.4 Fixed: exclude untrash
  * @since 2.9.7 Changed: move register post type to traits
  * @since 2.9.7 Fixed: capability check
+ * @since 2.9.10 Improved: use user_can wrapper
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space

@@ -2,7 +2,7 @@
 /**
  * Technote Traits Helper Custom Post
  *
- * @version 2.9.7
+ * @version 2.9.10
  * @author technote-space
  * @since 2.8.0
  * @since 2.8.3
@@ -15,6 +15,7 @@
  * @since 2.9.6 Improved: behavior of column which has default and nullable
  * @since 2.9.7 Changed: move register post type from model
  * @since 2.9.7 Fixed: capability check
+ * @since 2.9.10 Added: user_can method
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -43,12 +44,14 @@ trait Custom_Post {
 
 	/**
 	 * @since 2.9.7
+	 * @since 2.9.10 Changed: type
 	 * @var \WP_Post_Type|\WP_Error $_post_type_obj
 	 */
 	private $_post_type_obj;
 
 	/**
 	 * initialized
+	 * @since 2.9.10
 	 */
 	protected function initialized() {
 		$this->register_post_type();
@@ -68,6 +71,7 @@ trait Custom_Post {
 	/**
 	 * register post type
 	 * @since 2.9.7 Changed: move register post type from model
+	 * @since 2.9.10 Changed: visibility (public to private)
 	 */
 	private function register_post_type() {
 		$post_type            = $this->get_post_type();
@@ -196,6 +200,7 @@ trait Custom_Post {
 
 	/**
 	 * @since 2.9.7
+	 * @since 2.9.10 Changed: return type
 	 * @return \WP_Post_Type|\WP_Error
 	 */
 	public function get_post_type_object() {
@@ -203,6 +208,8 @@ trait Custom_Post {
 	}
 
 	/**
+	 * @since 2.9.10
+	 *
 	 * @param $capability
 	 *
 	 * @return bool

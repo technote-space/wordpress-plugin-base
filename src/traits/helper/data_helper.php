@@ -2,12 +2,13 @@
 /**
  * Technote Traits Helper Data Helper
  *
- * @version 2.9.6
+ * @version 2.9.10
  * @author technote-space
  * @since 2.8.0
  * @since 2.8.3 Changed: move parse_db_type to utility
  * @since 2.9.0 Changed: move validation methods to Validate
  * @since 2.9.6 Fixed: return null if param = null (sanitize_input)
+ * @since 2.9.10 Fixed: return false if type = bool and param = null (sanitize_input)
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
