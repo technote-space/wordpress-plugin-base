@@ -109,9 +109,7 @@ class Custom_Post implements \Technote\Interfaces\Loader, \Technote\Interfaces\U
 	 */
 	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function register_post_types() {
-		foreach ( $this->get_custom_posts() as $post ) {
-			$post->register_post_type();
-		}
+		$this->get_custom_posts();
 	}
 
 	/**

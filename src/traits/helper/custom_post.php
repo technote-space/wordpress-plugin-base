@@ -48,6 +48,13 @@ trait Custom_Post {
 	private $_post_type_obj;
 
 	/**
+	 * initialized
+	 */
+	protected function initialized() {
+		$this->register_post_type();
+	}
+
+	/**
 	 * @return mixed
 	 */
 	private function apply_custom_post_filters() {
@@ -62,7 +69,7 @@ trait Custom_Post {
 	 * register post type
 	 * @since 2.9.7 Changed: move register post type from model
 	 */
-	public function register_post_type() {
+	private function register_post_type() {
 		$post_type            = $this->get_post_type();
 		$this->_post_type_obj = register_post_type( $post_type, $this->get_post_type_args() );
 		if ( is_wp_error( $this->_post_type_obj ) ) {
