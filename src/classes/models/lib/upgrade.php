@@ -2,7 +2,7 @@
 /**
  * Technote Classes Models Lib Upgrade
  *
- * @version 2.9.8
+ * @version 2.9.9
  * @author technote-space
  * @since 2.4.0
  * @since 2.4.1 Added: show_plugin_update_notices method
@@ -14,6 +14,7 @@
  * @since 2.9.0 Improved: regexp
  * @since 2.9.1 Fixed: compare version
  * @since 2.9.8 Fixed: ignore if first activated
+ * @since 2.9.9 Changed: behavior to get readme file
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -175,6 +176,7 @@ class Upgrade implements \Technote\Interfaces\Loader {
 	}
 
 	/**
+	 * @since 2.9.9
 	 * @return string|false
 	 */
 	/** @noinspection PhpUnusedPrivateMethodInspection */
@@ -188,6 +190,7 @@ class Upgrade implements \Technote\Interfaces\Loader {
 	}
 
 	/**
+	 * @since 2.9.9
 	 * @return string|false
 	 */
 	/** @noinspection PhpUnusedPrivateMethodInspection */
@@ -203,6 +206,8 @@ class Upgrade implements \Technote\Interfaces\Loader {
 	}
 
 	/**
+	 * @since 2.9.9
+	 *
 	 * @param $slug
 	 *
 	 * @return string
@@ -213,6 +218,8 @@ class Upgrade implements \Technote\Interfaces\Loader {
 	}
 
 	/**
+	 * @since 2.9.9
+	 *
 	 * @param $slug
 	 *
 	 * @return array|false
