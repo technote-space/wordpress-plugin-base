@@ -48,8 +48,11 @@ class Upgrade implements \Technote\Interfaces\Loader {
 			return;
 		}
 
+		$this->app->log( sprintf( $this->translate( 'upgrade: %s to %s' ), $last_version, $this->app->get_plugin_version() ) );
+
 		try {
 			$upgrades = [];
+			$count    = 0;
 			foreach ( $this->get_class_list() as $class ) {
 				/** @var \Technote\Interfaces\Upgrade $class */
 				foreach ( $class->get_upgrade_methods() as $items ) {
@@ -68,8 +71,12 @@ class Upgrade implements \Technote\Interfaces\Loader {
 						continue;
 					}
 					$upgrades[ $version ][] = is_callable( $callback ) ? $callback : [ $class, $callback ];
+					$count ++;
 				}
 			}
+
+			$this->app->log( sprintf( $this->translate( 'total upgrade process count: %d' ), $count ) );
+
 			if ( empty( $upgrades ) ) {
 				return;
 			}
@@ -79,6 +86,7 @@ class Upgrade implements \Technote\Interfaces\Loader {
 				foreach ( $items as $item ) {
 					call_user_func( $item );
 				}
+				$this->app->log( sprintf( $this->translate( 'upgrade process count of version %s: %d' ), $version, count( $items ) ) );
 			}
 		} catch ( \Exception $e ) {
 			$this->app->log( $e );
