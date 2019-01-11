@@ -44,8 +44,8 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 	/**
 	 * @return string
 	 */
-	private function get_setting_slug() {
-		return $this->apply_filters( 'get_setting_slug', 'setting' );
+	protected function get_setting_slug() {
+		return $this->apply_filters( 'get_setting_slug', $this->app->get_config( 'config', 'setting_page_slug' ) );
 	}
 
 	/**
