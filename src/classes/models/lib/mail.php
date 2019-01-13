@@ -79,13 +79,7 @@ class Mail implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 		// このチケットがマージされたら以下の処理は不要
 		// https://core.trac.wordpress.org/ticket/15448
 
-		add_filter( 'wp_mail_content_type', $set_content_type = function () use ( &$set_content_type, $content_type ) {
-			remove_filter( 'wp_mail_content_type', $set_content_type );
-
-			return $content_type;
-		} );
-
-		add_action( 'phpmailer_init', $set_phpmailer = function ( $phpmailer ) use ( &$set_phpmailer, $messages ) {
+		add_action( 'phpmailer_init', $set_phpmailer = function ( $phpmailer ) use ( &$set_phpmailer, $messages, $content_type ) {
 			/** @var \PHPMailer $phpmailer */
 			remove_action( 'phpmailer_init', $set_phpmailer );
 			$phpmailer->Body    = '';
@@ -97,6 +91,7 @@ class Mail implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 					$phpmailer->AltBody = $message;
 				}
 			}
+			$phpmailer->ContentType = $content_type;
 		} );
 
 		// suppress error
