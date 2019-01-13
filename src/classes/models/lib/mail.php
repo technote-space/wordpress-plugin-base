@@ -38,7 +38,7 @@ class Mail implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 	 * @return bool
 	 */
 	public function send( $to, $subject, $body, $text = false ) {
-		if ( empty( $to ) || empty( $subject ) || ( empty( $body ) && empty( $text ) ) ) {
+		if ( $this->_is_sending || empty( $to ) || empty( $subject ) || ( empty( $body ) && empty( $text ) ) ) {
 			return false;
 		}
 
