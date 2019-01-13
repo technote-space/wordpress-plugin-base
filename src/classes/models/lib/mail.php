@@ -42,6 +42,7 @@ class Mail implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 			return false;
 		}
 
+		$subject = str_replace( [ "\r\n", "\r", "\n" ], '', $subject );
 		$this->remove_special_space( $subject );
 		$this->remove_special_space( $body );
 
