@@ -25,79 +25,79 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 
 return [
 	// library version
-	'library_version'           => '2.9.11',
+	'library_version'                => '2.9.11',
 
 	// plugin title
-	'plugin_title'              => '',
+	'plugin_title'                   => '',
 
 	// contact url
-	'contact_url'               => '',
+	'contact_url'                    => '',
 
 	// twitter
-	'twitter'                   => '',
+	'twitter'                        => '',
 
 	// github
-	'github'                    => '',
+	'github'                         => '',
 
 	// db version
-	'db_version'                => '0.0.1',
+	'db_version'                     => '0.0.1',
 
 	// update
-	'update_info_file_url'      => '',
+	'update_info_file_url'           => '',
 
 	/**
 	 * @since 2.9.9
 	 */
 	// readme
-	'readme_file_check_url'     => '',
+	'readme_file_check_url'          => '',
 
 	// menu image url
-	'menu_image'                => '',
+	'menu_image'                     => '',
 
 	// api version
-	'api_version'               => 'v1',
+	'api_version'                    => 'v1',
 
 	// default delete rule
-	'default_delete_rule'       => 'physical',
+	'default_delete_rule'            => 'physical',
 
 	/**
 	 * @since 2.9.6
 	 */
 	// prior default (to nullable)
-	'prior_default'             => false,
+	'prior_default'                  => false,
 
 	// cache filter result
-	'cache_filter_result'       => true,
+	'cache_filter_result'            => true,
 
 	// cache filter exclude list
-	'cache_filter_exclude_list' => [],
+	'cache_filter_exclude_list'      => [],
 
 	// prevent use log
-	'prevent_use_log'           => false,
+	'prevent_use_log'                => false,
 
 	// use custom post
-	'use_custom_post'           => false,
+	'use_custom_post'                => false,
 
 	// use social login
-	'use_social_login'          => false,
+	'use_social_login'               => false,
 
 	/**
 	 * @since 2.8.5
 	 */
 	// capture shutdown error
-	'capture_shutdown_error'    => defined( 'WP_DEBUG' ) && WP_DEBUG,
+	'capture_shutdown_error'         => defined( 'WP_DEBUG' ) && WP_DEBUG,
 
 	/**
 	 * @since 2.9.0
 	 */
 	// target shutdown error
-	'target_shutdown_error'     => E_ALL & ~E_NOTICE & ~E_WARNING,
+	'target_shutdown_error'          => E_ALL & ~E_NOTICE & ~E_WARNING,
 
 	/**
 	 * @since 2.9.0
 	 */
 	// log level (for developer)
-	'log_level'                 => [
+	'log_level'                      => [
 		'error' => [
 			'is_valid_log'  => true,
 			'is_valid_mail' => true,
@@ -121,6 +121,30 @@ return [
 		// set default level
 		''      => 'info',
 	],
+
+	/**
+	 * @since 2.9.12
+	 */
+	// suppress setting help contents
+	'suppress_setting_help_contents' => false,
+
+	/**
+	 * @since 2.9.12
+	 */
+	// setting page title
+	'setting_page_title'             => 'Dashboard',
+
+	/**
+	 * @since 2.9.12
+	 */
+	// setting page priority
+	'setting_page_priority'          => 0,
+
+	/**
+	 * @since 2.9.12
+	 */
+	// setting page slug
+	'setting_page_slug'              => 'setting',
 
 	/**
 	 * @since 2.9.12

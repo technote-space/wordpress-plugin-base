@@ -27,14 +27,14 @@ class Setting extends Base {
 	 * @return int
 	 */
 	public function get_load_priority() {
-		return $this->apply_filters( 'setting_page_priority', 0 );
+		return $this->apply_filters( 'setting_page_priority', $this->app->get_config( 'config', 'setting_page_priority' ) );
 	}
 
 	/**
 	 * @return string
 	 */
 	public function get_page_title() {
-		return $this->apply_filters( 'setting_page_title', 'Dashboard' );
+		return $this->apply_filters( 'setting_page_title', $this->app->get_config( 'config', 'setting_page_title' ) );
 	}
 
 	/**
@@ -69,6 +69,10 @@ class Setting extends Base {
 	 * @return array
 	 */
 	protected function get_help_contents() {
+		if ( $this->app->get_config( 'config', 'suppress_setting_help_contents' ) ) {
+			return [];
+		}
+
 		return [
 			[
 				'title' => 'The procedure for editing the help of dashboard',
