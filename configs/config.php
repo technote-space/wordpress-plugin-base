@@ -121,4 +121,12 @@ return [
 		// set default level
 		''      => 'info',
 	],
+
+	/**
+	 * @since 2.9.12
+	 */
+	// suppress log messages
+	'suppress_log_messages'          => [
+		'Non-static method WP_Feed_Cache::create() should not be called statically',
+	],
 ];
