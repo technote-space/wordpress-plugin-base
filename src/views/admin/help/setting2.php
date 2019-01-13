@@ -2,9 +2,10 @@
 /**
  * Technote Views Admin Help Setting
  *
- * @version 1.1.70
+ * @version 2.9.12
  * @author technote-space
  * @since 1.0.0
+ * @since 2.9.12 Changed: explain
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space

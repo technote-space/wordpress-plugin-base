@@ -2,7 +2,7 @@
 /**
  * Technote Configs Config
  *
- * @version 2.9.11
+ * @version 2.9.12
  * @author technote-space
  * @since 1.0.0
  * @since 2.1.0 Deleted: text_domain
@@ -14,6 +14,8 @@
  * @since 2.9.0 Added: log level settings
  * @since 2.9.6 Added: prior default flag
  * @since 2.9.9 Added: readme file check url
+ * @since 2.9.12 Added: setting page settings
+ * @since 2.9.12 Added: suppress log messages setting
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -25,7 +27,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 
 return [
 	// library version
-	'library_version'                => '2.9.11',
+	'library_version'                => '2.9.12',
 
 	// plugin title
 	'plugin_title'                   => '',

@@ -2,7 +2,7 @@
 /**
  * Technote Classes Models Lib Loader Controller Admin
  *
- * @version 2.9.0
+ * @version 2.9.12
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0
@@ -10,6 +10,7 @@
  * @since 2.7.0 Changed: log message
  * @since 2.8.0 Changed: visibility of get_menu_slug
  * @since 2.9.0 Improved: regexp
+ * @since 2.9.12 Improved: enable to set page slug setting from config
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -42,6 +43,7 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 	];
 
 	/**
+	 * @since 2.9.12 Improved: config setting
 	 * @return string
 	 */
 	protected function get_setting_slug() {

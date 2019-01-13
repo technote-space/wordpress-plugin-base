@@ -2,9 +2,11 @@
 /**
  * Technote Classes Models Lib Mail
  *
- * @version 2.9.0
+ * @version 2.9.12
  * @author technote-space
  * @since 2.9.0
+ * @since 2.9.12 Fixed: subject to single line
+ * @since 2.9.12 Fixed: content type
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
