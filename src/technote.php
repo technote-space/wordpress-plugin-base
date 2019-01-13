@@ -437,7 +437,13 @@ class Technote {
 		}
 
 		if ( $error['type'] & $this->get_config( 'config', 'target_shutdown_error' ) ) {
-			$this->log( $error['message'], $error, 'error' );
+			$suppress = $this->get_config( 'config', 'suppress_log_messages' );
+			$message  = str_replace( [ "\r\n", "\r", "\n" ], "\n", $error['message'] );
+			$messages = explode( "\n", $message );
+			$message  = reset( $messages );
+			if ( empty( $suppress ) || ( is_array( $suppress ) && ! in_array( $message, $suppress ) ) ) {
+				$this->log( $message, $error, 'error' );
+			}
 		}
 	}
 

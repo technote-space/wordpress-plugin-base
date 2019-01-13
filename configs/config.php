@@ -145,4 +145,12 @@ return [
 	 */
 	// setting page slug
 	'setting_page_slug'              => 'setting',
+
+	/**
+	 * @since 2.9.12
+	 */
+	// suppress log messages
+	'suppress_log_messages'          => [
+		'Non-static method WP_Feed_Cache::create() should not be called statically',
+	],
 ];
