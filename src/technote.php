@@ -441,7 +441,7 @@ class Technote {
 			$message  = str_replace( [ "\r\n", "\r", "\n" ], "\n", $error['message'] );
 			$messages = explode( "\n", $message );
 			$message  = reset( $messages );
-			if ( ! empty( $suppress ) && is_array( $suppress ) && ! in_array( $message, $suppress ) ) {
+			if ( empty( $suppress ) || ( is_array( $suppress ) && ! in_array( $message, $suppress ) ) ) {
 				$this->log( $message, $error, 'error' );
 			}
 		}
