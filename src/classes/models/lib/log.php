@@ -54,11 +54,14 @@ class Log implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, 
 			return false;
 		}
 
-		$data                   = $this->get_called_info();
-		$data['message']        = is_string( $message ) ? $this->app->translate( $message ) : json_encode( $message );
-		$data['lib_version']    = $this->app->get_library_version();
-		$data['plugin_version'] = $this->app->get_plugin_version();
-		$data['level']          = $level;
+		global $wp_version;
+		$data                      = $this->get_called_info();
+		$data['message']           = is_string( $message ) ? $this->app->translate( $message ) : json_encode( $message );
+		$data['lib_version']       = $this->app->get_library_version();
+		$data['plugin_version']    = $this->app->get_plugin_version();
+		$data['php_version']       = phpversion();
+		$data['wordpress_version'] = $wp_version;
+		$data['level']             = $level;
 		if ( isset( $context ) ) {
 			$data['context'] = json_encode( $context );
 		}

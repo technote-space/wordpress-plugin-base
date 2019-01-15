@@ -64,32 +64,40 @@ return [
 			/**
 			 * @since 2.9.0
 			 */
-			'level'          => [
+			'level'             => [
 				'type' => 'VARCHAR(32)',
 				'null' => false,
 			],
-			'message'        => [
+			'message'           => [
 				'type' => 'TEXT',
 				'null' => false,
 			],
-			'context'        => [
+			'context'           => [
 				'type' => 'LONGTEXT',
 				'null' => true,
 			],
-			'file'           => [
+			'file'              => [
 				'type' => 'VARCHAR(255)',
 				'null' => true,
 			],
-			'line'           => [
+			'line'              => [
 				'type'     => 'INT(11)',
 				'unsigned' => true,
 				'null'     => true,
 			],
-			'lib_version'    => [
+			'lib_version'       => [
 				'type' => 'VARCHAR(32)',
 				'null' => false,
 			],
-			'plugin_version' => [
+			'plugin_version'    => [
+				'type' => 'VARCHAR(32)',
+				'null' => false,
+			],
+			'php_version'       => [
+				'type' => 'VARCHAR(32)',
+				'null' => false,
+			],
+			'wordpress_version' => [
 				'type' => 'VARCHAR(32)',
 				'null' => false,
 			],
