@@ -293,7 +293,7 @@ class Technote {
 
 		spl_autoload_register( [ $this, 'load_class' ] );
 
-		if ( $this->get_config( 'config', 'capture_shutdown_error' ) ) {
+		if ( $this->filter->apply_filters( 'capture_shutdown_error' ) && $this->log->is_valid() ) {
 			add_action( 'shutdown', function () {
 				$this->shutdown();
 			}, 0 );
@@ -423,6 +423,10 @@ class Technote {
 		if ( ! $this->log->is_valid() ) {
 			$this->setting->remove_setting( 'save___log_term' );
 			$this->setting->remove_setting( 'delete___log_interval' );
+		}
+		if ( $this->get_config( 'config', 'prevent_use_log' ) ) {
+			$this->setting->remove_setting( 'is_valid_log' );
+			$this->setting->remove_setting( 'capture_shutdown_error' );
 		}
 	}
 
