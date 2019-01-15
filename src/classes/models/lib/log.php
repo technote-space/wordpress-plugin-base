@@ -11,6 +11,7 @@
  * @since 2.9.0 Added: send mail feature
  * @since 2.9.13 Changed: log validity
  * @since 2.9.13 Added: versions
+ * @since 2.9.13 Changed: moved shutdown function
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space

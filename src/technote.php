@@ -30,6 +30,7 @@
  * @since 2.9.0 Improved: log
  * @since 2.9.12 Improved: shutdown log
  * @since 2.9.13 Changed: log settings
+ * @since 2.9.13 Changed: moved shutdown function to log
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
