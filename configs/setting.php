@@ -92,6 +92,28 @@ return [
 					'default' => DAY_IN_SECONDS,
 					'min'     => MINUTE_IN_SECONDS,
 				],
+				/**
+				 * @since 2.9.13
+				 */
+				'is_valid_log'            => [
+					'label'   => 'Whether log is valid or not.',
+					'type'    => 'bool',
+					'default' => function ( $app ) {
+						/** @var \Technote $app */
+						return ! empty( $app->utility->definedv( 'WP_DEBUG' ) );
+					},
+				],
+				/**
+				 * @since 2.9.13
+				 */
+				'capture_shutdown_error'  => [
+					'label'   => 'Whether to capture shutdown error.',
+					'type'    => 'bool',
+					'default' => function ( $app ) {
+						/** @var \Technote $app */
+						return ! empty( $app->get_config( 'config', 'capture_shutdown_error' ) );
+					},
+				],
 			],
 		],
 	],

@@ -33,7 +33,11 @@ class Log implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, 
 	 * @return bool
 	 */
 	public function is_valid() {
-		return $this->apply_filters( 'log_validity', $this->app->utility->definedv( 'WP_DEBUG' ) && ! $this->app->get_config( 'config', 'prevent_use_log' ) );
+		if ( $this->app->get_config( 'config', 'prevent_use_log' ) ) {
+			return false;
+		}
+
+		return $this->apply_filters( 'log_validity', $this->apply_filters( 'is_valid_log' ) );
 	}
 
 	/**
@@ -48,9 +52,13 @@ class Log implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, 
 	 * @return bool
 	 */
 	public function log( $message, $context = null, $level = '' ) {
+		if ( ! $this->is_valid() ) {
+			return false;
+		}
+
 		$log_level = $this->app->get_config( 'config', 'log_level' );
 		$level     = $this->get_log_level( $level, $log_level );
-		if ( ! $this->is_valid() || empty( $log_level[ $level ] ) ) {
+		if ( empty( $log_level[ $level ] ) ) {
 			return false;
 		}
 
