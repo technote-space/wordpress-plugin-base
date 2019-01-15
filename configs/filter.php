@@ -48,6 +48,12 @@ return [
 		],
 	],
 
+	'log'  => [
+		'${prefix}app_initialize' => [
+			'setup_shutdown' => [],
+		],
+	],
+
 	/**
 	 * @since 2.9.0
 	 */

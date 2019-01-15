@@ -31,6 +31,42 @@ class Log implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, 
 	use \Technote\Traits\Singleton, \Technote\Traits\Hook, \Technote\Traits\Presenter;
 
 	/**
+	 * setup shutdown
+	 * @since 2.9.13
+	 */
+	/** @noinspection PhpUnusedPrivateMethodInspection */
+	private function setup_shutdown() {
+		if ( $this->apply_filters( 'capture_shutdown_error' ) && $this->is_valid() ) {
+			add_action( 'shutdown', function () {
+				$this->shutdown();
+			}, 0 );
+		}
+	}
+
+	/**
+	 * shutdown
+	 * @since 2.8.5
+	 * @since 2.9.0 Changed: capture error target
+	 * @since 2.9.13 Changed: moved function
+	 */
+	private function shutdown() {
+		$error = error_get_last();
+		if ( $error === null ) {
+			return;
+		}
+
+		if ( $error['type'] & $this->app->get_config( 'config', 'target_shutdown_error' ) ) {
+			$suppress = $this->app->get_config( 'config', 'suppress_log_messages' );
+			$message  = str_replace( [ "\r\n", "\r", "\n" ], "\n", $error['message'] );
+			$messages = explode( "\n", $message );
+			$message  = reset( $messages );
+			if ( empty( $suppress ) || ( is_array( $suppress ) && ! in_array( $message, $suppress ) ) ) {
+				$this->app->log( $message, $error, 'error' );
+			}
+		}
+	}
+
+	/**
 	 * @since 2.7.0
 	 * @return bool
 	 */
