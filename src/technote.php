@@ -294,11 +294,6 @@ class Technote {
 
 		spl_autoload_register( [ $this, 'load_class' ] );
 
-		if ( $this->filter->apply_filters( 'capture_shutdown_error' ) && $this->log->is_valid() ) {
-			add_action( 'shutdown', function () {
-				$this->shutdown();
-			}, 0 );
-		}
 		$this->load_functions();
 	}
 
@@ -428,28 +423,6 @@ class Technote {
 		if ( $this->get_config( 'config', 'prevent_use_log' ) ) {
 			$this->setting->remove_setting( 'is_valid_log' );
 			$this->setting->remove_setting( 'capture_shutdown_error' );
-		}
-	}
-
-	/**
-	 * shutdown
-	 * @since 2.8.5
-	 * @since 2.9.0 Changed: capture error target
-	 */
-	private function shutdown() {
-		$error = error_get_last();
-		if ( $error === null ) {
-			return;
-		}
-
-		if ( $error['type'] & $this->get_config( 'config', 'target_shutdown_error' ) ) {
-			$suppress = $this->get_config( 'config', 'suppress_log_messages' );
-			$message  = str_replace( [ "\r\n", "\r", "\n" ], "\n", $error['message'] );
-			$messages = explode( "\n", $message );
-			$message  = reset( $messages );
-			if ( empty( $suppress ) || ( is_array( $suppress ) && ! in_array( $message, $suppress ) ) ) {
-				$this->log( $message, $error, 'error' );
-			}
 		}
 	}
 
