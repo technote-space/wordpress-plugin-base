@@ -27,7 +27,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 
 return [
 	// library version
-	'library_version'                => '2.9.12',
+	'library_version'                => '2.9.13',
 
 	// plugin title
 	'plugin_title'                   => '',
