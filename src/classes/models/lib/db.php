@@ -586,8 +586,8 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	 * @return array
 	 */
 	private function set_update_params( $data, $create, $update, $delete ) {
-		$now  = $this->apply_filters( 'set_update_params_date', date_i18n( 'Y-m-d H:i:s' ) );
-		$user = $this->apply_filters( 'set_update_params_user', substr( $this->app->user->user_name, 0, 32 ) );
+		$now  = $this->apply_filters( 'set_update_params_date', date_i18n( 'Y-m-d H:i:s' ), $data, $create, $update, $delete );
+		$user = $this->apply_filters( 'set_update_params_user', substr( $this->app->user->user_name, 0, 32 ), $data, $create, $update, $delete );
 
 		if ( $create ) {
 			$data['created_at'] = $now;
