@@ -2,10 +2,11 @@
 /**
  * Technote Views Admin Logs
  *
- * @version 2.7.0
+ * @version 2.9.13
  * @author technote-space
  * @since 1.0.0
  * @since 2.7.0 Changed: save log to db
+ * @since 2.9.13 Added: versions
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space

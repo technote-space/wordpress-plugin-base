@@ -2,7 +2,7 @@
 /**
  * Technote Configs Config
  *
- * @version 2.9.12
+ * @version 2.9.13
  * @author technote-space
  * @since 1.0.0
  * @since 2.1.0 Deleted: text_domain
