@@ -43,7 +43,7 @@ return [
 		],
 	],
 
-	'db' => [
+	'db'   => [
 		'switch_blog' => [
 			'switch_blog' => [],
 		],
@@ -99,7 +99,8 @@ return [
 
 	'loader->admin' => [
 		'admin_menu'    => [
-			'add_menu' => [ 9 ],
+			'add_menu'  => [ 9 ],
+			'sort_menu' => [ 11 ],
 		],
 		'admin_notices' => [
 			'admin_notice' => [],

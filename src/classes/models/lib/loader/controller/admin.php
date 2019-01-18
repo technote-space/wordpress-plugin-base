@@ -35,6 +35,12 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 	private $messages = [];
 
 	/**
+	 * @since 2.10.0
+	 * @var \Technote\Classes\Controllers\Admin\Base[] $_pages
+	 */
+	private $_pages = [];
+
+	/**
 	 * @since 2.3.0
 	 * @var array $readonly_properties
 	 */
@@ -116,11 +122,11 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 			$this->do_action( 'post_load_admin_page', $this->page );
 		}
 
-		$pages = [];
+		$this->_pages = [];
 		foreach ( $this->get_class_list() as $page ) {
 			/** @var \Technote\Classes\Controllers\Admin\Base $page */
 			if ( $this->app->user_can( $this->apply_filters( 'admin_menu_capability', $page->get_capability(), $page ) ) ) {
-				$pages[] = $page;
+				$this->_pages[] = $page;
 			}
 		}
 
@@ -146,7 +152,7 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 		} );
 
 		/** @var \Technote\Classes\Controllers\Admin\Base $page */
-		foreach ( $this->app->utility->flatten( $pages ) as $page ) {
+		foreach ( $this->_pages as $page ) {
 			$hook = add_submenu_page(
 				$this->get_menu_slug(),
 				$this->app->translate( $page->get_page_title() ),
@@ -163,6 +169,66 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 				} );
 			}
 		}
+	}
+
+	/**
+	 * sort menu
+	 * @since 2.10.0
+	 */
+	/** @noinspection PhpUnusedPrivateMethodInspection */
+	private function sort_menu() {
+		if ( ! $this->app->get_config( 'config', 'use_custom_post' ) ) {
+			return;
+		}
+
+		global $submenu;
+		$slug = $this->get_menu_slug();
+		if ( empty( $submenu[ $slug ] ) ) {
+			return;
+		}
+
+		$pages = $this->app->utility->array_map( $this->_pages, function ( $p ) {
+			/** @var \Technote\Classes\Controllers\Admin\Base $p */
+			return $this->get_page_prefix() . $p->get_page_slug();
+		} );
+		$pages = array_combine( $pages, $this->_pages );
+
+		/** @var \Technote\Classes\Models\Lib\Custom_Post $custom_post */
+		$custom_post = \Technote\Classes\Models\Lib\Custom_Post::get_instance( $this->app );
+		$types       = $custom_post->get_custom_posts();
+		$types       = array_combine( $this->app->utility->array_map( $types, function ( $p ) {
+			/** @var \Technote\Interfaces\Helper\Custom_Post $p */
+			return "edit.php?post_type={$p->get_post_type()}";
+		} ), $types );
+
+		$sort = [];
+		foreach ( $submenu[ $slug ] as $item ) {
+			if ( isset( $pages[ $item[2] ] ) ) {
+				/** @var \Technote\Classes\Controllers\Admin\Base $p */
+				$p = $pages[ $item[2] ];
+				if ( method_exists( $p, 'get_load_priority' ) ) {
+					$priority = $p->get_load_priority();
+				} else {
+					$priority = 10;
+				}
+				$sort[ $item[2] ] = $priority;
+			} elseif ( isset( $types[ $item[2] ] ) ) {
+				/** @var \Technote\Interfaces\Helper\Custom_Post $p */
+				$p = $types[ $item[2] ];
+				if ( method_exists( $p, 'get_load_priority' ) ) {
+					$priority = $p->get_load_priority();
+				} else {
+					$priority = 10;
+				}
+				$sort[ $item[2] ] = $priority;
+			} else {
+				$sort[ $item[2] ] = 10;
+			}
+		}
+		if ( count( $sort ) !== count( $submenu[ $slug ] ) ) {
+			return;
+		}
+		array_multisort( $sort, $submenu[ $slug ] );
 	}
 
 	/**
