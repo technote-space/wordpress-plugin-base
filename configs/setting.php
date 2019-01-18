@@ -56,7 +56,7 @@ return [
 					'type'    => 'string',
 					'default' => function ( $app ) {
 						/** @var \Technote $app */
-						return $app->utility->array_get( $app->plugin_data, 'Version' );
+						return $app->get_plugin_version();
 					},
 				],
 				'use_admin_ajax'          => [

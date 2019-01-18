@@ -129,13 +129,13 @@ class Define implements \Technote\Interfaces\Singleton {
 		$this->plugin_src_dir     = $this->plugin_dir . DS . 'src';
 		$this->plugin_configs_dir = $this->plugin_dir . DS . 'configs';
 		$this->plugin_views_dir   = $this->plugin_src_dir . DS . 'views';
-		$domain_path              = trim( $this->app->plugin_data['DomainPath'], '/' . DS );
+		$domain_path              = trim( $this->app->get_plugin_data( 'DomainPath' ), '/' . DS );
 		if ( empty( $domain_path ) || ! is_dir( $this->plugin_dir . DS . $domain_path ) ) {
 			$this->plugin_textdomain         = false;
 			$this->plugin_languages_dir      = false;
 			$this->plugin_languages_rel_path = false;
 		} else {
-			$this->plugin_textdomain         = $this->app->plugin_data['TextDomain'];
+			$this->plugin_textdomain         = $this->app->get_plugin_data( 'TextDomain' );
 			$this->plugin_languages_dir      = $this->plugin_dir . DS . $domain_path;
 			$this->plugin_languages_rel_path = ltrim( str_replace( WP_PLUGIN_DIR, '', $this->plugin_languages_dir ), DS );
 		}

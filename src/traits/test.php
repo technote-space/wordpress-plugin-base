@@ -21,6 +21,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * Trait Test
  * @package Technote\Traits
  * @property \Technote $app
+ * @mixin \PHPUnit\Framework\TestCase
  */
 trait Test {
 
