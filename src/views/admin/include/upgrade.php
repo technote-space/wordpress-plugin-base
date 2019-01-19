@@ -22,7 +22,17 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 			<?php if ( empty( $notice ) ) {
 				continue;
 			} ?>
+			<?php if ( is_array( $notice ) ): ?>
+                <li style="margin:10px 0 0;"><span style="font-size: 1.2em; line-height: 1.3em; font-weight: bold;"><?php $instance->h( 'v' . $index, true ); ?></span>
+                    <ul style="list-style: circle; margin-left: 10px;">
+						<?php foreach ( $notice as $item ): ?>
+                            <li style="margin: 0"><?php $instance->h( $item, true ); ?></li>
+						<?php endforeach; ?>
+                    </ul>
+                </li>
+			<?php else: ?>
             <li style="margin: 0"><?php $instance->h( $notice, true ); ?></li>
+			<?php endif; ?>
 		<?php endforeach; ?>
     </ul>
 </div>
