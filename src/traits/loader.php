@@ -2,7 +2,7 @@
 /**
  * Technote Traits Loader
  *
- * @version 2.9.0
+ * @version 2.10.0
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0
@@ -10,6 +10,7 @@
  * @since 2.6.1 Improved: refactoring
  * @since 2.6.1 Updated: count without load class feature
  * @since 2.9.0 Improved: regexp
+ * @since 2.10.0 Changed: trivial change
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -87,7 +88,7 @@ trait Loader {
 	public function get_class_list() {
 		if ( ! isset( $this->_list ) ) {
 			$this->_list = [];
-			$sort       = [];
+			$sort        = [];
 			/** @var \Technote\Traits\Singleton $class */
 			foreach ( $this->get_namespaces() as $namespace ) {
 				foreach ( $this->get_classes( $this->namespace_to_dir( $namespace ), $this->get_instanceof() ) as $class ) {

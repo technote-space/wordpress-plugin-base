@@ -2,11 +2,12 @@
 /**
  * Technote Classes Models Lib Option
  *
- * @version 2.0.2
+ * @version 2.10.0
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0 Changed: not to flush cache when initialize
  * @since 2.0.2 Added: Uninstall priority
+ * @since 2.10.0 Changed: trivial change
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -116,7 +117,7 @@ class Option implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	 */
 	public function set( $key, $value ) {
 		$this->reload_options();
-		$suspend_reload        = $this->_suspend_reload;
+		$suspend_reload         = $this->_suspend_reload;
 		$prev                   = isset( $this->_options[ $key ] ) ? $this->_options[ $key ] : null;
 		$this->_options[ $key ] = $value;
 		if ( $prev !== $value ) {

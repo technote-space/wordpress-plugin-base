@@ -2,9 +2,10 @@
 /**
  * Technote Traits Readonly
  *
- * @version 2.3.0
+ * @version 2.10.0
  * @author technote-space
  * @since 2.3.0
+ * @since 2.10.0 Changed: trivial change
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -44,7 +45,7 @@ trait Readonly {
 	private function set_readonly_property( $name, $value ) {
 		if ( $this->is_readonly_property( $name ) ) {
 			$this->_is_allowed_access = true;
-			$this->$name             = $value;
+			$this->$name              = $value;
 			$this->_is_allowed_access = false;
 		} else {
 			$message = sprintf( $this->app->translate( 'you cannot access %s->%s.' ), static::class, $name );

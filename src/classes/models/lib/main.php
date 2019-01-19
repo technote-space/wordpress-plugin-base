@@ -9,6 +9,7 @@
  * @since 2.1.0 Changed: load textdomain from plugin data
  * @since 2.3.0 Changed: public properties to readonly properties
  * @since 2.5.0 Changed: views directory
+ * @since 2.10.0 Changed: moved main program
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space

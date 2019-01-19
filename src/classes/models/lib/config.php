@@ -2,10 +2,11 @@
 /**
  * Technote Classes Models Lib Config
  *
- * @version 2.0.0
+ * @version 2.10.0
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0
+ * @since 2.10.0 Changed: trivial change
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -38,8 +39,8 @@ class Config implements \Technote\Interfaces\Singleton {
 	 */
 	public function load( $name ) {
 		if ( ! isset( $this->_configs[ $name ] ) ) {
-			$plugin_config                                       = $this->load_config_file( $this->app->define->plugin_configs_dir, $name );
-			$lib_config                                          = $this->load_config_file( $this->app->define->lib_configs_dir, $name );
+			$plugin_config           = $this->load_config_file( $this->app->define->plugin_configs_dir, $name );
+			$lib_config              = $this->load_config_file( $this->app->define->lib_configs_dir, $name );
 			$this->_configs[ $name ] = array_replace_recursive( $lib_config, $plugin_config );
 		}
 

@@ -2,7 +2,7 @@
 /**
  * Technote
  *
- * @version 2.9.13
+ * @version 2.10.0
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0 Added: Feature to load library of latest version
@@ -31,6 +31,7 @@
  * @since 2.9.12 Improved: shutdown log
  * @since 2.9.13 Changed: log settings
  * @since 2.9.13 Changed: moved shutdown function to log
+ * @since 2.10.0 Changed: moved main program to lib/main
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -68,7 +69,7 @@ define( 'TECHNOTE_IS_MOCK', false );
  * @property \Technote\Classes\Models\Lib\Social $social
  * @property \Technote\Classes\Models\Lib\Custom_Post $custom_post
  * @property \Technote\Classes\Models\Lib\Mail $mail
- * @method void main_init( bool $uninstall = false )
+ * @method void main_init()
  * @method bool has_initialized()
  * @method string get_plugin_version()
  * @method string|false get_text_domain()
@@ -191,6 +192,8 @@ class Technote {
 	}
 
 	/**
+	 * @since 2.10.0
+	 *
 	 * @param $name
 	 * @param $arguments
 	 *
@@ -247,7 +250,7 @@ class Technote {
 	 */
 	public static function get_instance( $plugin_name, $plugin_file, $slug_name = null ) {
 		if ( ! isset( self::$_instances[ $plugin_name ] ) ) {
-			$instances                       = new static( $plugin_name, $plugin_file, $slug_name );
+			$instances                        = new static( $plugin_name, $plugin_file, $slug_name );
 			self::$_instances[ $plugin_name ] = $instances;
 
 			$latest  = self::$_latest_library_version;

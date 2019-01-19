@@ -2,11 +2,12 @@
 /**
  * Technote Classes Models Lib Minify
  *
- * @version 2.9.0
+ * @version 2.10.0
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0
  * @since 2.9.0 Added: method to clear cache
+ * @since 2.10.0 Fixed: output css after footer
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -209,7 +210,7 @@ class Minify implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 		}
 		$this->_css = [];
 	}
-  
+
 	/**
 	 * @since 2.10.0
 	 * end footer

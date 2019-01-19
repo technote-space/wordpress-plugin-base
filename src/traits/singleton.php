@@ -2,7 +2,7 @@
 /**
  * Technote Traits Singleton
  *
- * @version 2.4.2
+ * @version 2.10.0
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0
@@ -11,6 +11,7 @@
  * @since 2.3.2 Fixed: ignore abstract class
  * @since 2.4.2 Added: is_filter_callable, filter_callback methods
  * @since 2.4.2 Deleted: add_filter method
+ * @since 2.10.0 Changed: trivial change
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -120,7 +121,7 @@ trait Singleton {
 	 * @param \ReflectionClass $reflection
 	 */
 	protected function init( \Technote $app, $reflection ) {
-		$this->app        = $app;
+		$this->app         = $app;
 		$this->_reflection = $reflection;
 		$this->_class_name = $reflection->getName();
 		if ( $this instanceof \Technote\Interfaces\Hook ) {

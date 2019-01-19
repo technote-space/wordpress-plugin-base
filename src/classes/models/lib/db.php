@@ -2,7 +2,7 @@
 /**
  * Technote Classes Models Lib Db
  *
- * @version 2.9.14
+ * @version 2.10.0
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0 Added: Feature to cache result of conversion type format
@@ -20,6 +20,7 @@
  * @since 2.9.0 Added: method to get last error
  * @since 2.9.8 Fixed: upgrade message
  * @since 2.9.14 Fixed: prevent cache
+ * @since 2.10.0 Improved: share type2format result cache
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space

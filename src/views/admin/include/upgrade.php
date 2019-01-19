@@ -2,9 +2,10 @@
 /**
  * Technote Views Admin Include Upgrade
  *
- * @version 2.4.1
+ * @version 2.10.0
  * @author technote-space
  * @since 2.4.1
+ * @since 2.10.0 Improved: multiple version
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -31,7 +32,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
                     </ul>
                 </li>
 			<?php else: ?>
-            <li style="margin: 0"><?php $instance->h( $notice, true ); ?></li>
+                <li style="margin: 0"><?php $instance->h( $notice, true ); ?></li>
 			<?php endif; ?>
 		<?php endforeach; ?>
     </ul>
