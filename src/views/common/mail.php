@@ -33,7 +33,6 @@ $instance->add_style_view( 'common/style/mail' );
 <body bgcolor="#FFFFFF">
 <table class="body-wrap">
     <tr>
-        <td></td>
         <td class="container" bgcolor="#FFFFFF">
             <div class="content">
                 <table>
@@ -45,7 +44,6 @@ $instance->add_style_view( 'common/style/mail' );
                 </table>
             </div><!-- /content -->
         </td>
-        <td></td>
     </tr>
 </table><!-- /BODY -->
 </body>
