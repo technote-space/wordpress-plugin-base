@@ -27,8 +27,11 @@ trait Test {
 
 	use Singleton, Hook;
 
-	/** @var array $objects */
-	private $objects = [];
+	/**
+	 * @since 2.10.0 Changed: trivial change
+	 * @var array $_objects
+	 */
+	private $_objects = [];
 
 	/**
 	 * Test constructor.
@@ -72,20 +75,20 @@ trait Test {
 	 * @param mixed $obj
 	 */
 	protected function dump( $obj ) {
-		$this->objects[] = print_r( $obj, true );
+		$this->_objects[] = print_r( $obj, true );
 	}
 
 	/**
 	 * @return bool
 	 */
 	public function has_dump_objects() {
-		return ! empty( $this->objects );
+		return ! empty( $this->_objects );
 	}
 
 	/**
 	 * @return array
 	 */
 	public function get_dump_objects() {
-		return $this->objects;
+		return $this->_objects;
 	}
 }

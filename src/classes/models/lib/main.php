@@ -49,24 +49,37 @@ class Main implements \Technote\Interfaces\Singleton {
 
 	use \Technote\Traits\Singleton;
 
-	/** @var bool $lib_language_loaded */
-	private static $lib_language_loaded = false;
+	/**
+	 * @since 2.10.0 Changed: trivial change
+	 * @var bool $_lib_language_loaded
+	 */
+	private static $_lib_language_loaded = false;
 
-	/** @var array $shared_object */
-	private static $shared_object = [];
+	/**
+	 * @since 2.10.0 Changed: trivial change
+	 * @var array $_shared_object
+	 */
+	private static $_shared_object = [];
 
-	/** @var bool $initialized */
-	private $initialized = false;
+	/**
+	 * @since 2.10.0 Changed: trivial change
+	 * @var bool $_initialized
+	 */
+	private $_initialized = false;
 
-	/** @var array $plugin_data */
-	private $plugin_data;
+	/**
+	 * @since 2.10.0 Changed: trivial change
+	 * @var array $_plugin_data
+	 */
+	private $_plugin_data;
 
 	/**
 	 * @since 2.8.0 Added: social, custom_post
 	 * @since 2.9.0 Added: mail
-	 * @var array $properties
+	 * @since 2.10.0 Changed: trivial change
+	 * @var array $_properties
 	 */
-	private $properties = [
+	private $_properties = [
 		'define'      => '\Technote\Classes\Models\Lib\Define',
 		'config'      => '\Technote\Classes\Models\Lib\Config',
 		'setting'     => '\Technote\Classes\Models\Lib\Setting',
@@ -90,8 +103,11 @@ class Main implements \Technote\Interfaces\Singleton {
 		'mail'        => '\Technote\Classes\Models\Lib\Mail',
 	];
 
-	/** @var array $property_instances */
-	private $property_instances = [];
+	/**
+	 * @since 2.10.0 Changed: trivial change
+	 * @var array $_property_instances
+	 */
+	private $_property_instances = [];
 
 	/**
 	 * @param string $name
@@ -100,14 +116,14 @@ class Main implements \Technote\Interfaces\Singleton {
 	 * @throws \OutOfRangeException
 	 */
 	public function __get( $name ) {
-		if ( isset( $this->properties[ $name ] ) ) {
-			if ( ! isset( $this->property_instances[ $name ] ) ) {
+		if ( isset( $this->_properties[ $name ] ) ) {
+			if ( ! isset( $this->_property_instances[ $name ] ) ) {
 				/** @var \Technote\Interfaces\Singleton $class */
-				$class                             = $this->properties[ $name ];
-				$this->property_instances[ $name ] = $class::get_instance( $this->app );
+				$class                              = $this->_properties[ $name ];
+				$this->_property_instances[ $name ] = $class::get_instance( $this->app );
 			}
 
-			return $this->property_instances[ $name ];
+			return $this->_property_instances[ $name ];
 		}
 		throw new \OutOfRangeException( $name . ' is undefined.' );
 	}
@@ -118,7 +134,7 @@ class Main implements \Technote\Interfaces\Singleton {
 	 * @return bool
 	 */
 	public function __isset( $name ) {
-		return array_key_exists( $name, $this->properties );
+		return array_key_exists( $name, $this->_properties );
 	}
 
 	/**
@@ -128,7 +144,7 @@ class Main implements \Technote\Interfaces\Singleton {
 		if ( ! function_exists( 'get_plugin_data' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
-		$this->plugin_data = get_plugin_data( $this->app->plugin_file, false, false );
+		$this->_plugin_data = get_plugin_data( $this->app->plugin_file, false, false );
 	}
 
 	/**
@@ -142,7 +158,7 @@ class Main implements \Technote\Interfaces\Singleton {
 		$class = ltrim( $class, '\\' );
 		$dir   = null;
 
-		if ( ! isset( $this->property_instances['define'] ) ) {
+		if ( ! isset( $this->_property_instances['define'] ) ) {
 			$namespace = ucfirst( TECHNOTE_PLUGIN );
 			if ( preg_match( "#\A{$namespace}#", $class ) ) {
 				$class = preg_replace( "#\A{$namespace}#", '', $class );
@@ -175,10 +191,10 @@ class Main implements \Technote\Interfaces\Singleton {
 	 * @param bool $uninstall
 	 */
 	public function main_init( $uninstall = false ) {
-		if ( $this->initialized ) {
+		if ( $this->_initialized ) {
 			return;
 		}
-		$this->initialized = true;
+		$this->_initialized = true;
 
 		$this->filter->do_action( 'app_initialize', $this );
 		$this->setup_property( $uninstall );
@@ -194,7 +210,7 @@ class Main implements \Technote\Interfaces\Singleton {
 	 */
 	private function setup_property( $uninstall ) {
 		if ( $uninstall ) {
-			foreach ( $this->properties as $name => $class ) {
+			foreach ( $this->_properties as $name => $class ) {
 				$this->$name;
 			}
 			$this->uninstall->get_class_list();
@@ -212,8 +228,8 @@ class Main implements \Technote\Interfaces\Singleton {
 	 * setup textdomain
 	 */
 	private function setup_textdomain() {
-		if ( ! static::$lib_language_loaded ) {
-			static::$lib_language_loaded = true;
+		if ( ! static::$_lib_language_loaded ) {
+			static::$_lib_language_loaded = true;
 			load_plugin_textdomain( $this->define->lib_textdomain, false, $this->define->lib_languages_rel_path );
 		}
 
@@ -236,7 +252,7 @@ class Main implements \Technote\Interfaces\Singleton {
 			$this->setting->remove_setting( 'get_nonce_check_referer' );
 			$this->setting->remove_setting( 'check_referer_host' );
 		}
-		if ( ! empty( $this->plugin_data['PluginURI'] ) && $this->utility->starts_with( $this->plugin_data['PluginURI'], 'https://wordpress.org' ) ) {
+		if ( ! empty( $this->_plugin_data['PluginURI'] ) && $this->utility->starts_with( $this->_plugin_data['PluginURI'], 'https://wordpress.org' ) ) {
 			$this->setting->edit_setting( 'check_update', 'default', false );
 		}
 		if ( ! $this->log->is_valid() ) {
@@ -253,7 +269,7 @@ class Main implements \Technote\Interfaces\Singleton {
 	 * @return bool
 	 */
 	public function has_initialized() {
-		return $this->initialized;
+		return $this->_initialized;
 	}
 
 	/**
@@ -264,7 +280,7 @@ class Main implements \Technote\Interfaces\Singleton {
 	 * @return array|string
 	 */
 	public function get_plugin_data( $key = null ) {
-		return empty( $key ) ? $this->plugin_data : $this->plugin_data[ $key ];
+		return empty( $key ) ? $this->_plugin_data : $this->_plugin_data[ $key ];
 	}
 
 	/**
@@ -272,7 +288,7 @@ class Main implements \Technote\Interfaces\Singleton {
 	 * @return string
 	 */
 	public function get_plugin_version() {
-		return $this->plugin_data['Version'];
+		return $this->get_plugin_data( 'Version' );
 	}
 
 	/**
@@ -399,7 +415,7 @@ class Main implements \Technote\Interfaces\Singleton {
 	public function get_shared_object( $key, $target = null ) {
 		! isset( $target ) and $target = $this->app->plugin_name;
 
-		return isset( self::$shared_object[ $target ][ $key ] ) ? self::$shared_object[ $target ][ $key ] : null;
+		return isset( self::$_shared_object[ $target ][ $key ] ) ? self::$_shared_object[ $target ][ $key ] : null;
 	}
 
 	/**
@@ -409,7 +425,7 @@ class Main implements \Technote\Interfaces\Singleton {
 	 */
 	public function set_shared_object( $key, $object, $target = null ) {
 		! isset( $target ) and $target = $this->app->plugin_name;
-		self::$shared_object[ $target ][ $key ] = $object;
+		self::$_shared_object[ $target ][ $key ] = $object;
 	}
 
 	/**
@@ -421,7 +437,7 @@ class Main implements \Technote\Interfaces\Singleton {
 	public function isset_shared_object( $key, $target = null ) {
 		! isset( $target ) and $target = $this->app->plugin_name;
 
-		return isset( self::$shared_object[ $target ] ) && array_key_exists( $key, self::$shared_object[ $target ] );
+		return isset( self::$_shared_object[ $target ] ) && array_key_exists( $key, self::$_shared_object[ $target ] );
 	}
 
 	/**
@@ -430,6 +446,6 @@ class Main implements \Technote\Interfaces\Singleton {
 	 */
 	public function delete_shared_object( $key, $target = null ) {
 		! isset( $target ) and $target = $this->app->plugin_name;
-		unset( self::$shared_object[ $target ][ $key ] );
+		unset( self::$_shared_object[ $target ][ $key ] );
 	}
 }

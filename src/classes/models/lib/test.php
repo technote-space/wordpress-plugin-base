@@ -29,8 +29,11 @@ class Test implements \Technote\Interfaces\Loader {
 
 	use \Technote\Traits\Loader;
 
-	/** @var bool $is_valid */
-	private $is_valid = false;
+	/**
+	 * @since 2.10.0 Changed: trivial change
+	 * @var bool $_is_valid
+	 */
+	private $_is_valid = false;
 
 	/**
 	 * initialize
@@ -49,21 +52,21 @@ class Test implements \Technote\Interfaces\Loader {
 			}
 		}
 
-		$this->is_valid = true;
+		$this->_is_valid = true;
 	}
 
 	/**
 	 * @return bool
 	 */
 	public function is_valid() {
-		return $this->is_valid && count( $this->get_tests() ) > 0;
+		return $this->_is_valid && count( $this->get_tests() ) > 0;
 	}
 
 	/**
 	 * @return array
 	 */
 	private function get_tests() {
-		if ( ! $this->is_valid ) {
+		if ( ! $this->_is_valid ) {
 			return [];
 		}
 
@@ -97,7 +100,7 @@ class Test implements \Technote\Interfaces\Loader {
 	 * @return array
 	 */
 	public function do_tests() {
-		if ( ! $this->is_valid ) {
+		if ( ! $this->_is_valid ) {
 			return [];
 		}
 
