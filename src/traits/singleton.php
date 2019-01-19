@@ -80,7 +80,7 @@ trait Singleton {
 					self::$_instances[ $key ][ $class ] = null;
 				} else {
 					$instance = new static( $app, $reflection );
-					if ( $instance instanceof \Technote\Interfaces\Uninstall ) {
+					if ( $app->is_uninstall() && $instance instanceof \Technote\Interfaces\Uninstall ) {
 						$app->uninstall->add_uninstall( [ $instance, 'uninstall' ], $instance->get_uninstall_priority() );
 					}
 					self::$_instances[ $key ][ $class ] = $instance;

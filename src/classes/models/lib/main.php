@@ -188,16 +188,17 @@ class Main implements \Technote\Interfaces\Singleton {
 	}
 
 	/**
-	 * @param bool $uninstall
+	 * main init
+	 * @since 2.10.0 Deleted: $uninstall parameter
 	 */
-	public function main_init( $uninstall = false ) {
+	public function main_init() {
 		if ( $this->_initialized ) {
 			return;
 		}
 		$this->_initialized = true;
 
 		$this->filter->do_action( 'app_initialize', $this );
-		$this->setup_property( $uninstall );
+		$this->setup_property();
 		$this->setup_textdomain();
 		$this->setup_settings();
 		$this->filter->do_action( 'app_initialized', $this );
@@ -205,11 +206,10 @@ class Main implements \Technote\Interfaces\Singleton {
 
 	/**
 	 * @since 2.8.1 Added: setup social login, custom post filters
-	 *
-	 * @param bool $uninstall
+	 * @since 2.10.0 Deleted: $uninstall parameter
 	 */
-	private function setup_property( $uninstall ) {
-		if ( $uninstall ) {
+	private function setup_property() {
+		if ( $this->app->is_uninstall() ) {
 			foreach ( $this->_properties as $name => $class ) {
 				$this->$name;
 			}

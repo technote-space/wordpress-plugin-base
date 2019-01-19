@@ -136,6 +136,12 @@ class Technote {
 	 */
 	private $_main;
 
+	/**
+	 * @since 2.10.0
+	 * @var bool $_is_uninstall
+	 */
+	private $_is_uninstall = false;
+
 	/** @var string $original_plugin_name */
 	public $original_plugin_name;
 
@@ -346,8 +352,9 @@ class Technote {
 			return;
 		}
 
+		$app->_is_uninstall = true;
 		$app->plugins_loaded();
-		$app->main_init( true );
+		$app->main_init();
 		$app->uninstall->uninstall();
 	}
 
@@ -384,6 +391,14 @@ class Technote {
 	 */
 	public function get_library_version() {
 		return self::$_latest_library_version;
+	}
+
+	/**
+	 * @since 2.10.0
+	 * @return bool
+	 */
+	public function is_uninstall() {
+		return $this->_is_uninstall;
 	}
 }
 
