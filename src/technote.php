@@ -89,32 +89,52 @@ define( 'TECHNOTE_IS_MOCK', false );
  */
 class Technote {
 
-	/** @var array|\Technote[] */
-	private static $instances = [];
+	/**
+	 * @since 2.10.0 Changed: trivial change
+	 * @var array|\Technote[] $_instances
+	 */
+	private static $_instances = [];
 
 	/**
 	 * @since 2.0.0
-	 * @var string $latest_library_version
+	 * @since 2.10.0 Changed: trivial change
+	 * @var string $_latest_library_version
 	 */
-	private static $latest_library_version = null;
+	private static $_latest_library_version = null;
 
 	/**
 	 * @since 2.0.0
-	 * @var string $latest_library_directory
+	 * @since 2.10.0 Changed: trivial change
+	 * @var string $_latest_library_directory
 	 */
-	private static $latest_library_directory = null;
+	private static $_latest_library_directory = null;
 
 	/**
 	 * @since 2.0.0
-	 * @var string $library_version
+	 * @since 2.10.0 Changed: trivial change
+	 * @var string $_library_version
 	 */
-	private $library_version;
+	private $_library_version;
 
 	/**
 	 * @since 2.0.0
-	 * @var string $library_directory
+	 * @since 2.10.0 Changed: trivial change
+	 * @var string $_library_directory
 	 */
-	private $library_directory;
+	private $_library_directory;
+
+	/**
+	 * @since 2.0.0
+	 * @since 2.10.0 Changed: trivial change
+	 * @var bool $_plugins_loaded
+	 */
+	private $_plugins_loaded = false;
+
+	/**
+	 * @since 2.10.0
+	 * @var \Technote\Classes\Models\Lib\Main $_main
+	 */
+	private $_main;
 
 	/** @var string $original_plugin_name */
 	public $original_plugin_name;
@@ -127,18 +147,6 @@ class Technote {
 
 	/** @var string $slug_name */
 	public $slug_name;
-
-	/**
-	 * @since 2.0.0
-	 * @var bool $plugins_loaded
-	 */
-	private $plugins_loaded = false;
-
-	/**
-	 * @since 2.10.0
-	 * @var \Technote\Classes\Models\Lib\Main $main
-	 */
-	private $main;
 
 	/**
 	 * Technote constructor.
@@ -202,7 +210,7 @@ class Technote {
 	 * @return \Technote\Classes\Models\Lib\Main|\Technote\Traits\Singleton
 	 */
 	private function get_main() {
-		if ( ! isset( $this->main ) ) {
+		if ( ! isset( $this->_main ) ) {
 			$required = [
 				'Interfaces\Readonly',
 				'Interfaces\Singleton',
@@ -210,7 +218,7 @@ class Technote {
 				'Traits\Singleton',
 				'Classes\Models\Lib\Main',
 			];
-			$dir      = self::$latest_library_directory . DS . 'src';
+			$dir      = self::$_latest_library_directory . DS . 'src';
 			foreach ( $required as $item ) {
 				$path = $dir . DS . str_replace( '\\', DS, strtolower( $item ) ) . '.php';
 				if ( is_readable( $path ) ) {
@@ -218,10 +226,10 @@ class Technote {
 					require_once $path;
 				}
 			}
-			$this->main = \Technote\Classes\Models\Lib\Main::get_instance( $this );
+			$this->_main = \Technote\Classes\Models\Lib\Main::get_instance( $this );
 		}
 
-		return $this->main;
+		return $this->_main;
 	}
 
 	/**
@@ -232,19 +240,19 @@ class Technote {
 	 * @return Technote
 	 */
 	public static function get_instance( $plugin_name, $plugin_file, $slug_name = null ) {
-		if ( ! isset( self::$instances[ $plugin_name ] ) ) {
+		if ( ! isset( self::$_instances[ $plugin_name ] ) ) {
 			$instances                       = new static( $plugin_name, $plugin_file, $slug_name );
-			self::$instances[ $plugin_name ] = $instances;
+			self::$_instances[ $plugin_name ] = $instances;
 
-			$latest  = self::$latest_library_version;
-			$version = $instances->library_version;
+			$latest  = self::$_latest_library_version;
+			$version = $instances->_library_version;
 			if ( ! isset( $latest ) || version_compare( $latest, $version, '<' ) ) {
-				self::$latest_library_version   = $version;
-				self::$latest_library_directory = $instances->library_directory;
+				self::$_latest_library_version   = $version;
+				self::$_latest_library_directory = $instances->_library_directory;
 			}
 		}
 
-		return self::$instances[ $plugin_name ];
+		return self::$_instances[ $plugin_name ];
 	}
 
 	/**
@@ -267,8 +275,8 @@ class Technote {
 			$library_version   = '0.0.0';
 			$library_directory = dirname( TECHNOTE_BOOTSTRAP );
 		}
-		$this->library_version   = $library_version;
-		$this->library_directory = $library_directory;
+		$this->_library_version   = $library_version;
+		$this->_library_directory = $library_directory;
 	}
 
 	/**
@@ -304,10 +312,10 @@ class Technote {
 	 * load basic files
 	 */
 	private function plugins_loaded() {
-		if ( $this->plugins_loaded ) {
+		if ( $this->_plugins_loaded ) {
 			return;
 		}
-		$this->plugins_loaded = true;
+		$this->_plugins_loaded = true;
 
 		spl_autoload_register( function ( $class ) {
 			return $this->get_main()->load_class( $class );
@@ -352,7 +360,7 @@ class Technote {
 	 */
 	private static function find_plugin( $plugin_base_name ) {
 		/** @var \Technote $instance */
-		foreach ( self::$instances as $plugin_name => $instance ) {
+		foreach ( self::$_instances as $plugin_name => $instance ) {
 			$instance->plugins_loaded();
 			if ( $instance->define->plugin_base_name === $plugin_base_name ) {
 				return $instance;
@@ -367,7 +375,7 @@ class Technote {
 	 * @return string
 	 */
 	public function get_library_directory() {
-		return self::$latest_library_directory;
+		return self::$_latest_library_directory;
 	}
 
 	/**
@@ -375,7 +383,7 @@ class Technote {
 	 * @return string
 	 */
 	public function get_library_version() {
-		return self::$latest_library_version;
+		return self::$_latest_library_version;
 	}
 }
 

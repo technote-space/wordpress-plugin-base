@@ -39,20 +39,24 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 
 	use \Technote\Traits\Singleton, \Technote\Traits\Hook, \Technote\Traits\Uninstall;
 
-	/** @var array */
+	/** @var array $table_defines */
 	protected $table_defines = null;
 
 	/**
 	 * @since 2.0.0
+	 * @since 2.10.0 Improved: share result cache
 	 * @var array $_type2format
 	 */
-	private $_type2format = [];
+	private static $_type2format = [];
 
 	/**
 	 * @since 2.9.0
 	 * @var \Exception $_error
 	 */
 	private $_error = null;
+
+	/** @var int $_transaction_level */
+	private $_transaction_level = 0;
 
 	/**
 	 * initialize
@@ -71,7 +75,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	 * @return string
 	 */
 	private function type2format( $type ) {
-		if ( ! isset( $this->_type2format[ $type ] ) ) {
+		if ( ! isset( static::$_type2format[ $type ] ) ) {
 			$format = '%s';
 			switch ( true ) {
 				case stristr( $type, 'INT' ) !== false:
@@ -96,10 +100,10 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 					$format = '%f';
 					break;
 			}
-			$this->_type2format[ $type ] = $this->apply_filters( 'type2format', $format, $type );
+			static::$_type2format[ $type ] = $this->apply_filters( 'type2format', $format, $type );
 		}
 
-		return $this->_type2format[ $type ];
+		return static::$_type2format[ $type ];
 	}
 
 	/**
@@ -1340,17 +1344,14 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 		return $this->query( 'ROLLBACK' );
 	}
 
-	/** @var int $transaction_level */
-	private $transaction_level = 0;
-
 	/**
 	 * @param callable $func
 	 *
 	 * @return bool
 	 */
 	public function transaction( $func ) {
-		$level = $this->transaction_level;
-		$this->transaction_level ++;
+		$level = $this->_transaction_level;
+		$this->_transaction_level ++;
 		if ( $level === 0 ) {
 			$this->_error = null;
 			try {
@@ -1364,7 +1365,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 				$this->app->log( $e );
 				$this->_error = $e;
 			} finally {
-				$this->transaction_level = $level;
+				$this->_transaction_level = $level;
 			}
 		} else {
 			try {
@@ -1372,7 +1373,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 
 				return true;
 			} finally {
-				$this->transaction_level = $level;
+				$this->_transaction_level = $level;
 			}
 		}
 

@@ -30,11 +30,17 @@ trait Loader {
 
 	use Singleton, Hook, Presenter;
 
-	/** @var array $list */
-	private $list = null;
+	/**
+	 * @since 2.10.0 Changed: trivial change
+	 * @var array $_list
+	 */
+	private $_list = null;
 
-	/** @var array $cache */
-	private $cache = [];
+	/**
+	 * @since 2.10.0 Changed: trivial change
+	 * @var array $_cache
+	 */
+	private $_cache = [];
 
 	/** @var int $_count */
 	private $_count = null;
@@ -79,19 +85,19 @@ trait Loader {
 	 * @return array
 	 */
 	public function get_class_list() {
-		if ( ! isset( $this->list ) ) {
-			$this->list = [];
+		if ( ! isset( $this->_list ) ) {
+			$this->_list = [];
 			$sort       = [];
 			/** @var \Technote\Traits\Singleton $class */
 			foreach ( $this->get_namespaces() as $namespace ) {
 				foreach ( $this->get_classes( $this->namespace_to_dir( $namespace ), $this->get_instanceof() ) as $class ) {
 					$slug = $class->get_class_name();
-					if ( ! isset( $this->list[ $slug ] ) ) {
-						$this->list[ $slug ] = $class;
+					if ( ! isset( $this->_list[ $slug ] ) ) {
+						$this->_list[ $slug ] = $class;
 						if ( method_exists( $class, 'get_load_priority' ) ) {
 							$sort[ $slug ] = $class->get_load_priority();
 							if ( $sort[ $slug ] < 0 ) {
-								unset( $this->list[ $slug ] );
+								unset( $this->_list[ $slug ] );
 								unset( $sort[ $slug ] );
 							}
 						}
@@ -99,7 +105,7 @@ trait Loader {
 				}
 			}
 			if ( ! empty( $sort ) ) {
-				uasort( $this->list, function ( $a, $b ) use ( $sort ) {
+				uasort( $this->_list, function ( $a, $b ) use ( $sort ) {
 					/** @var \Technote\Traits\Singleton $a */
 					/** @var \Technote\Traits\Singleton $b */
 					$pa = isset( $sort[ $a->get_class_name() ] ) ? $sort[ $a->get_class_name() ] : 10;
@@ -110,7 +116,7 @@ trait Loader {
 			}
 		}
 
-		return $this->list;
+		return $this->_list;
 	}
 
 	/**
@@ -121,7 +127,7 @@ trait Loader {
 	 * @return int
 	 */
 	public function get_loaded_count( $exact = true ) {
-		if ( ! $exact && ! isset( $this->list ) ) {
+		if ( ! $exact && ! isset( $this->_list ) ) {
 			if ( ! isset( $this->_count ) ) {
 				$this->_count = 0;
 				foreach ( $this->get_namespaces() as $namespace ) {
@@ -173,17 +179,17 @@ trait Loader {
 	 * @return false|array
 	 */
 	protected function get_class_setting( $class_name, $add_namespace = '' ) {
-		if ( isset( $this->cache[ $add_namespace . $class_name ] ) ) {
-			return $this->cache[ $add_namespace . $class_name ];
+		if ( isset( $this->_cache[ $add_namespace . $class_name ] ) ) {
+			return $this->_cache[ $add_namespace . $class_name ];
 		}
 		$namespaces = $this->get_namespaces();
 		if ( ! empty( $namespaces ) ) {
 			foreach ( $namespaces as $namespace ) {
 				$class = rtrim( $namespace, '\\' ) . '\\' . $add_namespace . $class_name;
 				if ( class_exists( $class ) ) {
-					$this->cache[ $add_namespace . $class_name ] = [ $class, $add_namespace ];
+					$this->_cache[ $add_namespace . $class_name ] = [ $class, $add_namespace ];
 
-					return $this->cache[ $add_namespace . $class_name ];
+					return $this->_cache[ $add_namespace . $class_name ];
 				}
 			}
 		}

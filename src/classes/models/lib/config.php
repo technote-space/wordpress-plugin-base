@@ -25,8 +25,11 @@ class Config implements \Technote\Interfaces\Singleton {
 
 	use \Technote\Traits\Singleton;
 
-	/** @var array */
-	private static $configs = [];
+	/**
+	 * @since 2.10.0 Changed: trivial change
+	 * @var array $_configs
+	 */
+	private $_configs = [];
 
 	/**
 	 * @param string $name
@@ -34,13 +37,13 @@ class Config implements \Technote\Interfaces\Singleton {
 	 * @return array
 	 */
 	public function load( $name ) {
-		if ( ! isset( static::$configs[ $this->app->plugin_name ][ $name ] ) ) {
+		if ( ! isset( $this->_configs[ $name ] ) ) {
 			$plugin_config                                       = $this->load_config_file( $this->app->define->plugin_configs_dir, $name );
 			$lib_config                                          = $this->load_config_file( $this->app->define->lib_configs_dir, $name );
-			static::$configs[ $this->app->plugin_name ][ $name ] = array_replace_recursive( $lib_config, $plugin_config );
+			$this->_configs[ $name ] = array_replace_recursive( $lib_config, $plugin_config );
 		}
 
-		return static::$configs[ $this->app->plugin_name ][ $name ];
+		return $this->_configs[ $name ];
 	}
 
 	/**
@@ -61,7 +64,7 @@ class Config implements \Technote\Interfaces\Singleton {
 	 */
 	public function set( $name, $key, $value ) {
 		$this->load( $name );
-		$this->app->utility->array_set( static::$configs[ $this->app->plugin_name ][ $name ], $key, $value );
+		$this->app->utility->array_set( $this->_configs[ $name ], $key, $value );
 	}
 
 	/**

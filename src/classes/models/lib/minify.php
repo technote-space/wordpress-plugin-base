@@ -26,17 +26,29 @@ class Minify implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 
 	use \Technote\Traits\Singleton, \Technote\Traits\Hook;
 
-	/** @var array */
-	private $script = [];
+	/**
+	 * @since 2.10.0 Changed: trivial change
+	 * @var array $_script
+	 */
+	private $_script = [];
 
-	/** @var bool */
-	private $has_output_script = false;
+	/**
+	 * @since 2.10.0 Changed: trivial change
+	 * @var bool $_has_output_script
+	 */
+	private $_has_output_script = false;
 
-	/** @var array */
-	private $css = [];
+	/**
+	 * @since 2.10.0 Changed: trivial change
+	 * @var array $_css
+	 */
+	private $_css = [];
 
-	/** @var bool */
-	private $end_footer = false;
+	/**
+	 * @since 2.10.0 Changed: trivial change
+	 * @var bool $_end_footer
+	 */
+	private $_end_footer = false;
 
 	/**
 	 * @param string $src
@@ -101,8 +113,8 @@ class Minify implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 			return;
 		}
 
-		$this->script[ $priority ][] = $script;
-		if ( $this->has_output_script ) {
+		$this->_script[ $priority ][] = $script;
+		if ( $this->_has_output_script ) {
 			$this->output_js();
 		}
 	}
@@ -116,13 +128,13 @@ class Minify implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 		if ( $clear_cache ) {
 			$this->clear_cache( 'script' );
 		}
-		if ( empty( $this->script ) ) {
+		if ( empty( $this->_script ) ) {
 			return;
 		}
-		ksort( $this->script );
+		ksort( $this->_script );
 		$script = implode( "\n", array_map( function ( $s ) {
 			return implode( "\n", $s );
-		}, $this->script ) );
+		}, $this->_script ) );
 
 		if ( $this->apply_filters( 'minify_js' ) ) {
 			$minify = new \MatthiasMullie\Minify\JS();
@@ -131,8 +143,8 @@ class Minify implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 		} else {
 			echo '<script>' . $script . '</script>';
 		}
-		$this->script            = [];
-		$this->has_output_script = true;
+		$this->_script            = [];
+		$this->_has_output_script = true;
 	}
 
 	/**
@@ -165,8 +177,8 @@ class Minify implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 			return;
 		}
 
-		$this->css[ $priority ][] = $css;
-		if ( $this->end_footer ) {
+		$this->_css[ $priority ][] = $css;
+		if ( $this->_end_footer ) {
 			$this->output_css();
 		}
 	}
@@ -180,13 +192,13 @@ class Minify implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 		if ( $clear_cache ) {
 			$this->clear_cache( 'style' );
 		}
-		if ( empty( $this->css ) ) {
+		if ( empty( $this->_css ) ) {
 			return;
 		}
-		ksort( $this->css );
+		ksort( $this->_css );
 		$css = implode( "\n", array_map( function ( $s ) {
 			return implode( "\n", $s );
-		}, $this->css ) );
+		}, $this->_css ) );
 
 		if ( $this->apply_filters( 'minify_css' ) ) {
 			$minify = new \MatthiasMullie\Minify\CSS();
@@ -195,6 +207,6 @@ class Minify implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 		} else {
 			echo '<style>' . $css . '</style>';
 		}
-		$this->css = [];
+		$this->_css = [];
 	}
 }

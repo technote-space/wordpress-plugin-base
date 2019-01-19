@@ -26,17 +26,31 @@ class Device implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 
 	use \Technote\Traits\Singleton, \Technote\Traits\Hook;
 
-	/** @var bool */
-	private $is_robot = null;
+	/**
+	 * @since 2.10.0 Changed: trivial change
+	 * @var bool $_is_robot
+	 */
+	private $_is_robot = null;
 
-	/** @var \Mobile_Detect */
-	private $mobile_detect;
+	/**
+	 * @since 2.10.0 Changed: trivial change
+	 * @var \Mobile_Detect $_mobile_detect
+	 */
+	private $_mobile_detect;
+
+	/**
+	 * @since 2.10.0
+	 * @return bool
+	 */
+	protected static function is_shared_class() {
+		return true;
+	}
 
 	/**
 	 * initialize
 	 */
 	protected function initialize() {
-		$this->mobile_detect = new \Mobile_Detect();
+		$this->_mobile_detect = new \Mobile_Detect();
 	}
 
 	/**
@@ -45,13 +59,13 @@ class Device implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	 * @return bool
 	 */
 	public function is_robot( $cache = true ) {
-		if ( $cache && isset( $this->is_robot ) ) {
-			return $this->is_robot;
+		if ( $cache && isset( $this->_is_robot ) ) {
+			return $this->_is_robot;
 		}
 
-		$this->is_robot = $this->apply_filters( 'pre_check_bot', null );
-		if ( is_bool( $this->is_robot ) ) {
-			return $this->is_robot;
+		$this->_is_robot = $this->apply_filters( 'pre_check_bot', null );
+		if ( is_bool( $this->_is_robot ) ) {
+			return $this->_is_robot;
 		}
 
 		$bot_list = explode( ',', $this->apply_filters( 'bot_list', implode( ',', [
@@ -82,17 +96,17 @@ class Device implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 			'Ask Jeeves/Teoma; ',
 		] ) ) );
 
-		$this->is_robot = false;
+		$this->_is_robot = false;
 		$ua             = $this->app->input->user_agent();
 		foreach ( $bot_list as $value ) {
 			$value = trim( $value );
 			if ( preg_match( '/' . str_replace( '/', '\\/', $value ) . '/i', $ua ) ) {
-				$this->is_robot = true;
+				$this->_is_robot = true;
 				break;
 			}
 		}
 
-		return $this->is_robot;
+		return $this->_is_robot;
 	}
 
 	/**
@@ -101,7 +115,7 @@ class Device implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	 * @return bool
 	 */
 	public function is_tablet( $ua = null ) {
-		return $this->mobile_detect->isTablet( $ua );
+		return $this->_mobile_detect->isTablet( $ua );
 	}
 
 	/**
@@ -110,13 +124,13 @@ class Device implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	 * @return bool
 	 */
 	public function is_mobile( $ua = null ) {
-		return $this->mobile_detect->isMobile( $ua );
+		return $this->_mobile_detect->isMobile( $ua );
 	}
 
 	/**
 	 * @return \Mobile_Detect
 	 */
 	public function get_mobile_detect() {
-		return $this->mobile_detect;
+		return $this->_mobile_detect;
 	}
 }

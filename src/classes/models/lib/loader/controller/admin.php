@@ -31,8 +31,11 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 
 	use \Technote\Traits\Loader, \Technote\Traits\Nonce;
 
-	/** @var array $messages */
-	private $messages = [];
+	/**
+	 * @since 2.10.0 Changed: trivial change
+	 * @var array $_messages
+	 */
+	private $_messages = [];
 
 	/**
 	 * @since 2.10.0
@@ -301,7 +304,7 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 	private function admin_notice() {
 		if ( $this->app->user_can( $this->app->get_config( 'capability', 'admin_notice_capability', 'manage_options' ) ) ) {
 			$this->get_view( 'admin/include/notice', [
-				'messages' => $this->messages,
+				'messages' => $this->_messages,
 			], true );
 		}
 	}
@@ -313,6 +316,6 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 	 * @param bool $error
 	 */
 	public function add_message( $message, $group = '', $error = false, $escape = true ) {
-		$this->messages[ $group ][ $error ? 'error' : 'updated' ][] = [ $message, $escape ];
+		$this->_messages[ $group ][ $error ? 'error' : 'updated' ][] = [ $message, $escape ];
 	}
 }
