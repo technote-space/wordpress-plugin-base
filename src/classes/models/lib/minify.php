@@ -209,4 +209,13 @@ class Minify implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 		}
 		$this->_css = [];
 	}
+  
+	/**
+	 * @since 2.10.0
+	 * end footer
+	 */
+	/** @noinspection PhpUnusedPrivateMethodInspection */
+	private function end_footer() {
+		$this->_end_footer = true;
+	}
 }
