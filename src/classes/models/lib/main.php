@@ -229,8 +229,8 @@ class Main implements \Technote\Interfaces\Singleton {
 	 * setup textdomain
 	 */
 	private function setup_textdomain() {
-		if ( ! static::$_lib_language_loaded ) {
-			static::$_lib_language_loaded = true;
+		if ( ! self::$_lib_language_loaded ) {
+			self::$_lib_language_loaded = true;
 			load_plugin_textdomain( $this->define->lib_textdomain, false, $this->define->lib_languages_rel_path );
 		}
 

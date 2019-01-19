@@ -76,7 +76,7 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 	 * @return string
 	 */
 	private function type2format( $type ) {
-		if ( ! isset( static::$_type2format[ $type ] ) ) {
+		if ( ! isset( self::$_type2format[ $type ] ) ) {
 			$format = '%s';
 			switch ( true ) {
 				case stristr( $type, 'INT' ) !== false:
@@ -101,10 +101,10 @@ class Db implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \
 					$format = '%f';
 					break;
 			}
-			static::$_type2format[ $type ] = $this->apply_filters( 'type2format', $format, $type );
+			self::$_type2format[ $type ] = $this->apply_filters( 'type2format', $format, $type );
 		}
 
-		return static::$_type2format[ $type ];
+		return self::$_type2format[ $type ];
 	}
 
 	/**
