@@ -289,9 +289,9 @@ class Technote {
 	}
 
 	/**
+	 * setup actions
 	 * @since 2.0.0
 	 * @since 2.7.3 Fixed: suppress error when activate plugin
-	 * setup actions
 	 */
 	private function setup_actions() {
 		add_action( 'plugins_loaded', function () {
