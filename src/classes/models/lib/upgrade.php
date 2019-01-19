@@ -307,14 +307,33 @@ class Upgrade implements \Technote\Interfaces\Loader {
 	 */
 	private function parse_update_notice( $content ) {
 		$notices = [];
+		$version_notices = [];
 		if ( preg_match( '#==\s*Upgrade Notice\s*==([\s\S]+?)==#', $content, $matches ) ) {
+			$version = false;
 			foreach ( (array) preg_split( '~[\r\n]+~', trim( $matches[1] ) ) as $line ) {
 				$line = preg_replace( '~\[([^\]]*)\]\(([^\)]*)\)~', '<a href="${2}">${1}</a>', $line );
 				$line = preg_replace( '#\A\s*\*+\s*#', '', $line );
+				if ( preg_match( '#\A\s*=\s*([^\s]+)\s*=\s*\z#', $line, $m1 ) && preg_match( '#\s*(v\.?)?(\d+[\d.]*)*\s*#', $m1[1], $m2 ) ) {
+					$version = $m2[2];
+					continue;
+				}
+				if ( $version && version_compare( $version, $this->app->get_plugin_version(), '<=' ) ) {
+					continue;
+				}
 				$line = preg_replace( '#\A\s*=\s*([^\s]+)\s*=\s*\z#', '[ $1 ]', $line );
 				$line = trim( $line );
 				if ( '' !== $line ) {
+					if ( $version ) {
+						$version_notices[ $version ][] = $line;
+					} else {
 					$notices[] = $line;
+				}
+			}
+		}
+			if ( ! empty( $version_notices ) ) {
+				ksort( $version_notices );
+				foreach ( $version_notices as $version => $items ) {
+					$notices[ $version ] = $items;
 				}
 			}
 		}
