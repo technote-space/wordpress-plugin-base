@@ -211,7 +211,7 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 				} else {
 					$priority = 10;
 				}
-				$sort[ $item[2] ] = $priority;
+				$sort[] = $priority;
 			} elseif ( isset( $types[ $item[2] ] ) ) {
 				/** @var \Technote\Interfaces\Helper\Custom_Post $p */
 				$p = $types[ $item[2] ];
@@ -220,9 +220,9 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 				} else {
 					$priority = 10;
 				}
-				$sort[ $item[2] ] = $priority;
+				$sort[] = $priority;
 			} else {
-				$sort[ $item[2] ] = 10;
+				$sort[] = 10;
 			}
 		}
 		if ( count( $sort ) !== count( $submenu[ $slug ] ) ) {
