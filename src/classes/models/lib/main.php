@@ -11,6 +11,7 @@
  * @since 2.5.0 Changed: views directory
  * @since 2.10.0 Changed: moved main program
  * @since 3.0.0 Improved: for theme (#115)
+ * @since 3.0.0 Improved: remove capture_shutdown_error if log is not valid (#128)
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -246,6 +247,7 @@ class Main implements \Technote\Interfaces\Singleton {
 	 * setup settings
 	 * @since 2.1.0 Changed: set default value of check_update when the plugin is registered as official
 	 * @since 3.0.0 Improved: for theme (#115)
+	 * @since 3.0.0 Improved: remove capture_shutdown_error if log is not valid (#128)
 	 */
 	private function setup_settings() {
 		if ( defined( 'TECHNOTE_MOCK_REST_REQUEST' ) && TECHNOTE_MOCK_REST_REQUEST ) {
@@ -263,10 +265,10 @@ class Main implements \Technote\Interfaces\Singleton {
 		if ( ! $this->log->is_valid() ) {
 			$this->setting->remove_setting( 'save___log_term' );
 			$this->setting->remove_setting( 'delete___log_interval' );
+			$this->setting->remove_setting( 'capture_shutdown_error' );
 		}
 		if ( $this->get_config( 'config', 'prevent_use_log' ) ) {
 			$this->setting->remove_setting( 'is_valid_log' );
-			$this->setting->remove_setting( 'capture_shutdown_error' );
 		}
 	}
 
