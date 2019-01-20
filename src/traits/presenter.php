@@ -2,13 +2,14 @@
 /**
  * Technote Traits Presenter
  *
- * @version 2.9.1
+ * @version 3.0.0
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0
  * @since 2.0.3 Changed: trim assets_version
  * @since 2.8.3 Added: get_form_by_type
  * @since 2.9.1 Changed: array_merge -> array_replace_recursive
+ * @since 3.0.0 Improved: for theme (#115)
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -343,13 +344,31 @@ trait Presenter {
 	}
 
 	/**
+	 * @since 3.0.0 Added: $allow_multiple param
+	 * @since 3.0.0 Improved: for theme (#115)
+	 *
+	 * @param bool $allow_multiple
+	 *
 	 * @return array
 	 */
-	private function get_check_assets_dirs() {
-		return $this->apply_filters( 'check_assets_dirs', [
-			$this->app->define->plugin_assets_dir => $this->app->define->plugin_assets_url,
-			$this->app->define->lib_assets_dir    => $this->app->define->lib_assets_url,
-		] );
+	private function get_check_assets_dirs( $allow_multiple = false ) {
+		$dirs = [];
+		if ( $this->app->is_theme ) {
+			if ( $allow_multiple ) {
+				$dirs[ $this->app->define->lib_assets_dir ]    = $this->app->define->lib_assets_url;
+				$dirs[ $this->app->define->plugin_assets_dir ] = $this->app->define->plugin_assets_url;
+				! empty( $this->app->define->child_theme_assets_dir ) and $dirs[ $this->app->define->child_theme_assets_dir ] = $this->app->define->child_theme_assets_url;
+			} else {
+				! empty( $this->app->define->child_theme_assets_dir ) and $dirs[ $this->app->define->child_theme_assets_dir ] = $this->app->define->child_theme_assets_url;
+				$dirs[ $this->app->define->plugin_assets_dir ] = $this->app->define->plugin_assets_url;
+				$dirs[ $this->app->define->lib_assets_dir ]    = $this->app->define->lib_assets_url;
+			}
+		} else {
+			$dirs[ $this->app->define->plugin_assets_dir ] = $this->app->define->plugin_assets_url;
+			$dirs[ $this->app->define->lib_assets_dir ]    = $this->app->define->lib_assets_url;
+		}
+
+		return $this->apply_filters( 'check_assets_dirs', $dirs );
 	}
 
 	/**
@@ -519,27 +538,71 @@ trait Presenter {
 	}
 
 	/**
+	 * @since 3.0.0 Improved: for theme (#115)
+	 *
 	 * @param string $handle
 	 * @param string $file
 	 * @param array $depends
 	 * @param string|bool|null $ver
 	 * @param string $media
 	 * @param string $dir
+	 *
+	 * @return bool
 	 */
 	public function enqueue_style( $handle, $file, $depends = [], $ver = false, $media = 'all', $dir = 'css' ) {
-		wp_enqueue_style( $handle, $this->app->define->plugin_assets_url . '/' . $dir . '/' . $file, $depends, $ver, $media );
+		$path    = $dir . DS . $file;
+		$result  = false;
+		$_handle = $handle;
+		$index   = 0;
+		foreach ( $this->get_check_assets_dirs( true ) as $_dir => $_url ) {
+			$_dir = rtrim( $_dir, DS . '/' );
+			if ( file_exists( $_dir . DS . $path ) && is_file( $_dir . DS . $path ) ) {
+				wp_enqueue_style( $handle, $_url . '/' . $dir . '/' . $file, $depends, $ver, $media );
+
+				if ( ! $this->app->is_theme ) {
+					return true;
+				}
+				$result = true;
+				$handle = "{$_handle}-{$index}";
+				$index ++;
+			}
+		}
+
+		return $result;
 	}
 
 	/**
+	 * @since 3.0.0 Improved: for theme (#115)
+	 *
 	 * @param string $handle
 	 * @param string $file
 	 * @param array $depends
 	 * @param string|bool|null $ver
 	 * @param bool $in_footer
 	 * @param string $dir
+	 *
+	 * @return bool
 	 */
 	public function enqueue_script( $handle, $file, $depends = [], $ver = false, $in_footer = true, $dir = 'js' ) {
-		wp_enqueue_script( $handle, $this->app->define->plugin_assets_url . '/' . $dir . '/' . $file, $depends, $ver, $in_footer );
+		$path    = $dir . DS . $file;
+		$result  = false;
+		$_handle = $handle;
+		$index   = 0;
+		foreach ( $this->get_check_assets_dirs( true ) as $_dir => $_url ) {
+			$_dir = rtrim( $_dir, DS . '/' );
+			if ( file_exists( $_dir . DS . $path ) && is_file( $_dir . DS . $path ) ) {
+				wp_enqueue_script( $handle, $_url . '/' . $dir . '/' . $file, $depends, $ver, $in_footer );
+
+				if ( ! $this->app->is_theme ) {
+					return true;
+				}
+				$result = true;
+				$handle = "{$_handle}-{$index}";
+				$index ++;
+			}
+		}
+
+		return $result;
 	}
 
 	/**

@@ -2,7 +2,7 @@
 /**
  * Technote Configs Config
  *
- * @version 2.10.0
+ * @version 3.0.0
  * @author technote-space
  * @since 1.0.0
  * @since 2.1.0 Deleted: text_domain
@@ -16,6 +16,7 @@
  * @since 2.9.9 Added: readme file check url
  * @since 2.9.12 Added: setting page settings
  * @since 2.9.12 Added: suppress log messages setting
+ * @since 3.0.0 Changed: plugin_title to main_menu_title
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -29,8 +30,11 @@ return [
 	// library version
 	'library_version'                => '2.10.0',
 
-	// plugin title
-	'plugin_title'                   => '',
+	// main menu title
+	/**
+	 * @since 3.0.0 Changed: name
+	 */
+	'main_menu_title'                => '',
 
 	// contact url
 	'contact_url'                    => '',

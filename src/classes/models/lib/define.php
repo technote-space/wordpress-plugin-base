@@ -2,7 +2,7 @@
 /**
  * Technote Classes Models Lib Define
  *
- * @version 2.10.0
+ * @version 3.0.0
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0 Changed: directory structure
@@ -10,6 +10,7 @@
  * @since 2.3.0 Changed: public properties to readonly properties
  * @since 2.5.0 Changed: views directory
  * @since 2.10.0 Changed: trivial change
+ * @since 3.0.0 Improved: for theme (#115)
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -52,6 +53,10 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * @property-read string $plugin_logs_dir
  * @property-read string $plugin_url
  * @property-read string $plugin_assets_url
+ * @property-read string $child_theme_dir
+ * @property-read string $child_theme_assets_dir
+ * @property-read string $child_theme_url
+ * @property-read string $child_theme_assets_url
  */
 class Define implements \Technote\Interfaces\Singleton {
 
@@ -90,11 +95,16 @@ class Define implements \Technote\Interfaces\Singleton {
 		'plugin_logs_dir',
 		'plugin_url',
 		'plugin_assets_url',
+		'child_theme_dir',
+		'child_theme_url',
+		'child_theme_assets_dir',
+		'child_theme_assets_url',
 	];
 
 	/**
 	 * initialize
 	 * @since 2.1.0 Changed: load textdomain from plugin data
+	 * @since 3.0.0 Improved: for theme (#115)
 	 */
 	protected function initialize() {
 		$this->plugin_name = $this->app->plugin_name;
@@ -103,7 +113,7 @@ class Define implements \Technote\Interfaces\Singleton {
 		$this->plugin_namespace = ucwords( $this->plugin_name, '_' );
 		$this->plugin_dir       = dirname( $this->plugin_file );
 		$this->plugin_dir_name  = basename( $this->plugin_dir );
-		$this->plugin_base_name = plugin_basename( $this->plugin_file );
+		$this->plugin_base_name = $this->app->is_theme ? 'theme/' . $this->plugin_dir : plugin_basename( $this->plugin_file );
 
 		$cache = $this->app->get_shared_object( 'lib_defines_cache', 'all' );
 		if ( ! isset( $cache ) ) {
@@ -142,7 +152,17 @@ class Define implements \Technote\Interfaces\Singleton {
 		}
 		$this->plugin_logs_dir = $this->plugin_dir . DS . 'logs';
 
-		$this->plugin_url        = plugins_url( '', $this->plugin_file );
+		if ( $this->app->is_theme ) {
+			$this->plugin_url = get_template_directory_uri();
+			if ( get_template_directory() !== get_stylesheet_directory() ) {
+				$this->child_theme_dir        = get_stylesheet_directory();
+				$this->child_theme_url        = get_stylesheet_directory_uri();
+				$this->child_theme_assets_dir = $this->child_theme_dir . DS . 'assets';
+				$this->child_theme_assets_url = $this->child_theme_url . '/assets';
+			}
+		} else {
+			$this->plugin_url = plugins_url( '', $this->plugin_file );
+		}
 		$this->plugin_assets_url = $this->plugin_url . '/assets';
 	}
 }
