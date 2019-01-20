@@ -2,10 +2,11 @@
 /**
  * Technote Traits Readonly
  *
- * @version 2.10.0
+ * @version 3.0.0
  * @author technote-space
  * @since 2.3.0
  * @since 2.10.0 Changed: trivial change
+ * @since 3.0.0 Changed: behavior of not set property (#130)
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -48,8 +49,7 @@ trait Readonly {
 			$this->$name              = $value;
 			$this->_is_allowed_access = false;
 		} else {
-			$message = sprintf( $this->app->translate( 'you cannot access %s->%s.' ), static::class, $name );
-			throw new \OutOfRangeException( $message );
+			throw new \OutOfRangeException( sprintf( $this->app->translate( 'you cannot access %s->%s.' ), static::class, $name ) );
 		}
 	}
 
@@ -63,8 +63,7 @@ trait Readonly {
 		if ( $this->_is_allowed_access && $this->is_readonly_property( $name ) ) {
 			$this->$name = $value;
 		} else {
-			$message = sprintf( $this->app->translate( 'you cannot access %s->%s.' ), static::class, $name );
-			throw new \OutOfRangeException( $message );
+			throw new \OutOfRangeException( sprintf( $this->app->translate( 'you cannot access %s->%s.' ), static::class, $name ) );
 		}
 	}
 
@@ -76,9 +75,13 @@ trait Readonly {
 	 */
 	public function __get( $name ) {
 		if ( $this->is_readonly_property( $name ) ) {
-			return $this->$name;
+			if ( property_exists( $this, $name ) ) {
+				return $this->$name;
+			}
+
+			return null;
 		}
-		throw new \OutOfRangeException( $name . ' is undefined.' );
+		throw new \OutOfRangeException( sprintf( $this->app->translate( '%s is undefined.' ), $name ) );
 	}
 
 	/**
@@ -87,7 +90,7 @@ trait Readonly {
 	 * @return bool
 	 */
 	public function __isset( $name ) {
-		return $this->is_readonly_property( $name ) && ! is_null( $this->$name );
+		return $this->is_readonly_property( $name ) && property_exists( $this, $name ) && ! is_null( $this->$name );
 	}
 
 	/**
