@@ -2,14 +2,14 @@
 /**
  * Technote Traits Presenter
  *
- * @version 3.0.0
+ * @version 2.10.1
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0
  * @since 2.0.3 Changed: trim assets_version
  * @since 2.8.3 Added: get_form_by_type
  * @since 2.9.1 Changed: array_merge -> array_replace_recursive
- * @since 3.0.0 Improved: for theme (#115)
+ * @since 2.10.1 Improved: for theme (#115)
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -344,8 +344,8 @@ trait Presenter {
 	}
 
 	/**
-	 * @since 3.0.0 Added: $allow_multiple param
-	 * @since 3.0.0 Improved: for theme (#115)
+	 * @since 2.10.1 Added: $allow_multiple param
+	 * @since 2.10.1 Improved: for theme (#115)
 	 *
 	 * @param bool $allow_multiple
 	 *
@@ -538,7 +538,7 @@ trait Presenter {
 	}
 
 	/**
-	 * @since 3.0.0 Improved: for theme (#115)
+	 * @since 2.10.1 Improved: for theme (#115)
 	 *
 	 * @param string $handle
 	 * @param string $file
@@ -572,7 +572,7 @@ trait Presenter {
 	}
 
 	/**
-	 * @since 3.0.0 Improved: for theme (#115)
+	 * @since 2.10.1 Improved: for theme (#115)
 	 *
 	 * @param string $handle
 	 * @param string $file

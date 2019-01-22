@@ -2,11 +2,11 @@
 /**
  * Technote Traits Readonly
  *
- * @version 3.0.0
+ * @version 2.10.1
  * @author technote-space
  * @since 2.3.0
  * @since 2.10.0 Changed: trivial change
- * @since 3.0.0 Changed: behavior of not set property (#130)
+ * @since 2.10.1 Changed: behavior of not set property (#130)
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space

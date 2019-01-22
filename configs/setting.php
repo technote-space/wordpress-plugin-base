@@ -2,7 +2,7 @@
 /**
  * Technote Configs Setting
  *
- * @version 3.0.0
+ * @version 2.10.1
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.3 Changed: default assets_version
@@ -10,7 +10,7 @@
  * @since 2.7.1 Fixed: for under WordPress v4.4
  * @since 2.9.13 Added: log settings
  * @since 2.10.0 Changed: trivial change
- * @since 3.0.0 Changed: trivial change
+ * @since 2.10.1 Changed: trivial change
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space

@@ -2,7 +2,7 @@
 /**
  * Technote Classes Models Lib Uninstall
  *
- * @version 3.0.0
+ * @version 2.10.1
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0
@@ -10,7 +10,7 @@
  * @since 2.3.1 Changed: not load uninstall if not required
  * @since 2.6.0 Fixed: search uninstall file namespace
  * @since 2.10.0 Changed: trivial change
- * @since 3.0.0 Improved: for theme (#115)
+ * @since 2.10.1 Improved: for theme (#115)
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -38,7 +38,7 @@ class Uninstall implements \Technote\Interfaces\Loader {
 
 	/**
 	 * register uninstall
-	 * @since 3.0.0 Improved: for theme (#115)
+	 * @since 2.10.1 Improved: for theme (#115)
 	 */
 	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function register_uninstall() {

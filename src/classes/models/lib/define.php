@@ -2,7 +2,7 @@
 /**
  * Technote Classes Models Lib Define
  *
- * @version 3.0.0
+ * @version 2.10.1
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0 Changed: directory structure
@@ -10,7 +10,7 @@
  * @since 2.3.0 Changed: public properties to readonly properties
  * @since 2.5.0 Changed: views directory
  * @since 2.10.0 Changed: trivial change
- * @since 3.0.0 Improved: for theme (#115)
+ * @since 2.10.1 Improved: for theme (#115)
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -104,7 +104,7 @@ class Define implements \Technote\Interfaces\Singleton {
 	/**
 	 * initialize
 	 * @since 2.1.0 Changed: load textdomain from plugin data
-	 * @since 3.0.0 Improved: for theme (#115)
+	 * @since 2.10.1 Improved: for theme (#115)
 	 */
 	protected function initialize() {
 		$this->plugin_name = $this->app->plugin_name;

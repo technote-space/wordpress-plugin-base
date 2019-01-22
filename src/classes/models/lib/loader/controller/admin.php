@@ -2,7 +2,7 @@
 /**
  * Technote Classes Models Lib Loader Controller Admin
  *
- * @version 3.0.0
+ * @version 2.10.1
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0
@@ -12,7 +12,7 @@
  * @since 2.9.0 Improved: regexp
  * @since 2.9.12 Improved: enable to set page slug setting from config
  * @since 2.10.0 Improved: submenu order
- * @since 3.0.0 Improved: for theme (#115)
+ * @since 2.10.1 Improved: for theme (#115)
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -69,8 +69,8 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 	}
 
 	/**
-	 * @since 3.0.0 Changed: method name
-	 * @since 3.0.0 Improved: for theme (#115)
+	 * @since 2.10.1 Changed: method name
+	 * @since 2.10.1 Improved: for theme (#115)
 	 * @return string
 	 */
 	private function get_main_menu_title() {
@@ -116,7 +116,7 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 
 	/**
 	 * add menu
-	 * @since 3.0.0 Changed: trivial change
+	 * @since 2.10.1 Changed: trivial change
 	 */
 	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function add_menu() {

@@ -2,7 +2,7 @@
 /**
  * Technote
  *
- * @version 3.0.0
+ * @version 2.10.1
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0 Added: Feature to load library of latest version
@@ -32,7 +32,7 @@
  * @since 2.9.13 Changed: log settings
  * @since 2.9.13 Changed: moved shutdown function to log
  * @since 2.10.0 Changed: moved main program to lib/main
- * @since 3.0.0 Improved: for theme (#115)
+ * @since 2.10.1 Improved: for theme (#115)
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -146,7 +146,7 @@ class Technote {
 	private $_is_uninstall = false;
 
 	/**
-	 * @since 3.0.0
+	 * @since 2.10.1
 	 * @var bool $is_theme
 	 */
 	public $is_theme = false;
@@ -166,7 +166,7 @@ class Technote {
 	/**
 	 * Technote constructor.
 	 *
-	 * @since 3.0.0 Improved: for theme (#115)
+	 * @since 2.10.1 Improved: for theme (#115)
 	 *
 	 * @param string $plugin_name
 	 * @param string $plugin_file
@@ -304,7 +304,7 @@ class Technote {
 	 * setup actions
 	 * @since 2.0.0
 	 * @since 2.7.3 Fixed: suppress error when activate plugin
-	 * @since 3.0.0 Improved: for theme (#115)
+	 * @since 2.10.1 Improved: for theme (#115)
 	 */
 	private function setup_actions() {
 		if ( $this->is_theme ) {
@@ -364,7 +364,7 @@ class Technote {
 
 	/**
 	 * load functions file
-	 * @since 3.0.0 Improved: for theme (#115)
+	 * @since 2.10.1 Improved: for theme (#115)
 	 */
 	private function load_functions() {
 		if ( $this->is_theme ) {
@@ -396,7 +396,7 @@ class Technote {
 
 	/**
 	 * @since 2.7.4 Fixed: suppress error when uninstall plugin
-	 * @since 3.0.0 Improved: for theme (#115)
+	 * @since 2.10.1 Improved: for theme (#115)
 	 *
 	 * @param string $plugin_base_name
 	 *

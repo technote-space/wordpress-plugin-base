@@ -2,7 +2,7 @@
 /**
  * Technote Classes Models Lib Main
  *
- * @version 3.0.0
+ * @version 2.10.1
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0 Changed: directory structure
@@ -10,8 +10,8 @@
  * @since 2.3.0 Changed: public properties to readonly properties
  * @since 2.5.0 Changed: views directory
  * @since 2.10.0 Changed: moved main program
- * @since 3.0.0 Improved: for theme (#115)
- * @since 3.0.0 Improved: remove capture_shutdown_error if log is not valid (#128)
+ * @since 2.10.1 Improved: remove capture_shutdown_error if log is not valid (#128)
+ * @since 2.10.1 Improved: for theme (#115)
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -142,7 +142,7 @@ class Main implements \Technote\Interfaces\Singleton {
 
 	/**
 	 * initialize
-	 * @since 3.0.0 Improved: for theme (#115)
+	 * @since 2.10.1 Improved: for theme (#115)
 	 */
 	protected function initialize() {
 		if ( ! function_exists( 'get_plugin_data' ) ) {
@@ -246,8 +246,8 @@ class Main implements \Technote\Interfaces\Singleton {
 	/**
 	 * setup settings
 	 * @since 2.1.0 Changed: set default value of check_update when the plugin is registered as official
-	 * @since 3.0.0 Improved: for theme (#115)
-	 * @since 3.0.0 Improved: remove capture_shutdown_error if log is not valid (#128)
+	 * @since 2.10.1 Improved: remove capture_shutdown_error if log is not valid (#128)
+	 * @since 2.10.1 Improved: for theme (#115)
 	 */
 	private function setup_settings() {
 		if ( defined( 'TECHNOTE_MOCK_REST_REQUEST' ) && TECHNOTE_MOCK_REST_REQUEST ) {
