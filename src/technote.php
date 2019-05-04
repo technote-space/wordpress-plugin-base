@@ -2,7 +2,7 @@
 /**
  * Technote
  *
- * @version 2.10.0
+ * @version 2.10.1
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0 Added: Feature to load library of latest version
@@ -32,6 +32,7 @@
  * @since 2.9.13 Changed: log settings
  * @since 2.9.13 Changed: moved shutdown function to log
  * @since 2.10.0 Changed: moved main program to lib/main
+ * @since 2.10.1 Improved: for theme (#115)
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -44,6 +45,7 @@ define( 'TECHNOTE_IS_MOCK', false );
 
 /**
  * Class Technote
+ * @property bool $is_theme
  * @property string $original_plugin_name
  * @property string $plugin_name
  * @property string $slug_name
@@ -143,6 +145,12 @@ class Technote {
 	 */
 	private $_is_uninstall = false;
 
+	/**
+	 * @since 2.10.1
+	 * @var bool $is_theme
+	 */
+	public $is_theme = false;
+
 	/** @var string $original_plugin_name */
 	public $original_plugin_name;
 
@@ -158,11 +166,15 @@ class Technote {
 	/**
 	 * Technote constructor.
 	 *
+	 * @since 2.10.1 Improved: for theme (#115)
+	 *
 	 * @param string $plugin_name
 	 * @param string $plugin_file
 	 * @param string|null $slug_name
 	 */
 	private function __construct( $plugin_name, $plugin_file, $slug_name ) {
+		$theme_dir                  = str_replace( '/', DS, WP_CONTENT_DIR . DS . 'theme' );
+		$this->is_theme             = preg_match( "#\A{$theme_dir}#", str_replace( '/', DS, $plugin_file ) ) > 0;
 		$this->original_plugin_name = $plugin_name;
 		$this->plugin_file          = $plugin_file;
 		$this->plugin_name          = strtolower( $this->original_plugin_name );
@@ -292,29 +304,46 @@ class Technote {
 	 * setup actions
 	 * @since 2.0.0
 	 * @since 2.7.3 Fixed: suppress error when activate plugin
+	 * @since 2.10.1 Improved: for theme (#115)
 	 */
 	private function setup_actions() {
-		add_action( 'plugins_loaded', function () {
-			$this->plugins_loaded();
-		} );
+		if ( $this->is_theme ) {
+			add_action( 'after_setup_theme', function () {
+				$this->plugins_loaded();
+			} );
+
+			add_action( 'after_switch_theme', function () {
+				$this->plugins_loaded();
+				$this->main_init();
+				$this->filter->do_action( 'app_activated', $this );
+			} );
+
+			add_action( 'switch_theme', function () {
+				$this->filter->do_action( 'app_deactivated', $this );
+			} );
+		} else {
+			add_action( 'plugins_loaded', function () {
+				$this->plugins_loaded();
+			} );
+
+			add_action( 'activated_plugin', function ( $plugin ) {
+				$this->plugins_loaded();
+				$this->main_init();
+				if ( $this->define->plugin_base_name === $plugin ) {
+					$this->filter->do_action( 'app_activated', $this );
+				}
+			} );
+
+			add_action( 'deactivated_plugin', function ( $plugin ) {
+				if ( $this->define->plugin_base_name === $plugin ) {
+					$this->filter->do_action( 'app_deactivated', $this );
+				}
+			} );
+		}
 
 		add_action( 'init', function () {
 			$this->main_init();
 		}, 1 );
-
-		add_action( 'activated_plugin', function ( $plugin ) {
-			$this->plugins_loaded();
-			$this->main_init();
-			if ( $this->define->plugin_base_name === $plugin ) {
-				$this->filter->do_action( 'app_activated', $this );
-			}
-		} );
-
-		add_action( 'deactivated_plugin', function ( $plugin ) {
-			if ( $this->define->plugin_base_name === $plugin ) {
-				$this->filter->do_action( 'app_deactivated', $this );
-			}
-		} );
 	}
 
 	/**
@@ -335,8 +364,12 @@ class Technote {
 
 	/**
 	 * load functions file
+	 * @since 2.10.1 Improved: for theme (#115)
 	 */
 	private function load_functions() {
+		if ( $this->is_theme ) {
+			return;
+		}
 		$functions = $this->define->plugin_dir . DS . 'functions.php';
 		if ( is_readable( $functions ) ) {
 			/** @noinspection PhpIncludeInspection */
@@ -363,6 +396,7 @@ class Technote {
 
 	/**
 	 * @since 2.7.4 Fixed: suppress error when uninstall plugin
+	 * @since 2.10.1 Improved: for theme (#115)
 	 *
 	 * @param string $plugin_base_name
 	 *
@@ -371,6 +405,9 @@ class Technote {
 	private static function find_plugin( $plugin_base_name ) {
 		/** @var \Technote $instance */
 		foreach ( self::$_instances as $plugin_name => $instance ) {
+			if ( $instance->is_theme ) {
+				continue;
+			}
 			$instance->plugins_loaded();
 			if ( $instance->define->plugin_base_name === $plugin_base_name ) {
 				return $instance;

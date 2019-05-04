@@ -2,11 +2,12 @@
 /**
  * Technote Views Admin Logs
  *
- * @version 2.9.13
+ * @version 2.10.1
  * @author technote-space
  * @since 1.0.0
  * @since 2.7.0 Changed: save log to db
  * @since 2.9.13 Added: versions
+ * @since 2.10.1 Changed: trivial change
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -58,7 +59,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
                                 <td><?php $instance->h( $log['wordpress_version'] ); ?></td>
                             </tr>
                             <tr>
-                                <th><?php $instance->h( 'Plugin', true ); ?></th>
+                                <th><?php $instance->h( $instance->app->is_theme ? 'Theme' : 'Plugin', true ); ?></th>
                                 <td><?php $instance->h( $log['plugin_version'] ); ?></td>
                             </tr>
                             <tr>

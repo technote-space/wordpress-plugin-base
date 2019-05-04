@@ -2,7 +2,7 @@
 /**
  * Technote Classes Models Lib Loader Controller Admin
  *
- * @version 2.10.0
+ * @version 2.10.1
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0
@@ -12,6 +12,7 @@
  * @since 2.9.0 Improved: regexp
  * @since 2.9.12 Improved: enable to set page slug setting from config
  * @since 2.10.0 Improved: submenu order
+ * @since 2.10.1 Improved: for theme (#115)
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -68,13 +69,16 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 	}
 
 	/**
+	 * @since 2.10.1 Changed: method name
+	 * @since 2.10.1 Improved: for theme (#115)
 	 * @return string
 	 */
-	private function get_plugin_title() {
-		$plugin_title = $this->app->get_config( 'config', 'plugin_title' );
-		empty( $plugin_title ) and $plugin_title = $this->app->original_plugin_name;
+	private function get_main_menu_title() {
+		$main_menu_title = $this->app->get_config( 'config', 'main_menu_title' );
+		empty ( $main_menu_title ) and ! $this->app->is_theme and $main_menu_title = $this->app->get_config( 'config', 'plugin_title' );
+		empty( $main_menu_title ) and $main_menu_title = str_replace( '_', ' ', $this->app->original_plugin_name );
 
-		return $this->apply_filters( 'get_plugin_title', $this->app->translate( $plugin_title ) );
+		return $this->apply_filters( 'get_main_menu_title', $this->app->translate( $main_menu_title ) );
 	}
 
 	/**
@@ -112,6 +116,7 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 
 	/**
 	 * add menu
+	 * @since 2.10.1 Changed: trivial change
 	 */
 	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function add_menu() {
@@ -135,8 +140,8 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 		}
 
 		$hook = add_menu_page(
-			$this->get_plugin_title(),
-			$this->get_plugin_title(),
+			$this->get_main_menu_title(),
+			$this->get_main_menu_title(),
 			$capability,
 			$this->get_menu_slug(),
 			function () {
@@ -151,9 +156,11 @@ class Admin implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 			} );
 		}
 
-		add_filter( 'plugin_action_links_' . $this->app->define->plugin_base_name, function ( $links ) {
-			return $this->plugin_action_links( $links );
-		} );
+		if ( ! $this->app->is_theme ) {
+			add_filter( 'plugin_action_links_' . $this->app->define->plugin_base_name, function ( $links ) {
+				return $this->plugin_action_links( $links );
+			} );
+		}
 
 		/** @var \Technote\Classes\Controllers\Admin\Base $page */
 		foreach ( $this->_pages as $page ) {
