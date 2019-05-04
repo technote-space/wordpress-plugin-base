@@ -1,3 +1,9 @@
+# This repository is no longer maintained.
+
+Moved to  
+[https://github.com/wp-content-framework/core](https://github.com/wp-content-framework/core)
+
+
 # Wordpress plugin base
 
 Wordpress plugin 開発用のライブラリです。  
@@ -406,11 +412,6 @@ class Sample extends \Technote\Classes\Tests\Base {
 
 ![test1](https://raw.githubusercontent.com/technote-space/wordpress-plugin-base/images/test1.png)
 ![test2](https://raw.githubusercontent.com/technote-space/wordpress-plugin-base/images/test2.png)
-
-## サンプルプラグイン
-[関連記事提供用プラグイン](https://github.com/technote-space/wp-related-post-jp)  
-[Contact Form 7 拡張用プラグイン](https://github.com/technote-space/contact-form-7-huge-file-upload)  
-[Marker Animation プラグイン](https://github.com/technote-space/marker-animation) 
 
 # Author
 
